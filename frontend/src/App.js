@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import MainRouter from './MainRouter';
-//import ButtonAppBar from './components/AppBar/Appbar';
+import ButtonAppBar from './components/AppBar/Appbar';
 import './styles/stylesheet.css';
 
 // function App() {
@@ -14,7 +14,7 @@ import './styles/stylesheet.css';
 
 const App = () => (
   <BrowserRouter>
-    {/* <ButtonAppBar /> */}
+    <ButtonAppBar />
     <MainRouter />
   </BrowserRouter>
 ) // App

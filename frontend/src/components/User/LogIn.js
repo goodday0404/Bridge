@@ -11,7 +11,7 @@ import useStyles from '../../styles/LogInStyle';
 import TextInputField from './TextInputField';
 import LogInOptions from './LogInOptions';
 import AlertDiv from './alert';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../std/SubmitButton';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import { logInProcess, validateJWT } from '../../Auth';
 
@@ -68,14 +68,14 @@ class LogIn extends Component {
       this.setState( { isLoading: true } )
       //this.startLoading();
       const { email, password } = this.state
-console.log({email, password})
+//console.log({email, password})
       logInProcess( { email, password } ).then( data => {
-console.log(data.error)
+//console.log(data.error)
               if ( data.error ) this.setState( { error: data.error[0].msg, isLoading: false } ) 
               else validateJWT( data, () => this.setState( { isLogIn: true } ) )
               //this.endLoading();
       }) // then
-    } // handleClick
+    } // handleSubmit
 
     // logInProcess = async user => {
     //   const domain = 'http://localhost:8080/login'

@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
+import Blurb from '../std/Blurb';
+import Footer from '../std/Footer';
 
 const Tutor = () => (
     <div className='jumbotron'>
-        <h2>Tutor</h2>
+        <Blurb body='Find your tutor' />
         <p className='lead'>
             welcome to reat front end
         </p>
+        <Footer title='Tutor footer' content='Add contents here' />
     </div>
 ) // Tutor
 

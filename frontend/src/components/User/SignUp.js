@@ -9,7 +9,7 @@ import LockOnIcon from './LockOnIcon';
 import FormTitle from './FormTtile';
 import TextInputField from './TextInputField';
 import { Option } from './LogInOptions';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../std/SubmitButton';
 import AlertDiv from './alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import { signUpProcess } from '../../Auth';
@@ -23,7 +23,9 @@ class SignUp extends Component {
           email: '',
           error: '',
           isSignUp: false,
-          isLoading: false
+          isLoading: false,
+          tutor: 'no',
+          courses: 'empty'
       } // this.initialState
       this.state = this.initialState
   } // constructor
@@ -48,8 +50,8 @@ class SignUp extends Component {
   handleSubmit = event => {
     event.preventDefault() // prevent webbrowser from reloading
     this.startLoading();
-    const { name, email, password } = this.state
-    signUpProcess( { name, email, password } ).then( data => {
+    const { name, email, password, tutor, courses } = this.state
+    signUpProcess( { name, email, password, tutor, courses } ).then( data => {
             if ( data.error ) {
               this.setState( { error: data.error[0].msg } ) 
             } else {
@@ -99,7 +101,7 @@ class SignUp extends Component {
 
   render() {
     const { error, isSignUp, isLoading } = this.state
-    const loginMsg = 'Please login here'
+    const loginMsg = 'Please login'
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />

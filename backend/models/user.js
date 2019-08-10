@@ -27,8 +27,24 @@ const userSchemaDetail = {
 		default: Date.now
 	}, // created
 
-	updated: Date // date when user file is updated
+	updated: Date, // date when user file is updated
 
+	photo: {
+		data: Buffer,
+		contentType: String
+	}, // photo
+
+	tutor: {
+		type: String,
+		trim: true,
+		required: true
+	}, // tutor, // indicate whether this user is a tutor
+
+	courses: {
+		type: String,
+		trim: true,
+		required: true
+	}, // courses, // courses that the tutor offers lessons
 }; // userSchemaDetail
 
 /*

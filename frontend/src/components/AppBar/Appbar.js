@@ -77,6 +77,7 @@ console.log('auth: ', auth)
                             open={open}
                             handleClose={handleClose}
                             userName={ isAuth().user.name }
+                            
                         /> 
                     }
                 </Toolbar>

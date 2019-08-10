@@ -1,5 +1,7 @@
 const _ = require( 'lodash');
 const User = require( '../models/user');
+const formidable = require( 'formidable' );
+const fs = require( 'fs' ); // Node.js module
 
 const createErrorObj = ( response, error, code ) => {
 	return response.status( code ).json( { error } );
@@ -51,24 +53,51 @@ exports.getUser = ( request, response ) => {
 	return response.json( profile );
 }; // getUser
 
+// exports.updateUser = ( request, response, next ) => {
+// 	let user = request.profile;
+// 	/*
+// 		lodash.extend( source, content ): mustate source with content
+// 	*/
+// 	user = _.extend( user, request.body ); 
+// 	user.updated = Date.now();
+// 	const handleSave = ( err ) => {
+// 		if ( err ) {
+// 			// const error = { error: 'not autherized for this action' };
+// 			// return response.status( 400 ).json( error );
+// 			return createErrorObj( response, { error: 'not autherized for this action' }, 400 );
+// 		} // if
+// 		user.hashed_password = user.salt = undefined;
+// 		response.json( user );
+// 	}; // handleSave
+// 	user.save( handleSave );
+// }; // updateUser
+
 exports.updateUser = ( request, response, next ) => {
-	let user = request.profile;
-	/*
-		lodash.extend( source, content ): mustate source with content
-	*/
-	user = _.extend( user, request.body ); 
-	user.updated = Date.now();
-	const handleSave = ( err ) => {
+	let form = new formidable.IncomingForm()
+	form.keepExtensions = true
+	const handleRequest = ( err, newData, imageFile ) => {
 		if ( err ) {
-			// const error = { error: 'not autherized for this action' };
-			// return response.status( 400 ).json( error );
-			return createErrorObj( response, { error: 'not autherized for this action' }, 400 );
+			return createErrorObj( response, { error: 'Uploading image file failed' }, 400 );
 		} // if
-		user.hashed_password = user.salt = undefined;
-		response.json( user );
-	}; // handleSave
-	user.save( handleSave );
-}; // updateUser
+
+		let userInfo = request.profile
+		userInfo = _.extend( userInfo, newData ) // update user data	
+		userInfo.updated = Date.now() //  updated time
+
+		if ( imageFile.photo ) {
+			const photo = userInfo.photo
+			photo.data = fs.readFileSync( imageFile.photo.path )
+			photo.contentType = imageFile.photo.type
+		} // if
+
+		userInfo.save( ( err ) => {
+			if ( err ) return response.status( 400 ).json( { error: err } )
+			userInfo.hashed_password = userInfo.salt = undefined
+			response.json( userInfo )
+		}) // save
+	} // handleRequest
+	form.parse( request, handleRequest )
+} // updateUser
 
 exports.deleteUser = ( request, response, next ) => {
 	let user = request.profile;

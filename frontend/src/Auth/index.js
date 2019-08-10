@@ -1,18 +1,31 @@
+import React, { Component } from 'react';
+import { Route, Redirect } from 'react-router-dom';
 
-const domain = 'http://localhost:8080/'
+// const domain = 'http://localhost:8080/'
 
-const path = event => domain.concat( event )
+// const path = event => domain.concat( event )
+
+const domain = `${ process.env.REACT_APP_API_URL }`
+
+export const path = event => `${ domain }/${ event }`
 
 const postData = user => ({
     method: 'POST',
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
-    },
+    }, // header
     body: JSON.stringify(user)
-}) // data
+}) // postData
 
-const getData = () => ( { method: 'GET' } )
+export const dataAccess = ( action, token ) => ( { 
+    method: action,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${ token }`
+    } // header
+} ) // dataAccess
 
 const requestServer = async ( event, user, message ) => {
     try {
@@ -22,6 +35,14 @@ const requestServer = async ( event, user, message ) => {
         return console.log( error );
     } // catch
 } // requestServer
+
+export const getUserInfo = async ( userId, token ) => (
+    requestServer( `user/${ userId }`, dataAccess( 'GET', token ), 'Retrieving user success!' )
+) // signUpProcess
+
+export const getAllUserInfo = async () => (
+    requestServer( 'users', { method: 'GET' }, 'Retrieving users success!' )
+) // signUpProcess
 
 export const signUpProcess = async user => (
     requestServer( 'signup', postData( user ), 'SignUp success!')
@@ -34,8 +55,20 @@ export const logInProcess = async user => (
 export const logOutProcess = async call => {
     if ( typeof window !== 'undefined' ) localStorage.removeItem( 'jwt' )
     call()
-    return requestServer( 'logOut', getData(), 'LogOut success!')
+    return requestServer( 'logOut', dataAccess('GET', ''), 'LogOut success!')
 } // logOut
+
+export const updateProcess = async ( userId, token, user ) => {
+console.log('user data update: ', user)
+    const headers = { Accept: 'application/json', Authorization: `Bearer ${ token }`}
+    return requestServer( `user/${ userId }`,
+                          { method: 'PUT', headers, body: user }, 
+                          'Updating user profile success!' )
+} // signUpProcess
+
+export const deleteUser = async ( userId, token ) => (
+    requestServer( `user/${ userId }`, dataAccess( 'DELETE', token ), 'Deleting user success!' )
+) // signUpProcess
 
 export const validateJWT = ( JWT, call ) => {
     if ( typeof window === 'undefined' ) return
@@ -50,6 +83,15 @@ export const isAuth = () => {
     if ( item !== null ) return JSON.parse( item )
     return false
 } // isAuth
+
+export const authRoute = ( { component: Component, ...rest } ) => {
+    const renderFor = props => (
+        isAuth() ? <Component { ...props } /> :
+                   <Redirect to={ { pathname: '/logIn', 
+                                    state: { from: props.location } } } />
+    ) // renderFor
+    return <Route { ...rest } render={ renderFor } />
+} // authRoute
 
 // export const signUpProcess = async user => {
 //     const domain = 'http://localhost:8080/signup'

@@ -3,21 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { Create } from '@material-ui/icons'
 import { Link, withRouter } from 'react-router-dom';
-
-//const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} {...props} />)
-
-// export const logOutProcess = async history => {
-//     if ( typeof window !== 'undefined' ) localStorage.removeItem( 'jwt' )
-//     history.push( '/' )
-//     const domain = 'http://localhost:8080/logOut'
-//     const data = { method: 'GET' }
-//     try {
-//         const response = await fetch( domain, data );
-//         return await response.json( { msg: 'Logged out successully!' } );
-//     } catch ( error ) {
-//         return console.log( error );
-//     } // catch
-// } // logOut
+import { isAuth } from '../../Auth';
 
 const buttonTextColor = ( history, to ) => {
     const isActivePage = history.location.pathname === to
@@ -54,9 +40,10 @@ const ItemAfterLogin = props => {
     return (
         <List component="nav">
             <ListItem component="div">
+                <NavBarItem item='Apply Tutor' to={ `/user/applyTutor/${ isAuth().user._id }` } history={ history } />
                 <NavBarItem item='Tutors' to='/tutors' history={ history } />
-                <NavBarItem item='Post' to='/posts' history={ history } />
-                <NavBarItem item={ <Create /> } to='/posts' history={ history } />
+                <NavBarItem item='Posts' to='/posts' history={ history } />
+                <NavBarItem item={ <Create /> } to='/create' history={ history } />
             </ListItem>
         </List>
     ) // return

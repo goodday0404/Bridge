@@ -50,7 +50,13 @@ exports.userSignupValidator = [
 					   .isLength( { min: 6, max: 20 } )
 					   .withMessage( 'password must be 3 - 32 characters long' )
 					   .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.* )(?=.*[^a-zA-Z0-9]).{8,}$/, 'i')
-					   .withMessage('Password must include one lowercase character, one uppercase character, a number, and a special character.')									    
+					   .withMessage('Password must include one lowercase character,\
+						one uppercase character, a number, and a special character.'),
+	check( 'tutor' ).exists( checkFalsy )
+					.withMessage( 'tutor is required' ),
+	check( 'courses' ).exists( checkFalsy )
+				    .withMessage( 'courses is required' )
+					   									    
 ]; // userSignupValidator
 
 exports.userSignupErrorHandler = ( request, response, next ) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { withRouter } from 'react-router-dom';
-import { logOutProcess } from '../../Auth';
+import { logOutProcess, isAuth } from '../../Auth';
 
 // export const logOutProcess = async call => {
 //     if ( typeof window !== 'undefined' ) localStorage.removeItem( 'jwt' )
@@ -21,6 +21,7 @@ import { logOutProcess } from '../../Auth';
 const UserMenu = props => {
     const { anchorEl, open, handleClose, history } = props
     const logOut = () => logOutProcess( () => history.push( '/' ) )
+    const clickProfile = () => history.push( `/user/${ isAuth().user._id }` )
     return (
         <Menu
             id="menu-appbar"
@@ -37,8 +38,8 @@ const UserMenu = props => {
             open={open}
             onClose={handleClose}
         >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={ clickProfile }> Profile </MenuItem>
+            <MenuItem onClick={ handleClose }> My account </MenuItem>
             <MenuItem onClick={ logOut }> Log out </MenuItem>
         </Menu>
     ) // return
