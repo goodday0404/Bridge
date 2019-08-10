@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { isAuth, path, getData, getUserInfo } from '../../Auth';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import useStyles from '../../styles/PostStyle';
 import Header from  '../std/Header';
 import Image from './Image';
 import DeleteAccount from './DeleteAccount';
+import Footer from '../std/Footer';
+import Blurb from '../std/Blurb';
 
 class Profile extends Component {
     state = {
@@ -48,36 +55,82 @@ class Profile extends Component {
     render() {
         const { user, route } = this.state
         const logInUser = isAuth().user 
+        const styleContainer = {
+            paddingTop: '100px',
+            paddingBottom: '100px'
+        } // styleContainer
+        const styleText = {
+            paddingTop: '30px',
+            paddingBottom: '30px'
+        } // // styleContainer
+
         return ( 
             route ? <Redirect to='/LogIn' /> :
 
-            <div className='container'>
-              <Header title='User Profile' />
-              <div className='row'>
-                <div className='col-md-6'>
-                  <Image name={ user.name } />
-                </div>
+            <main>
+                <Blurb title='Profile' />
+                <Container style={ styleContainer } maxWidth="md">
+                    <Image name={ user.name } />
+                    <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
+                        Name: { user.name }
+                    </Typography>
+                    <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
+                        Email: { user.email }
+                    </Typography>
+                    { 
+                      this.isTutor() && 
+                      <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
+                          Tutor for: { user.courses }
+                      </Typography>
+                    }
+                    {
+                      this.isLogInUser( logInUser ) &&
+                      <div style={ { marginTop: '20px' } }>
+                          <Grid container spacing={2} justify="center">
+                          <Grid item>
+                              <Link to={ `/user/edit/${ user._id }`}>
+                                <Button variant="contained" color="primary">
+                                    Edit  Profile
+                                </Button>
+                              </Link>
+                          </Grid>
+                          <Grid item>
+                            <DeleteAccount userId={ user._id } />
+                          </Grid>
+                          </Grid>
+                      </div> 
+                    }
+                </Container>
+                <Footer title='CreatePost footer' contents={ 'Add contents here' } />
+            </main>
 
-                <div className='col-md-6'>
-                  <div className='lead mt-2'>
-                      <p> Name: { user.name } </p>
-                      <p> Email: { user.email } </p>
-                      { this.isTutor() && <p> Tutor for: { user.courses } </p> }
-                      {/* <p> { `Joined ${ new Date( this.state.user.created ).toDateString() }` } </p> */}
-                  </div>
-                  { this.isLogInUser( logInUser ) && 
+            // <div className='container'>
+            //   <Header title='User Profile' />
+            //   <div className='row'>
+            //     <div className='col-md-6'>
+            //       <Image name={ user.name } />
+            //     </div>
+
+            //     <div className='col-md-6'>
+            //       <div className='lead mt-2'>
+            //           <p> Name: { user.name } </p>
+            //           <p> Email: { user.email } </p>
+            //           { this.isTutor() && <p> Tutor for: { user.courses } </p> }
+            //           {/* <p> { `Joined ${ new Date( this.state.user.created ).toDateString() }` } </p> */}
+            //       </div>
+            //       { this.isLogInUser( logInUser ) && 
                     
-                    <div className='d-inline-block mt-5'>
-                        <Link className='btn btn-raised btn-success mr-5' to={ `/user/edit/${ user._id }`}>
-                          Edit  Profile
-                        </Link>
-                        <DeleteAccount userId={ user._id } />
-                    </div>
-                  }
-                </div>
-              </div>
+            //         <div className='d-inline-block mt-5'>
+            //             <Link className='btn btn-raised btn-success mr-5' to={ `/user/edit/${ user._id }`}>
+            //               Edit  Profile
+            //             </Link>
+            //             <DeleteAccount userId={ user._id } />
+            //         </div>
+            //       }
+            //     </div>
+            //   </div>
                 
-            </div>
+            // </div>
         ) // return
     } // render
 

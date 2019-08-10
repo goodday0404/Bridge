@@ -2,11 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import useStyles from '../../styles/PostStyle';
+// import Button from '@material-ui/core/Button';
 
 const Title = props => {
     const { title } = props
     return (
-        <Typography component="h3" variant="h4" align="center" color="textPrimary" gutterBottom>
+        <Typography component="h4" variant="h3" align="center" color="textPrimary" gutterBottom>
             { title }
         </Typography>
     ) // return
@@ -23,12 +24,13 @@ const Body = props => {
 
 const Blurb = props => {
     const classes = useStyles()
-    const { body } = props
+    const { title, body } = props
     return (
         <div className={classes.heroContent}>
             <Container maxWidth="md">
-                {/* <Title title={ title } /> */}
-                <Body body={ body } />
+                { title ? <Title title={ title } /> : <Body body={ body } /> }
+                {/* <Title title={ title } />
+                <Body body={ body } /> */}
             </Container>
         </div>
     ) // return
