@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 // const domain = 'http://localhost:8080/'
@@ -76,6 +76,16 @@ export const validateJWT = ( JWT, call ) => {
     localStorage.setItem( 'jwt', JSON.stringify( JWT ) )
     call()
 } // validateJWT
+
+export const updateLocalJWT = ( user, call ) => {
+    if ( typeof window === 'undefined' ) return
+    const item = localStorage.getItem( 'jwt' )
+    if ( !item ) return
+    let userInfo = JSON.parse( item )
+    userInfo.user = user
+    localStorage.setItem( 'jwt', JSON.stringify( userInfo ) )
+    call()
+} // updateLocalJWT
 
 export const isAuth = () => {
     if ( typeof window === 'undefined' ) return false

@@ -23,8 +23,8 @@ const MainRouter = () => {
                 <Route exact path='/posts' component={ Posts } />
                 <Route exact path='/create' component={ CreatePost } />
                 <Route exact path='/user/applyTutor/:userId' component={ ApplyTutor } />
-                <Route exact path='/tutors' component={ Users } />
-                {/* <Route exact path='/users' component={ Users } /> */}
+                <Route exact path='/tutors' component={ Tutor } />
+                <Route exact path='/users' component={ Users } />
                 <Route exact path='/user/edit/:userId' component={ EditUserProfile } />
                 <Route exact path='/user/:userId' component={ Profile } />
                 <Route exact path='/' component={ Home } />

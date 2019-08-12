@@ -7,10 +7,11 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import useStyles from '../../styles/PostStyle';
 import Header from  '../std/Header';
-import Image from './Image';
+import Image from '../std/Image';
 import DeleteAccount from './DeleteAccount';
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
+import { EditDeleteButtons, FollowUnFollowButtons } from './ProfileButtons';
 
 class Profile extends Component {
     state = {
@@ -19,6 +20,12 @@ class Profile extends Component {
     } // state
 
     isTutor = () => this.state.user.tutor === 'yes'
+
+    getImage() {
+        const { user } = this.state
+        const date = new Date().getTime()
+        return user ? path( `user/photo/${ user._id }?${ date }` ) : undefined
+    } // getImage
 
     handleUserInfo( userId ) {
       //const userId = this.props.match.params.userId
@@ -70,35 +77,43 @@ class Profile extends Component {
             <main>
                 <Blurb title='Profile' />
                 <Container style={ styleContainer } maxWidth="md">
-                    <Image name={ user.name } />
+                    <Image url={ this.getImage() } name={ user.name } />
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        Name: { user.name }
+                        Name:   { user.name }
                     </Typography>
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        Email: { user.email }
+                        Email:    { user.email }
+                    </Typography>
+                    <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
+                        Program:    { user.program }
                     </Typography>
                     { 
                       this.isTutor() && 
                       <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                          Tutor for: { user.courses }
+                          Tutor for:    { user.courses }
                       </Typography>
                     }
+                    <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
+                        { user.description }
+                    </Typography>
                     {
-                      this.isLogInUser( logInUser ) &&
-                      <div style={ { marginTop: '20px' } }>
-                          <Grid container spacing={2} justify="center">
-                          <Grid item>
-                              <Link to={ `/user/edit/${ user._id }`}>
-                                <Button variant="contained" color="primary">
-                                    Edit  Profile
-                                </Button>
-                              </Link>
-                          </Grid>
-                          <Grid item>
-                            <DeleteAccount userId={ user._id } />
-                          </Grid>
-                          </Grid>
-                      </div> 
+                      this.isLogInUser( logInUser ) ?
+                      <EditDeleteButtons  userId={ user._id } /> :
+                      <FollowUnFollowButtons />
+                      // <div style={ { marginTop: '20px' } }>
+                      //     <Grid container spacing={2} justify="center">
+                      //     <Grid item>
+                      //         <Link to={ `/user/edit/${ user._id }`}>
+                      //           <Button variant="contained" color="primary">
+                      //               Edit  Profile
+                      //           </Button>
+                      //         </Link>
+                      //     </Grid>
+                      //     <Grid item>
+                      //       <DeleteAccount userId={ user._id } />
+                      //     </Grid>
+                      //     </Grid>
+                      // </div> 
                     }
                 </Container>
                 <Footer title='CreatePost footer' contents={ 'Add contents here' } />

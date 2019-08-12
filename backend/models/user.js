@@ -1,6 +1,7 @@
 const mongoose = require( 'mongoose' );
 const uuidv1 = require( 'uuid/v1' );
 const crypto = require( 'crypto' );
+const { ObjectId } = mongoose.Schema;
 
 const userSchemaDetail = {
 	name: {
@@ -34,17 +35,37 @@ const userSchemaDetail = {
 		contentType: String
 	}, // photo
 
-	tutor: {
+	tutor: {	// indicate whether this user is a tutor
 		type: String,
 		trim: true,
 		required: true
-	}, // tutor, // indicate whether this user is a tutor
+	}, // tutor, 
 
-	courses: {
+	courses: {	 // courses that the tutor offers lessons
 		type: String,
 		trim: true,
 		required: true
-	}, // courses, // courses that the tutor offers lessons
+	}, // courses,
+
+	program: {	// program of study
+		type: String,
+		trim: true,
+	}, // program
+
+	description: {	// decription about an user
+		type: String,
+		trim: true,
+	}, // info
+
+	follows: [ {	// users whom this user follows
+		type: ObjectId,
+		ref: 'User'
+	} ], // follows
+
+	followers: [ {	// users who follow this user
+		type: ObjectId,
+		ref: 'User'
+	} ] // followers
 }; // userSchemaDetail
 
 /*

@@ -24,7 +24,7 @@ const Body = props => {
 
 const Blurb = props => {
     const classes = useStyles()
-    const { title, body } = props
+    const { title, body} = props
     return (
         <div className={classes.heroContent}>
             <Container maxWidth="md">

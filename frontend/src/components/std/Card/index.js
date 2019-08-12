@@ -6,13 +6,16 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../../../styles/PostStyle';
+import { Link } from 'react-router-dom';
 
 export const SimpleCardButton = props => {
-    const { label } = props
+    const { label, to } = props
     return (
-        <Button size="small" color="primary">
-            { label }
-        </Button>
+        <Link to={ to } >
+            <Button size="small" color="primary">
+                { label }
+            </Button>
+        </Link>
     ) // return
 } // SimpleCardButton
 
@@ -23,17 +26,22 @@ export const SimpleCardMedia = props => {
         <CardMedia  className={classes.cardMedia}
                     image={ image }
                     title={ title }
+                    component='img'
+                    onError={ error => { error.target.src = 'https://source.unsplash.com/random' } }
         />
     ) // return
 } // SimpleCardMedia
 
 export const SimpleCardContents = props => {
     const classes = useStyles()
-    const { head, body } = props
+    const { head, contact, body } = props
     return (
         <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5" component="h2">
                 { head }
+            </Typography>
+            <Typography style={ { paddingBottom: '10px' } } >
+                { contact }
             </Typography>
             <Typography>
                 { body }
@@ -43,10 +51,11 @@ export const SimpleCardContents = props => {
 } // SimpleCardMedia
 
 export const DefaultCardActions = props => {
+    const { to } = props
     return (
         <CardActions>
-            <SimpleCardButton label='View' />
-            <SimpleCardButton label='Edit' />
+            <SimpleCardButton label='View' to={ to } />
+            <SimpleCardButton label='Edit' to={ to } />
         </CardActions>
     ) // return
 } // SimpleCardMedia

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Header from  '../std/Header';
-import { isAuth, getUserInfo, updateProcess } from '../../Auth';
+import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
 import { InputField, FormButton } from '../std/Form';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
+import Image from '../std/Image';
 
 class EditUserProfile extends Component {
     state = {
@@ -18,6 +19,8 @@ class EditUserProfile extends Component {
         error: '',
         tutor: 'no',
         courses: '',
+        program: '',
+        description: '',
         fileSize: 0
     } // state
 
@@ -36,6 +39,12 @@ class EditUserProfile extends Component {
     getUserId() {
         return this.props.match.params.userId
     } // getUserId
+
+    getImage() {
+        const { _id } = this.state
+        const date = new Date().getTime()
+        return _id ? path( `user/photo/${ _id }?${ date }` ) : undefined
+    } // getImage
 
     isValidEmail( email ) {
         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
@@ -90,6 +99,10 @@ class EditUserProfile extends Component {
         if ( !this.isLoading ) this.setState( { isLoading: false } )
     } // componentWillUnmount
 
+    componentWillReceiveProps( props ) {
+        this.handleUserInfo( props.match.params.userId )
+    } // componentWillReceiveProps
+
     //////////////////////////// Event handlers /////////////////////////////////
 
     handleInputEntered = key => event => {
@@ -112,7 +125,9 @@ class EditUserProfile extends Component {
                 if ( data.error ) {
                     this.setState( { error: data.error.error } ) 
                 } else {
-                    this.setState( { route: true } )
+                    updateLocalJWT( data, () => {
+                        this.setState( { route: true } )
+                    }) // updateLocalJWT
                 } // if
         }) // then
     } // handleSubmit
@@ -120,9 +135,9 @@ class EditUserProfile extends Component {
     handleUserInfo( userId ) {
         getUserInfo( userId, isAuth().token )
         .then( data => {
-          const { _id, name, email, tutor, courses } = data
+          const { _id, name, email, tutor, courses, program, description } = data
           if ( data.error ) this.setState( { route: true } )
-          else this.setState( { _id, name, email, tutor, courses } )
+          else this.setState( { _id, name, email, tutor, courses, program, description } )
         }) // then
       } // handleUserInfo
 
@@ -136,21 +151,23 @@ class EditUserProfile extends Component {
         return <CircularIndeterminate />
     } // showLoadingIcon
 
-    inputField( label, context, type, value, accept ) {
+    inputField( label, context, type, value, accept, textarea ) {
         return <InputField  label={ label } 
                             type={ type } 
                             accept={ accept }
                             value={ value }
+                            textarea={ textarea }
                             onChange={ this.handleInputEntered( context ) }
                />
     } // inputField
 
-    EditForm = ( name, email, password, about, tutor, courses ) => (
+    EditForm = ( name, email, password, program, description, tutor, courses ) => (
         <form> 
             { this.inputField( 'Photo', 'photo', 'file', '', 'image/*' ) }
             { this.inputField( 'Name', 'name', 'text', name ) }
             { this.inputField( 'Email', 'email', 'text', email ) }
-            { this.inputField( 'About', 'about', 'text', about ) }
+            { this.inputField( 'Program', 'program', 'text', program, undefined, 'textarea' ) }
+            { this.inputField( 'About me', 'description', 'text', description, undefined, 'textarea' ) }
             { this.inputField( 'Tutor', 'tutor', 'text', tutor ) }
             { this.inputField( 'Courses', 'courses', 'text', courses ) }
             { this.inputField( 'Password', 'password', 'text', password ) }
@@ -159,7 +176,8 @@ class EditUserProfile extends Component {
       );
 
     render() {
-        const { _id, name, email, password , route, isLoading, error, tutor, courses } = this.state
+        const { _id, name, email, password , route, isLoading, error, 
+                tutor, courses, program, description } = this.state
         return (
             route ? <Redirect to={ `/user/${ _id }` } /> :
 
@@ -167,7 +185,8 @@ class EditUserProfile extends Component {
                 <Header title='Edit User Profile' />
                 { isLoading && this.showLoadingIcon() }
                 { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                { this.EditForm( name, email, password, '', tutor, courses ) }
+                <Image url={ this.getImage() } alt={ name } />
+                { this.EditForm( name, email, password, program, description, tutor, courses ) }
             </div>
         ) // return
     } // render

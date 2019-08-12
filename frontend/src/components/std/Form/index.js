@@ -22,14 +22,28 @@ const TextInput = props => {
     ) // return  
 } // TextInput
 
+const UncontrolledInput = props => {
+    const { type, value, onChange } = props
+    return (
+        <textarea  onChange={ onChange }
+                    type={ type }
+                    value={ value }
+                    className="form-control"
+        />
+    ) // return  
+} // UncontrolledInput
+
 export const InputField = props => {
-    const { label, type, accept, value, onChange } = props
+    const { label, type, accept, value, onChange, textarea } = props
     return (
         <div className="form-group">
             <label className="text-muted"> { label } </label>
             { accept ? 
                 <ImageInput type={ type } accept={ accept } onChange={ onChange } /> :
-                <TextInput type={ type } value={ value } onChange={ onChange } />
+
+                textarea ?
+                    <UncontrolledInput type={ type } value={ value } onChange={ onChange } /> :
+                    <TextInput type={ type } value={ value } onChange={ onChange } />
              }
         </div>
     ) // return 

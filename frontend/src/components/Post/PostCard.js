@@ -5,12 +5,12 @@ import { SimpleCardMedia, SimpleCardContents, DefaultCardActions } from '../std/
 
 const PostCard = props => {
     const classes = useStyles()
-    const { image, title, head, body } = props
+    const { image, title, head, email, body, to } = props
     return (
         <Card className={classes.card}>
             <SimpleCardMedia image={ image } title={ title } />
-            <SimpleCardContents head={ head } body={ body } />
-            <DefaultCardActions />
+            <SimpleCardContents head={ head } contact={ email } body={ body } />
+            <DefaultCardActions to={ to } />
         </Card>
     ) // return
 } // PostCard

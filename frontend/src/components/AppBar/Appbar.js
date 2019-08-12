@@ -42,8 +42,8 @@ const ButtonAppBar = props => {
         setAnchorEl(null);
     } // handleChange
 
-console.log('isLogin: ', isLogin)
-console.log('auth: ', auth)
+// console.log('isLogin: ', isLogin)
+// console.log('auth: ', auth)
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -58,7 +58,7 @@ console.log('auth: ', auth)
                     <Typography variant="h6" className={classes.title}>
                         Bridge
                     </Typography>
-                    { 
+                    {/* { 
                         isLogin && 
                         <SearchBox 
                             search={classes.search} 
@@ -66,7 +66,7 @@ console.log('auth: ', auth)
                             inputRoot={classes.inputRoot}
                             inputInput={classes.inputInput} 
                         />
-                    }
+                    } */}
                     {/* <AppBarButtons isLogin={isAuth} /> */}
                     <NavBar isAuth={ isLogin } history={ history } />
                     { 
