@@ -44,7 +44,7 @@ const userSchemaDetail = {
 	courses: {	 // courses that the tutor offers lessons
 		type: String,
 		trim: true,
-		required: true
+		//required: true
 	}, // courses,
 
 	program: {	// program of study

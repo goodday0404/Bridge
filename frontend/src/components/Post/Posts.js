@@ -1,15 +1,71 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Album from './Album';
-import AlbumTC from './AlbumTC';
+import PostAlbum from './PostAlbum';
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import Blurb from '../std/Blurb';
+import Footer from '../std/Footer';
+import { getAllUserInfo } from '../../Auth';
+import { getAllPostsRequest } from '../../API/postAPI';
+import SearchBox from '../AppBar/SearchBox';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import SelectOutlind from '../std/Select';
 
 class Posts extends Component {
+    state = {
+        posts: [],
+        searched: [],
+        //searchString: '',
+        criteria: '',
+        isTutor: this.props.isTutor
+    } // state
+
+    getSearchedItems = searchString => {
+        const { criteria, posts } = this.state
+        if ( !searchString ) return posts
+        const target = searchString.trim().toLowerCase();
+        return posts.filter( post => {
+console.log('filtered post: ', post)
+            let criterion = post.name
+            if ( criteria === 'courses' ) criterion = post.courses
+            else if ( criteria === 'email' ) criterion = post.email
+            else if ( criteria === 'program' ) criterion = post.program
+            return criterion.toLowerCase().match( target ) 
+        } ) // filter
+    } // getSearchedItems
+      
+    handleInputChange = event => {
+        this.setState( { searched: this.getSearchedItems( event.target.value ) } )
+    } // handleInputChange
+
+    handleSelect = event => {
+        this.setState( { criteria: event.target.value } )
+    } // handleSelect
+
+    componentDidMount() {
+        getAllPostsRequest().then( data => {
+            if ( data.error ) {
+                console.log( data.error )
+                return
+            } // if
+            // const items = !this.state.isTutor ? data : data.filter( user => {
+            //     return user.tutor.match( 'yes' )
+            // } ) // filter
+console.log('post data: ', data)
+            this.setState( { posts: data.posts, searched: data.posts } )
+        }) // then
+    } // componentDidMount
+
     render() {
+        const { searched, isTutor, call } = this.state
+        const styleContainer = {
+            paddingTop: '60px',
+            paddingBottom: '100px'
+        } // styleContainer
+
         return (
-            // <Album />
-            <AlbumTC />
+            <PostAlbum searched={ searched } />
           ) // return
     } // render
 } // Post

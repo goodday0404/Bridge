@@ -52,8 +52,8 @@ const SelectOutlind = props => {
                 inputProps={ { name: 'criteria', id: 'age-simple' } }
             >
                 { 
-                    isTutor ? <MenuItem value='courses'> <em>Course</em> </MenuItem> :
-                            <MenuItem value='program'> <em>Program</em> </MenuItem>
+                    isTutor ?   <MenuItem value='courses'> <em>Course</em> </MenuItem> :
+                                <MenuItem value='program'> <em>Program</em> </MenuItem>
                 }
                 
                 <MenuItem value='name'> Name </MenuItem>

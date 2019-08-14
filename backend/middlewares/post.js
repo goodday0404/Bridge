@@ -26,7 +26,7 @@ const createErrorObj = ( response, error, code ) => {
 		request.post && request.auth && request.postedBy._id === request.auth._id
 */
 exports.postById = ( request, response, next, id ) => {
-//console.log('postById is called')
+console.log('postById is called')
 	Post.findById( id )
 		.populate( 'postedBy', '_id name')
 		.exec( ( err, post ) => {
@@ -41,7 +41,8 @@ exports.postById = ( request, response, next, id ) => {
 exports.getPosts = ( request, response ) => {
 	const posts = Post.find()
 					  .populate( 'postedBy', '_id name' )
-					  .select( 'id title body' ) // select properties of object only we want
+					  .select( 'id title body created' ) // select properties of object only we want
+					  .sort( { created: -1 } )
 					  .then( posts => {
 					  	// same with response.status(200).json( { posts: posts }
 					  	// since status(200) is set as default
@@ -55,19 +56,43 @@ exports.getPosts = ( request, response ) => {
 }; // getPosts
 
 // create a post based on the information from the request
-exports.createPost = ( request, response, next ) => {
+// exports.createPost = ( request, response, next ) => {
+//     let form = new formidable.IncomingForm();
+//     form.keepExtensions = true;
+//     form.parse( request, ( err, newData, imageFile ) => {
+// 		if ( err ) return createErrorObj( response, 'Uploading image failed', 400 );
+// 		let post = new Post( newData );
+// 		const profile = request.profile;
+// 		const filePhoto = imageFile.photo;
+// 		const postPhoto = post.photo;
+//         profile.hashed_password = profile.salt = undefined;
+// 		post.postedBy = profile;
 
+//         if ( filePhoto ) {
+//             postPhoto.data = fs.readFileSync( filePhoto.path );
+// 			postPhoto.contentType =  filePhoto.type;
+// 		} // if
+		
+//         post.save( ( error, result ) => {
+//             if ( error ) return createErrorObj( response, 'Uploading image failed', 400 );
+//             response.json(result);
+//         }); // save
+//     }); // parse
+// }
+
+// create a post based on the information from the request
+exports.createPost = ( request, response, next ) => {
 	let form = new formidable.IncomingForm();
 	form.keepExtensions = true;
 
 	const hadleParse = ( err, fields, files ) => {
-
 		// handle the given files
-		const handleFile = () => {
-			const photo = files.photo;
-			if ( photo ) {
-				photo.data = fs.readFileSync( photo.path );
-				photo.contentType = photo.type;
+		const handleFile = ( post ) => {
+			const filePhoto = files.photo
+			const postPhoto = post.photo
+			if ( filePhoto ) {
+				postPhoto.data = fs.readFileSync( filePhoto.path );
+				postPhoto.contentType = filePhoto.type;
 			} // if
 		}; // handleFile
 
@@ -75,29 +100,22 @@ exports.createPost = ( request, response, next ) => {
 			if ( err ) return createErrorObj( response, err, 400 );
 			response.json( post );
 		}; // savePost
-
-		if ( err ) {
-			return createErrorObj( response, { error: 'Image could not be uploaded!' }, 400 );
-		} // if
 		
 		let post = new Post( fields ); // fields come from request
 		const profile = request.profile;
 		profile.hashed_password = profile.salt = undefined;
 		post.postedBy = request.profile;
-		// console.log( "profile", request.profile );
-		handleFile();
+		handleFile( post );
 		post.save( savePost ); 
 	}; // hadleParse
 
 	form.parse( request, hadleParse );
-	// const errors = validationResult( request );
-	// if ( !errors.isEmpty() ) {
-	// 	const errorList = { errors: errors.array() };
-	// 	return response.status( 422 ).json( errorList );
-	// } // if
-
-	// const post = new Post( request.body );
-	// return post.save().then( result => response.status( 200 ).json( { post: result } ) );
+	
+	const errors = validationResult( request );
+	if ( !errors.isEmpty() ) {
+		const errorList = { errors: errors.array() };
+		return response.status( 422 ).json( errorList );
+	} // if
 }; // createPost
 
 exports.postByUser = ( request, response ) => {
@@ -133,6 +151,12 @@ exports.updatePost = ( request, response, next ) => {
 		response.json( post );
 	} ); // save
 }; // updatePost
+
+exports.postPhoto = ( request, response, next ) => {
+	const photo = request.post.photo
+	response.set( 'content-Type', photo.contentType )
+	return response.send( photo.data )
+} // postPhoto
 
 exports.deletePost = ( request, response ) => {
 	let post = request.post;

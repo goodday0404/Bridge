@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Album from '../Post/Album';
+import UserAlbum from './UserAlbum';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
 import { getAllUserInfo } from '../../Auth';
@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import SelectOutlind from '../std/Select';
 
-class AlbumLayout extends Component {
+class UserAlbumLayout extends Component {
     state = {
         users: [],
         searched: [],
@@ -23,6 +23,7 @@ class AlbumLayout extends Component {
         if ( !searchString ) return users
         const target = searchString.trim().toLowerCase();
         return users.filter( user => {
+console.log('filtered user: ', user)
             let criterion = user.name
             if ( criteria === 'courses' ) criterion = user.courses
             else if ( criteria === 'email' ) criterion = user.email
@@ -74,7 +75,7 @@ class AlbumLayout extends Component {
                             />
                             <SearchBox handleInputChange={ this.handleInputChange } />
                         </Grid>
-                        <Album searched={ searched } />
+                        <UserAlbum searched={ searched } />
                     </Container>
                 </main>
                 <Footer title='Posts footer' contents='Add someting here' />
@@ -83,4 +84,4 @@ class AlbumLayout extends Component {
     } // render
 } // Post
 
-export default AlbumLayout;
+export default UserAlbumLayout;

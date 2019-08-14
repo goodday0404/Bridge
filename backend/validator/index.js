@@ -54,8 +54,8 @@ exports.userSignupValidator = [
 						one uppercase character, a number, and a special character.'),
 	check( 'tutor' ).exists( checkFalsy )
 					.withMessage( 'tutor is required' ),
-	check( 'courses' ).exists( checkFalsy )
-				    .withMessage( 'courses is required' )
+	// check( 'courses' ).exists( checkFalsy )
+	// 			    .withMessage( 'courses is required' )
 					   									    
 ]; // userSignupValidator
 

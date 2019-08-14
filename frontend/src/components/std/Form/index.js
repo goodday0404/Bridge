@@ -52,7 +52,7 @@ export const InputField = props => {
 export const FormButton = props => {
     const { label, onClick } =props
     return (
-        <button onClick={ onClick } className="btn btn-raised btn-primary">
+        <button style={ { marginBottom: '100px' } } onClick={ onClick } className="btn btn-raised btn-primary">
             { label }
         </button>
     ) // return 

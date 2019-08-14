@@ -1,7 +1,7 @@
 import React from 'react';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
-import AlbumLayout from '../User/AlbumLayout';
+import UserAlbumLayout from '../User/UserAlbumLayout';
 
 const Tutor = () => (
     // <div className='jumbotron'>
@@ -11,7 +11,7 @@ const Tutor = () => (
     //     </p>
     //     <Footer title='Tutor footer' content='Add contents here' />
     // </div>
-    <AlbumLayout isTutor={ true } />
+    <UserAlbumLayout isTutor={ true } />
 ) // Tutor
 
 export default Tutor;

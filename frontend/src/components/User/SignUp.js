@@ -25,7 +25,8 @@ class SignUp extends Component {
           isSignUp: false,
           isLoading: false,
           tutor: 'no',
-          courses: 'empty'
+          courses: '',
+          program: ''
       } // this.initialState
       this.state = this.initialState
   } // constructor
@@ -50,8 +51,8 @@ class SignUp extends Component {
   handleSubmit = event => {
     event.preventDefault() // prevent webbrowser from reloading
     this.startLoading();
-    const { name, email, password, tutor, courses } = this.state
-    signUpProcess( { name, email, password, tutor, courses } ).then( data => {
+    const { name, email, password, tutor, courses, program } = this.state
+    signUpProcess( { name, email, password, tutor, courses, program } ).then( data => {
             if ( data.error ) {
               this.setState( { error: data.error[0].msg } ) 
             } else {

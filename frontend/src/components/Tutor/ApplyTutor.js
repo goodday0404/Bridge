@@ -48,8 +48,8 @@ class ApplyTutor extends Component {
         this.setState( { [ key ]: event.target.value } )
     } // handleChange
 
-    handleSelectButton = key => event => {
-        this.userData.set( key, event.target.value )
+    handleSelectButton = event => {
+        this.userData.set( 'tutor', event.target.value )
         this.setState({ tutor: event.target.value } )
     } // handleSelectButton
 
@@ -79,11 +79,13 @@ class ApplyTutor extends Component {
 
     render() {
         const { tutor } = this.state
-        const containerStyle = { 
-            paddingTop: '100px',
-            paddingBottom: '100px'
-        } // containerStyle 
-
+        const containerStyle = { paddingTop: '100px', paddingBottom: '100px' } 
+        const textFieldStyle = {
+            display: 'flex',
+            flexWrap: 'wrap',
+            paddingTop: '40px',
+            paddingBottom: '50px'
+        } // textFieldStyle
         //const { _id, name, email, password , route, isLoading, error } = this.state
         return (
             //route ? <Redirect to={ `/user/${ _id }` } /> :
@@ -93,7 +95,13 @@ class ApplyTutor extends Component {
                     <h4> Do you want to be a tutor? </h4>
                     <RadioButton value={ tutor } onChange={ this.handleSelectButton } />
                     { console.log(this.state) }
-                    <OutlinedTextField  onChange={ this.handleTextInput( 'courses' ) } />
+                    <OutlinedTextField  
+                        onChange={ this.handleTextInput( 'courses' ) }
+                        label="Courses"
+                        placeholder="Enter course codes, eg) CS493 CS494 MATH239"
+                        helperText="Seperate course codes by space"
+                        style={ textFieldStyle }
+                     />
                     <SubmitButton buttonName='Submit' onClick={ this.handleSubmit } />
                     {/* { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }

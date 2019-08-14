@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
+import Container from '@material-ui/core/Container';
+import Footer from '../std/Footer';
+import Blurb from '../std/Blurb';
 
 class Post extends Component {
     render() {
+        const containerStyle = { paddingTop: '100px', paddingBottom: '100px' }
+        
         return (
-            <div className='container'>
-                Post
-            </div>
+            <main>
+                <Blurb body='something blar blar' />
+                <Container style={ containerStyle } maxWidth="md">
+                    <h4> Implement displaying a post </h4>
+                </Container>
+                <Footer title='Post footer' contents={ 'Add contents here' } />
+            </main>
           ) // return
     } // render
 } // Post

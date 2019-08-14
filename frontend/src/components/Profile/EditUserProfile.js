@@ -6,6 +6,8 @@ import { InputField, FormButton } from '../std/Form';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
+import Blurb from '../std/Blurb';
+import Footer from '../std/Footer';
 
 class EditUserProfile extends Component {
     state = {
@@ -181,13 +183,17 @@ class EditUserProfile extends Component {
         return (
             route ? <Redirect to={ `/user/${ _id }` } /> :
 
-            <div className='container'>
-                <Header title='Edit User Profile' />
-                { isLoading && this.showLoadingIcon() }
-                { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                <Image url={ this.getImage() } alt={ name } />
-                { this.EditForm( name, email, password, program, description, tutor, courses ) }
-            </div>
+            <main>
+                <Blurb body='Edit User Profile' />
+                <div className='container' style={ { paddingTop: '100px' } } >
+                    { isLoading && this.showLoadingIcon() }
+                    { error && this.alertSection( error, '#F8BBD0', 'red' ) }
+                    <Image url={ this.getImage() } alt={ name } />
+                    { this.EditForm( name, email, password, program, description, tutor, courses ) }
+                </div>
+                <Footer title='Profile footer' contents={ 'add something here' } />
+            </main>
+            
         ) // return
     } // render
 } // EditUserProfile

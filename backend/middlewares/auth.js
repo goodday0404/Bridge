@@ -46,8 +46,10 @@ exports.logIn = ( request, response ) => {
 		// persist the token as 't' in cookie with expiry date
 		response.cookie( 't', token, { expire: new Date() + 9999 } );
 		// return response with user and token to client 
-		const { _id, name, email, tutor, courses } = user;
-		return response.json( { token, user: { _id, name, email, tutor, courses } } );
+		const { _id, name, email, tutor, courses, program, description, 
+				follows, followers } = user;
+		return response.json( { token, user: { _id, name, email, tutor, courses, 
+								program, description, follows, followers } } );
 	} ); // User.findOne
 
 }; // logIn

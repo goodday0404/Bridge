@@ -20,6 +20,7 @@ const MainRouter = () => {
             <Switch>
                 <Route exact path='/signUp' component={ SignUp } />
                 <Route exact path='/login' component={ LogIn } />
+                <Route exact path='/posts/:postId' component={ Post } />
                 <Route exact path='/posts' component={ Posts } />
                 <Route exact path='/create' component={ CreatePost } />
                 <Route exact path='/user/applyTutor/:userId' component={ ApplyTutor } />

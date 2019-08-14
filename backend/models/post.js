@@ -19,7 +19,7 @@ const schema = {
 	}, // body
 
 	photo: {
-		type: Buffer,
+		data: Buffer,
 		contentType: String
 	}, // photo
 

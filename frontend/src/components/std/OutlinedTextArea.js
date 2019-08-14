@@ -11,27 +11,29 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const OutlinedTextField = props => {
+const OutlinedTextArea = props => {
   const classes = useStyles();
-  const { label, placeholder, helperText, onChange, style } = props
+  const { rows, label, placeholder, helperText, onChange } = props
 
   return (
-    <form style={ style } noValidate autoComplete="off">
+    <form className={classes.container} noValidate autoComplete="off">
       <TextField
-        id="outlined-full-width"
+        id="outlined-multiline-static"
         label={ label }
+        multiline
+        fullWidth
+        rows={ rows }
+        //defaultValue=''
         placeholder={ placeholder }
         helperText={ helperText }
-        fullWidth
+        className={ classes.textField }
         margin="normal"
         variant="outlined"
-        InputLabelProps={{
-          shrink: true,
-        }}
+        InputLabelProps={ { shrink: true } }
         onChange={ onChange }
       />
     </form>
   ) // return
-} // OutlinedTextFields
+} // OutlinedTextAreas
 
-export default OutlinedTextField;
+export default OutlinedTextArea;

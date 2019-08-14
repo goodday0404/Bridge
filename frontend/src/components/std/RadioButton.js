@@ -30,7 +30,13 @@ const useStyles = makeStyles(theme => ({
 
 const RadioButton = props => {
     const classes = useStyles();
-    const { value, onChange } = props
+    const { onChange } = props
+    const [ value, setValue ] = React.useState('Yes');
+
+    const handleChange = event=> {
+      setValue( event.target.value );
+      onChange( event )
+    }
     return (
         <FormControl component="fieldset" className={classes.formControl}>
             {/* <FormLabel component="legend">Do you want to be a tutor?</FormLabel> */}
@@ -39,7 +45,7 @@ const RadioButton = props => {
                 name="gender1"
                 className={classes.group}
                 value={ value }
-                onChange={onChange}
+                onChange={ handleChange }
             >
                 <FormControlLabel value='yes' control={<Radio />} label="Yes" />
                 <FormControlLabel value='no' control={<Radio />} label="No" />

@@ -59,12 +59,41 @@ export const logOutProcess = async call => {
 } // logOut
 
 export const updateProcess = async ( userId, token, user ) => {
-console.log('user data update: ', user)
+//console.log('user data update: ', user)
     const headers = { Accept: 'application/json', Authorization: `Bearer ${ token }`}
     return requestServer( `user/${ userId }`,
                           { method: 'PUT', headers, body: user }, 
                           'Updating user profile success!' )
 } // signUpProcess
+
+export const followRequest = ( userId, token, followId ) => {
+    return requestServer( 'user/follow',
+                          { ...dataAccess( 'PUT', token ), 
+                            body: JSON.stringify( { userId, followId } ) }, 
+                          'Updating follow state success!' )
+} // followRequest
+
+export const unfollowRequest = ( userId, token, unfollowId ) => {
+    return requestServer( 'user/unfollow',
+                          { ...dataAccess( 'PUT', token ), 
+                            body: JSON.stringify( { userId, unfollowId } ) }, 
+                          'Updating follow state success!' )
+} // followRequest
+
+// export const followUnfollowRequest = ( userId, token, action, targetId ) => {
+//     return requestServer( `user/${ action }`,
+//                           { ...dataAccess( 'PUT', token ), 
+//                             body: JSON.stringify( { userId, targetId } ) }, 
+//                           'Updating follow state success!' )
+// } // followUnfollowRequest
+
+// export const followRequest = ( userId, token, followId ) => {
+//     return followUnfollowRequest( userId, token, 'follow', followId )
+// } // followRequest
+
+// export const UnfollowRequest = ( userId, token, unfollowId ) => {
+//     return followUnfollowRequest( userId, token, 'unfollow', unfollowId )
+// } // followRequest
 
 export const deleteUser = async ( userId, token ) => (
     requestServer( `user/${ userId }`, dataAccess( 'DELETE', token ), 'Deleting user success!' )

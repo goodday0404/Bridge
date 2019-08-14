@@ -6,10 +6,10 @@ import Header from  '../std/Header';
 import Image from '../std/Image';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
-import AlbumLayout from './AlbumLayout';
+import UserAlbumLayout from './UserAlbumLayout';
  
 const Users = () => (
-    <AlbumLayout isTutor={ false } />
+    <UserAlbumLayout isTutor={ false } />
 ) // Tutor
 
 // class Users extends Component {

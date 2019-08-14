@@ -2,20 +2,24 @@ const _ = require( 'lodash');
 const User = require( '../models/user');
 const formidable = require( 'formidable' );
 const fs = require( 'fs' ); // Node.js module
+const mongoose = require( 'mongoose' );
+
+mongoose.set('useFindAndModify', false);
 
 const createErrorObj = ( response, error, code ) => {
 	return response.status( code ).json( { error } );
 }; // createErrorObj
 
 exports.userById = ( request, response, next, id ) => {
+console.log('find id: ', id)
 	User.findById( id )
-		.populate( 'follows', '_id name' )
-		.populate( 'followers', '_id name' )
+		.populate( 'follows', '_id name email program description' )
+		.populate( 'followers', '_id name email program description' )
 		.exec( ( err, user ) => {
 		if ( err || !user ) {
 			// const error = { error: "user is not found" };
 			// return response.status( 400 ).json( error );
-			return createErrorObj( response, { error: "user is not found" }, 400 )
+			return createErrorObj( response, "user is not found", 400 )
 		} // if
 		request.profile = user; // add profile object in rqquest with user information
 		next();
@@ -91,17 +95,14 @@ exports.updateUser = ( request, response, next ) => {
 		if ( err ) {
 			return createErrorObj( response, { error: 'Uploading image file failed' }, 400 );
 		} // if
-
 		let userInfo = request.profile
 		userInfo = _.extend( userInfo, newData ) // update user data	
 		userInfo.updated = Date.now() //  updated time
-
 		if ( imageFile.photo ) {
 			const photo = userInfo.photo
 			photo.data = fs.readFileSync( imageFile.photo.path )
 			photo.contentType = imageFile.photo.type
 		} // if
-
 		userInfo.save( ( err ) => {
 			if ( err ) return response.status( 400 ).json( { error: err } )
 			userInfo.hashed_password = userInfo.salt = undefined
@@ -128,53 +129,32 @@ exports.deleteUser = ( request, response, next ) => {
 const followTemplate = ( request, response, next, user ) => {
 	const handleError = ( err, result ) => {
 		if ( err ) return createErrorObj( response, { error: err }, 400 );
+		next()
 	} // handleError
 	User.findByIdAndUpdate( request.body.userId, user, handleError )
-	next()
 } // followTemplate
 
-exports.addFollows = ( request, response, next ) => {
-	const follow = { $push: { follows: request.body.followId } }
-	followTemplate( request, response, next, follow )
-} // addFollows
+// exports.addFollows = ( request, response, next ) => {
+// 	const follow = { $push: { follows: request.body.followId } }
+// 	followTemplate( request, response, next, follow )
+// } // addFollows
 
-exports.deleteFollows = ( request, response, next ) => {
-	const unfollow = { $pull: { follows: request.body.unfollowId } }
-	followTemplate( request, response, next, unfollow )
-} // deleteFollows
+// exports.deleteFollows = ( request, response, next ) => {
+// 	const unfollow = { $pull: { follows: request.body.unfollowId } }
+// 	followTemplate( request, response, next, unfollow )
+// } // deleteFollows
 
 // exports.addFollows = ( request, response, next ) => {
+// console.log('userId: ', request.body.userId)
+// console.log('followId: ', request.body.followId)
 // 	const body = request.body
 // 	const follow = { $push: { follows: body.followId } }
 // 	const handleError = ( err, result ) => {
 // 		if ( err ) return createErrorObj( response, { error: err }, 400 );
+// 		next()
 // 	} // handleError
 // 	User.findByIdAndUpdate( body.userId, follow, handleError )
-// 	next()
 // } // addFollows
-
-const unfollowTemplate = ( response, user, id ) => {
-	const isNewData = { new: true }
-	const handleErrorAndResult = ( err, result ) => {
-		if ( err ) return createErrorObj( response, { error: err }, 400 );
-		result.hashed_password = result.salt = undefined;
- 		response.json( result );
-	} // handleError
-	User.findByIdAndUpdate( id, user, isNewData )
-		.populate( 'follows', '_id name' )
-		.populate( 'followers', '_id name' )
-		.exec( handleErrorAndResult )
-} // followTemplate
-
-exports.addFollowers = ( request, response ) => {
-	const follower = { $push: { followers: request.body.userId } }
-	unfollowTemplate( response, follower, request.body.followId )
-} // addFollows
-
-exports.deleteFollowers = ( request, response ) => {
-	const unfollower = { $pull: { followers: request.body.userId } }
-	unfollowTemplate( response, unfollower, request.body.unfollowId )
-} // addFollows
 
 // exports.addFollowers = ( request, response ) => {
 // 	const body = request.body
@@ -190,6 +170,31 @@ exports.deleteFollowers = ( request, response ) => {
 // 		.populate( 'followers', '_id name' )
 // 		.exec( handleErrorAndResult )
 // } // addFollows
+
+const followerTemplate = ( response, follower, id ) => {
+	const isNewData = { new: true }
+	const handleErrorAndResult = ( err, result ) => {
+		if ( err ) return createErrorObj( response, { error: err }, 400 );
+		result.hashed_password = result.salt = undefined;
+ 		response.json( result );
+	} // handleError
+	User.findByIdAndUpdate( id, follower, isNewData )
+		.populate( 'follows', '_id name email program description' )
+		.populate( 'followers', '_id name email program description' )
+		.exec( handleErrorAndResult )
+} // followTemplate
+
+// exports.addFollowers = ( request, response ) => {
+// 	const follower = { $push: { followers: request.body.userId } }
+// 	followerTemplate( response, follower, request.body.followId )
+// } // addFollows
+
+// exports.deleteFollowers = ( request, response ) => {
+// 	const unfollower = { $pull: { followers: request.body.unfollowId } }
+// 	followerTemplate( response, unfollower, request.body.userId )
+// } // addFollows
+
+
 
 // exports.deleteFollows = ( request, response, next ) => {
 // 	const body = request.body
@@ -217,3 +222,56 @@ exports.deleteFollowers = ( request, response ) => {
 // } // addFollows
 
 
+
+
+
+exports.addFollows = (req, res, next) => {
+    User.findByIdAndUpdate(req.body.userId, { $push: { follows: req.body.followId } }, (err, result) => {
+        if (err) {
+            return res.status(400).json({ error: err });
+        }
+        next();
+    });
+};
+
+exports.addFollowers = (req, res) => {
+    User.findByIdAndUpdate(req.body.followId, { $push: { followers: req.body.userId } }, { new: true })
+        .populate('follows', '_id name email program description')
+        .populate('followers', '_id name email program description')
+        .exec((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            result.hashed_password = undefined;
+            result.salt = undefined;
+            res.json(result);
+        });
+};
+
+// remove follow unfollow
+exports.deleteFollows = (req, res, next) => {
+    User.findByIdAndUpdate(req.body.userId, { $pull: { follows: req.body.unfollowId } }, (err, result) => {
+        if (err) {
+            return res.status(400).json({ error: err });
+        }
+        next();
+    });
+};
+
+exports.deleteFollowers = (req, res) => {
+    User.findByIdAndUpdate(req.body.unfollowId, { $pull: { followers: req.body.userId } }, { new: true })
+        .populate('follows', '_id name')
+        .populate('followers', '_id name')
+        .exec((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            result.hashed_password = undefined;
+            result.salt = undefined;
+            res.json(result);
+        });
+};

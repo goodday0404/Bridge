@@ -1,14 +1,14 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import useStyles from '../../styles/PostStyle';
-import PostCard from './PostCard'; 
 import { path } from '../../Auth';
+import UserCard from './UserCard';
 
 const getImage = user => {
   return path( `user/photo/${ user._id }` ) 
 } // getImage
   
-const Album = props => {
+const UserAlbum = props => {
     const classes = useStyles();
     const footerContents = 'add something here'
     const { searched, call } = props
@@ -56,10 +56,11 @@ const Album = props => {
 //console.log(`${user.name}'s description: ${user.description}`)
                 return (
                 <Grid item key={user.name} xs={12} sm={6} md={4}>
-                  <PostCard image={ getImage( user ) } 
+                  <UserCard image={ getImage( user ) } 
                             title="Image title"
                             head={ user.name } 
                             email={ user.email }
+                            program={ user.program }
                             body={ user.description }
                             to={ `/user/${ user._id }` }
                   />
@@ -69,4 +70,4 @@ const Album = props => {
     );
 }
 
-export default Album;
+export default UserAlbum;

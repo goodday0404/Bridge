@@ -21,9 +21,10 @@ export const SimpleCardButton = props => {
 
 export const SimpleCardMedia = props => {
     const classes = useStyles()
-    const { image, title } = props
+    const { image, title, style } = props
     return (
-        <CardMedia  className={classes.cardMedia}
+        <CardMedia  //className={classes.cardMedia}
+                    style={ style }
                     image={ image }
                     title={ title }
                     component='img'
@@ -34,7 +35,7 @@ export const SimpleCardMedia = props => {
 
 export const SimpleCardContents = props => {
     const classes = useStyles()
-    const { head, contact, body } = props
+    const { head, contact, program, body } = props
     return (
         <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5" component="h2">
@@ -43,6 +44,10 @@ export const SimpleCardContents = props => {
             <Typography style={ { paddingBottom: '10px' } } >
                 { contact }
             </Typography>
+            <Typography style={ { paddingBottom: '20px' } } >
+                { program }
+            </Typography>
+            <hr/>
             <Typography>
                 { body }
             </Typography>
@@ -55,7 +60,7 @@ export const DefaultCardActions = props => {
     return (
         <CardActions>
             <SimpleCardButton label='View' to={ to } />
-            <SimpleCardButton label='Edit' to={ to } />
+            {/* <SimpleCardButton label='Edit' to={ to } /> */}
         </CardActions>
     ) // return
 } // SimpleCardMedia

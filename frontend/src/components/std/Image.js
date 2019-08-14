@@ -3,7 +3,7 @@ import DefaultAvatar from '../../images/defaultAvatar.jpg';
 
 const style = {
     // width: '100%', 
-    height: '200px', 
+    height: '400px', 
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',

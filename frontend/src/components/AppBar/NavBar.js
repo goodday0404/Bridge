@@ -40,7 +40,7 @@ const ItemAfterLogin = props => {
     return (
         <List component="nav">
             <ListItem component="div">
-                <NavBarItem item='Apply Tutor' to={ `/user/applyTutor/${ isAuth().user._id }` } history={ history } />
+                <NavBarItem item='ApplyTutor' to={ `/user/applyTutor/${ isAuth().user._id }` } history={ history }  />
                 <NavBarItem item='Tutors' to='/tutors' history={ history } />
                 <NavBarItem item='Members' to='/users' history={ history } />
                 <NavBarItem item='Posts' to='/posts' history={ history } />

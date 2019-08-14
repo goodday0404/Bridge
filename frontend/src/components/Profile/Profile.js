@@ -12,14 +12,25 @@ import DeleteAccount from './DeleteAccount';
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
 import { EditDeleteButtons, FollowUnFollowButtons } from './ProfileButtons';
+import SubView from './SubView';
 
 class Profile extends Component {
     state = {
-        user: '',
-        route: false
+        user: { follows: [], followers: [] },
+        route: false,
+        follow: false
     } // state
 
     isTutor = () => this.state.user.tutor === 'yes'
+
+    isMyFollow = you => {
+        const myInfo = isAuth();
+console.log('myInfo: ', myInfo)
+        const result = you.followers.find( follower => {
+            return follower._id === myInfo.user._id
+        }) // find
+        return result
+    } // isMyFollow
 
     getImage() {
         const { user } = this.state
@@ -32,10 +43,25 @@ class Profile extends Component {
       //console.log( 'user id from route params: ', this.props.match.params.userId )
       getUserInfo( userId, isAuth().token )
       .then( data => {
-        if ( data.error ) this.setState( { route: true } )
-        else this.setState( { user: data } )
+        if ( data.error ) {
+            this.setState( { route: true } )
+            return
+        } // if
+        let follow = this.isMyFollow( data )
+console.log('follow?: ', follow)
+        this.setState( { user: data, follow } )
       }) // then
     } // handleUserInfo
+
+    handleClickFollowUnfollow = apiRequest => {
+        const { user, follow } = this.state
+        const auth = isAuth()
+        apiRequest( auth.user._id, auth.token, user._id )
+        .then( data => {
+            if ( data.error ) this.setState( { error: data.error } )
+            else this.setState( { user: data, follow: !follow } )
+        }) // then
+    } // handleClickFollow
 
     // request new user data when FIRST TIME new user component is clicked
     componentDidMount() {
@@ -60,7 +86,7 @@ class Profile extends Component {
     } // isLogInUser
 
     render() {
-        const { user, route } = this.state
+        const { user, route, follow } = this.state
         const logInUser = isAuth().user 
         const styleContainer = {
             paddingTop: '100px',
@@ -99,7 +125,9 @@ class Profile extends Component {
                     {
                       this.isLogInUser( logInUser ) ?
                       <EditDeleteButtons  userId={ user._id } /> :
-                      <FollowUnFollowButtons />
+                      <FollowUnFollowButtons follow={ follow } 
+                                             clickHandler={this.handleClickFollowUnfollow }  
+                      />
                       // <div style={ { marginTop: '20px' } }>
                       //     <Grid container spacing={2} justify="center">
                       //     <Grid item>
@@ -115,6 +143,7 @@ class Profile extends Component {
                       //     </Grid>
                       // </div> 
                     }
+                    <SubView follows={ user.follows } followers={ user.followers } />
                 </Container>
                 <Footer title='CreatePost footer' contents={ 'Add contents here' } />
             </main>
