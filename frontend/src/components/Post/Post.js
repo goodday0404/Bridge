@@ -1,20 +1,55 @@
 import React, { Component } from 'react';
 import Container from '@material-ui/core/Container';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import { path } from '../../Auth';
+import { getPostRequest } from '../../API/postAPI';
+import { getImage } from './index';
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
+import { makeStyles } from '@material-ui/core/styles';
+import { Divider } from '@material-ui/core';
+import PostCard from './PostCard';
+import PostCardExpanded from './PostCardExpanded';
+
+const useStyles = makeStyles(theme => ({
+    container: {
+        paddingTop: '100px', 
+        paddingBottom: '100px',
+    },
+})) // useStyles
+
+const PostContents = props => {
+    const { post } = props
+    const classes = useStyles();
+    return (
+        <main>
+            {/* <Blurb body='something blar blar' /> */}
+            <Container className={ classes.container } maxWidth="lg" >
+                <PostCardExpanded post={ post } image={ getImage( post ) } />
+            </Container>
+            <Footer title='Post footer' contents={ 'Add contents here' } />
+        </main>
+    ) // return
+} // PostContents
+
 
 class Post extends Component {
+    state ={
+        post: ''
+    } // state
+
+    componentDidMount() {
+        getPostRequest( this.props.match.params.postId ).then( data => {
+            if ( data.error ) console.log( data.error )
+            else this.setState( { post: data } )
+        }) // then
+    } // componentDidMount
+
     render() {
-        const containerStyle = { paddingTop: '100px', paddingBottom: '100px' }
-        
+        const { post } = this.state
         return (
-            <main>
-                <Blurb body='something blar blar' />
-                <Container style={ containerStyle } maxWidth="md">
-                    <h4> Implement displaying a post </h4>
-                </Container>
-                <Footer title='Post footer' contents={ 'Add contents here' } />
-            </main>
+            <PostContents post={ post } />
           ) // return
     } // render
 } // Post

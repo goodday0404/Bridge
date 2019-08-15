@@ -6,11 +6,12 @@ import { SimpleCardMedia, SimpleCardContents, DefaultCardActions } from '../std/
 const UserCard = props => {
     const classes = useStyles()
     const { image, title, head, email, program, body, to } = props
+    const style = { paddingTop: '30%', height: '350px', width: 'auto' } 
     return (
         <Card className={classes.card}>
-            <SimpleCardMedia image={ image } title={ title } style={ { paddingTop: '56.25%'} } />
+            <SimpleCardMedia image={ image } title={ title } style={ style } />
             <SimpleCardContents head={ head } contact={ email } program={ program } body={ body } />
-            <DefaultCardActions to={ to } />
+            <DefaultCardActions label='View' to={ to } />
         </Card>
     ) // return
 } // UserCard

@@ -6,9 +6,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 const SearchBox = props => {
     const classes = useStyles();
-    const { handleInputChange } = props
+    const { handleInputChange, style } = props
     return(
-        <div className={classes.grow} >
+        <div className={classes.grow} style={ style } >
             <Toolbar variant='regular' >
                 <div className={ classes.search }>
                     <div className={ classes.searchIcon }>

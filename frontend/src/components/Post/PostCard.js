@@ -7,17 +7,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Hidden from '@material-ui/core/Hidden';
 import { SimpleCardMedia, SimpleCardContents, DefaultCardActions } from '../std/Card';
+import { posterName } from './index'
 import useStyles from '../../styles/PostAlbumStyle';
 
 const PostCard = props => {
     const classes = useStyles()
-    const { post, image } = props
+    const { post, image, textLimit } = props
     const postPath = `/posts/${ post._id }`
-
-    const posterId = poster => poster ? `/user/${ poster._id }`  : '/posts'
-    const posterName = poster => {
-        return poster ? <Link to={ posterId( poster ) } > { poster.name } </Link> : 'Unknown'
-    } // posterName
 
     return (
         // <CardActionArea component='a' href={ postPath } >
@@ -37,7 +33,7 @@ const PostCard = props => {
                         </Typography>
                         <hr/>
                         <Typography style={ { paddingBottom: '10px'} } variant="subtitle1" paragraph>
-                            { post.body.substring( 0, 200 ) }
+                            { textLimit ? post.body.substring( 0, 200 ) : post.body }
                         </Typography>
                         <Typography variant="subtitle1" color="primary">
                             <Link to={ postPath } > Continue reading... </Link>

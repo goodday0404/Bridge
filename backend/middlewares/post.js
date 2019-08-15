@@ -26,7 +26,7 @@ const createErrorObj = ( response, error, code ) => {
 		request.post && request.auth && request.postedBy._id === request.auth._id
 */
 exports.postById = ( request, response, next, id ) => {
-console.log('postById is called')
+//console.log('postById is called')
 	Post.findById( id )
 		.populate( 'postedBy', '_id name')
 		.exec( ( err, post ) => {
@@ -37,6 +37,11 @@ console.log('postById is called')
 		} );
 }; // postedById
 
+// just return request.post since post is stored in there by executing postById
+exports.getPost = ( request, response ) => {
+console.log('getPost is called')
+	return response.json( request.post )
+} 
 
 exports.getPosts = ( request, response ) => {
 	const posts = Post.find()

@@ -56,10 +56,10 @@ export const SimpleCardContents = props => {
 } // SimpleCardMedia
 
 export const DefaultCardActions = props => {
-    const { to } = props
+    const { label, to } = props
     return (
         <CardActions>
-            <SimpleCardButton label='View' to={ to } />
+            <SimpleCardButton label={ label } to={ to } />
             {/* <SimpleCardButton label='Edit' to={ to } /> */}
         </CardActions>
     ) // return

@@ -24,61 +24,11 @@ import PostCard from './PostCard';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
 import { path } from '../../Auth';
+import { getImage } from './index';
 
-const featuredPosts = [
-    {
-      title: 'Featured post',
-      date: 'Nov 12',
-      description:
-        'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    },
-    {
-      title: 'Post title',
-      date: 'Nov 11',
-      description:
-        'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    },
-    {
-        title: 'Featured post',
-        date: 'Nov 12',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-      {
-        title: 'Post title',
-        date: 'Nov 11',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-      {
-        title: 'Featured post',
-        date: 'Nov 12',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-      {
-        title: 'Post title',
-        date: 'Nov 11',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-      {
-        title: 'Featured post',
-        date: 'Nov 12',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-      {
-        title: 'Post title',
-        date: 'Nov 11',
-        description:
-          'This is a wider card with supporting text below as a natural lead-in to additional content.',
-      },
-  ];
-
-const getImage = post => {
-  return path( `post/photo/${ post._id }` ) 
-} // getImage
+// const getImage = post => {
+//   return path( `post/photo/${ post._id }` ) 
+// } // getImage
 
 const PostAlbum = props => {
     const classes = useStyles();
@@ -86,32 +36,37 @@ const PostAlbum = props => {
     const image = undefined
     
     return (
-        <React.Fragment>
-        <CssBaseline />
-        <main>
-            <Blurb body='Post what help you need here. Tutors will contact you.' />
-            <Container className={classes.cardGrid} maxWidth="lg">
-                <Grid container spacing={4} className={classes.cardGrid}>
-                    { searched.map( ( post, i ) => (
-                        <Grid item key={ `${post.title}${ i }` } xs={12} md={6}>
-                            <PostCard 
-                                // postId={ post._id }
-                                // posterId={ posterId( post.postedBy ) }
-                                // posterName={ posterName( post.postedBy ) }
-                                // title={ post.title } 
-                                // date={ post.date }
-                                // description={ post.description }
-                                post={ post } 
-                                image={ getImage( post ) }
-                            />
-                        </Grid>
-                    ))}
+        <Grid container spacing={4} className={classes.cardGrid}>
+            { searched.map( ( post, i ) => (
+                <Grid item key={ `${post.title}${ i }` } xs={12} md={6}>
+                    <PostCard 
+                        post={ post } 
+                        image={ getImage( post ) }
+                        textLimit={ 200 }
+                    />
                 </Grid>
-            </Container>
-            </main>
-            <Footer title='Posts footer' contents={ 'add something here' } />
-        </React.Fragment>
-        
+            ))}
+        </Grid>
+        // <React.Fragment>
+        //     <CssBaseline />
+        //     <main>
+        //         <Blurb body='Post what help you need here. Tutors will contact you.' />
+        //         <Container className={classes.cardGrid} maxWidth="lg">
+        //             <Grid container spacing={4} className={classes.cardGrid}>
+        //                 { searched.map( ( post, i ) => (
+        //                     <Grid item key={ `${post.title}${ i }` } xs={12} md={6}>
+        //                         <PostCard 
+        //                             post={ post } 
+        //                             image={ getImage( post ) }
+        //                             textLimit={ 200 }
+        //                         />
+        //                     </Grid>
+        //                 ))}
+        //             </Grid>
+        //         </Container>
+        //         <Footer title='Posts footer' contents={ 'add something here' } />
+        //     </main>
+        // </React.Fragment>   
     ) // return
 } // PostAlbum
 

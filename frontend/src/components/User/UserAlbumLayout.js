@@ -7,7 +7,8 @@ import SearchBox from '../AppBar/SearchBox';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import SelectOutlind from '../std/Select';
+import { SelectOutlined } from '../std/Select';
+
 
 class UserAlbumLayout extends Component {
     state = {
@@ -70,8 +71,8 @@ console.log('filtered user: ', user)
                     />
                     <Container style={ styleContainer } maxWidth="md">
                         <Grid container spacing={1} style={ { paddingBottom: '60px' } } >
-                            <SelectOutlind  isTutor={ isTutor } 
-                                            handleSelect={ this.handleSelect } 
+                            <SelectOutlined     isTutor={ isTutor } 
+                                                handleSelect={ this.handleSelect } 
                             />
                             <SearchBox handleInputChange={ this.handleInputChange } />
                         </Grid>

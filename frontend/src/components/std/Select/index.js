@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const SelectOutlind = props => {
+export const SelectOutlined = props => {
     const { isTutor, handleSelect } = props
     const classes = useStyles();
     const [values, setValues] = React.useState({
@@ -63,7 +63,41 @@ const SelectOutlind = props => {
     ) // return
 } // SelectOutlind
 
-export default SelectOutlind;
+
+export const SelectPost = props => {
+    const { handleSelect } = props
+    const classes = useStyles();
+    const [values, setValues] = React.useState({
+        criteria: '',
+        name: 'hai',
+      });
+
+    const handleChange = call => event => {
+        setValues(oldValues => ({
+            ...oldValues,
+            [event.target.name]: event.target.value,
+        }))
+        call( event )
+    }
+    
+    return (
+        <FormControl className={classes.formControl} style={ { marginLeft: '100px' } } >
+            <InputLabel htmlFor="select-simple">
+                Critaria
+            </InputLabel>
+            <Select
+                value={ values.criteria }
+                onChange={ handleChange( handleSelect ) }
+                inputProps={ { name: 'criteria', id: 'select-simple' } }
+            >
+                <MenuItem value='title'> <em>Title</em> </MenuItem>
+                <MenuItem value='body'> Description </MenuItem>
+                <MenuItem value='name'> Author </MenuItem>
+            </Select>
+        </FormControl>
+    ) // return
+} // SelectPost
+
 
 
 

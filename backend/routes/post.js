@@ -2,7 +2,7 @@
 	This module works like a 'middleware'.
 */
 const express = require('express');
-const { getPosts, createPost, postByUser, postById, isPoster, 
+const { getPost, getPosts, createPost, postByUser, postById, isPoster, 
 		deletePost, updatePost, postPhoto } = require('../middlewares/post');
 const { createPostValidator } = require( '../validator');
 const { requireLogIn } = require( '../middlewares/auth');
@@ -16,6 +16,7 @@ router.get( '/posts', getPosts );
 //					for validation ****
 router.post( '/post/new/:userId', requireLogIn, createPost, createPostValidator );
 router.get( '/posts/by/:userId', requireLogIn, postByUser );
+router.get( '/post/:postId', getPost )
 router.get( '/post/photo/:postId', postPhoto );
 router.put( '/post/:postId', requireLogIn, isPoster, updatePost );
 router.delete( '/post/:postId', requireLogIn, isPoster, deletePost );
