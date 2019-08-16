@@ -29,6 +29,8 @@ exports.postById = ( request, response, next, id ) => {
 //console.log('postById is called')
 	Post.findById( id )
 		.populate( 'postedBy', '_id name')
+		.populate( 'comments', 'text created')
+		.populate( 'comments.postedBy', '_id name')
 		.exec( ( err, post ) => {
 			if ( err || !post ) return createErrorObj( response, err, 400 );
 			request.post = post;
@@ -46,6 +48,8 @@ console.log('getPost is called')
 exports.getPosts = ( request, response ) => {
 	const posts = Post.find()
 					  .populate( 'postedBy', '_id name' )
+					  .populate( 'comments', 'text created')
+					  .populate( 'comments.postedBy', '_id name')
 					  .select( 'id title body created' ) // select properties of object only we want
 					  .sort( { created: -1 } )
 					  .then( posts => {
@@ -127,7 +131,8 @@ exports.postByUser = ( request, response ) => {
 	const key = { postedBy: request.profile._id };
 	Post.find( key )
 		.populate( 'postedBy', '_id name' )
-		.sort( '_created' )
+		.sort( { created: -1 } )
+		//.sort( '_created' )
 		.exec( ( err, posts) => {
 			if ( err ) return createErrorObj( response, err, 400 );
 			response.json( posts );
@@ -147,15 +152,38 @@ exports.isPoster = ( request, response, next ) => {
 	next();
 }; // isPoster
 
+// exports.updatePost = ( request, response, next ) => {
+// 	let post = request.post;
+// 	post = _.extend( post, request.body );
+// 	post.updated = Date.now();
+// 	post.save( err => {
+// 		if ( err ) return createErrorObj( response, err, 400 );
+// 		response.json( post );
+// 	} ); // save
+// }; // updatePost
+
 exports.updatePost = ( request, response, next ) => {
-	let post = request.post;
-	post = _.extend( post, request.body );
-	post.updated = Date.now();
-	post.save( err => {
-		if ( err ) return createErrorObj( response, err, 400 );
-		response.json( post );
-	} ); // save
-}; // updatePost
+	let form = new formidable.IncomingForm()
+	form.keepExtensions = true
+	const handleRequest = ( err, newData, imageFile ) => {
+		if ( err ) {
+			return createErrorObj( response, { error: 'Uploading image file failed' }, 400 );
+		} // if
+		let postInfo = request.post
+		postInfo = _.extend( postInfo, newData ) // update user data	
+		postInfo.updated = Date.now() //  updated time
+		if ( imageFile.photo ) {
+			const photo = postInfo.photo
+			photo.data = fs.readFileSync( imageFile.photo.path )
+			photo.contentType = imageFile.photo.type
+		} // if
+		postInfo.save( ( err, result ) => {
+			if ( err ) return response.status( 400 ).json( { error: err } )
+			response.json( postInfo )
+		}) // save
+	} // handleRequest
+	form.parse( request, handleRequest )
+} // updatePost
 
 exports.postPhoto = ( request, response, next ) => {
 	const photo = request.post.photo
@@ -171,7 +199,48 @@ exports.deletePost = ( request, response ) => {
 	} ); // remove
 }; // deletePost
 
+const findCommentAndUpdate = ( response, postId, comments ) => {
+	Post.findByIdAndUpdate( postId, comments, { new: true } )
+	.populate( 'comments.postedBy', '_id name')
+	.populate( 'postedBy', '_id name')
+	.exec( ( error, result ) => {
+		if ( error ) return createErrorObj( response, error, 400 )
+		else response.json( result )
+	}) // exec
+} // findCommentAndUpdate
 
+exports.updateComment = ( request, response ) => {
+	const body = request.body
+	const push = { $push: { comments: body.userId } }
+	request.body.comment.postedBy = body.userId
+	findCommentAndUpdate( response, body.postId, push )
+	// Post.findByIdAndUpdate( body.postId, push, { new: true } )
+	// .populate( 'comments.postedBy', '_id name')
+	// .populate( 'postedBy', '_id name')
+	// .exec( ( error, result ) => {
+	// 	if ( error ) return createErrorObj( response, error, 400 )
+	// 	else response.json( result )
+	// }) // exec
+} // updateComment
+
+exports.updateUncomment = ( request, response ) => {
+	const body = request.body
+	const pull = {
+		$pull: {
+			comments: {
+				_id: body.comment._id
+			} // comments
+		} // $pull
+	} // pull
+	findCommentAndUpdate( response, body.postId, pull )
+	// Post.findByIdAndUpdate( body.postId, pull, { new: true } )
+	// .populate( 'comments.postedBy', '_id name')
+	// .populate( 'postedBy', '_id name')
+	// .exec( ( error, result ) => {
+	// 	if ( error ) return createErrorObj( response, error, 400 )
+	// 	else response.json( result )
+	// }) // exec
+} // updateComment
 
 
 

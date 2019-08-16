@@ -13,13 +13,14 @@ const useStyles = makeStyles(theme => ({
 
 const OutlinedTextArea = props => {
   const classes = useStyles();
-  const { rows, label, placeholder, helperText, onChange } = props
+  const { rows, label, value, placeholder, helperText, onChange } = props
 
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <TextField
         id="outlined-multiline-static"
         label={ label }
+        value={ value }
         multiline
         fullWidth
         rows={ rows }

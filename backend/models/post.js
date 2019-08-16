@@ -31,7 +31,25 @@ const schema = {
 	created: {
 		type: Date,
 		default: Date.now
-	} // created
+	}, // created
+	
+	updated: Date, // date when user file is updated
+
+	comments: [
+		{
+			text: String,
+
+			created: {
+				type: Date,
+				default: Date.now
+			}, // created
+			
+			postedBy: {
+				type: ObjectId,
+				ref: 'User'
+			} // postedBy
+		}
+	] // comments
 }; // schema
 
 const postSchema = new mongoose.Schema( schema );

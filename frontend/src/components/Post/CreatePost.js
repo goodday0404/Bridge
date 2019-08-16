@@ -170,7 +170,7 @@ class CreatePost extends Component {
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
-            route ? <Redirect to='posts' /> :
+            route ? <Redirect to='/posts' /> :
 
             <main>
                 <Blurb body='Create you post' />

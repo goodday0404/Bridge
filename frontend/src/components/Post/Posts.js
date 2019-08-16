@@ -71,6 +71,7 @@ console.log('filtered post: ', post)
     } // ClickPostButton
 
     componentDidMount() {
+console.log('posts are mounted')
         // this.handleUserInfo( this.props.match.params.userId )
         this.handleUserInfo( isAuth() )
         getAllPostsRequest().then( data => {
@@ -81,7 +82,6 @@ console.log('filtered post: ', post)
             // const items = !this.state.isTutor ? data : data.filter( user => {
             //     return user.tutor.match( 'yes' )
             // } ) // filter
-console.log('post data: ', data)
             this.setState( { posts: data.posts, searched: data.posts } )
         }) // then
     } // componentDidMount
@@ -92,7 +92,7 @@ console.log('post data: ', data)
             paddingTop: '60px',
             paddingBottom: '100px'
         } // styleContainer
-
+//console.log('posts render')
         return (
             <React.Fragment>
                 <CssBaseline />
@@ -134,4 +134,5 @@ console.log('post data: ', data)
     } // render
 } // Post
 
-export default withRouter( Posts );
+// export default withRouter( Posts );
+export default Posts;

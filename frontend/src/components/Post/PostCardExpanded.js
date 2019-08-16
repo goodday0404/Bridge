@@ -15,6 +15,7 @@ import NewComment from '../Comment/NewComment';
 import Comments from '../Comment/Comments';
 import { isAuth } from '../../Auth';
 import { deletePostRequest } from '../../API/postAPI';
+import EditPost from './EditPost';
 
 const useStyles = makeStyles(theme => ({
     // card: {
@@ -86,9 +87,6 @@ export const PostCardContents = props => {
                                 { new Date( post.created ).toDateString() } 
                             </p>
                         </Typography>
-                        {/* <Typography className={ classes.date } variant="subtitle1" color="textSecondary">
-                            on { new Date( post.created ).toDateString() }
-                        </Typography> */}
                         { 
                             isAuthor && <PostButtons 
                                             post={ post } 
@@ -96,18 +94,6 @@ export const PostCardContents = props => {
                                             deleteButtonHandler={ deleteButtonHandler }
                                         /> 
                         }
-                        {/* <PostButton 
-                            label='Update'
-                            variant='outlined'
-                            color='primary' 
-                            // handler={ handler( 'update' ) } 
-                        />
-                        <PostButton 
-                            label='Delete'
-                            variant='outlined'
-                            color='secondary' 
-                            // handler={ handler( 'delete' ) } 
-                        /> */}
                         <hr/>
                         <SimpleCardMedia    image={ image } title={ post.title } 
                                             style={ imageStyle } 
@@ -129,27 +115,19 @@ class PostCardExpanded extends Component {
     state = {
         post: '',
         comments: [],
-        route: false
+        isEdited: false,
+        isDeleted: false
     } // state
 
-    // componentDidMount() {
-    //     this.setState( { post: this.props.post } )
-    // }
-
-    // componentWillReceiveProps( props ) {
-    //     this.setState( { post: props.post } )
-    // } // componentWillReceiveProps
-
     handleClickDelete = post => () => {
-console.log('post._id: ', this.state.post._id)
         deletePostRequest( post._id, isAuth().token ).then( data => {
             if ( data.error ) console.log( data.error )
-            else this.setState( { route: true } )
+            else this.setState( { isDeleted: true } )
         }) // then
     } // handleClickDelete
     
     handleClickUpdate = post => () => {
-    
+        this.setState( { isEdited: true } )
     } // handleClickUpdate
 
     handleNewComment = event => {
@@ -157,21 +135,23 @@ console.log('post._id: ', this.state.post._id)
     } // handleClickUpdate
 
     render() {
+        const { isEdited, isDeleted } = this.state
         const { post, image, textLimit } = this.props
-console.log('this.state.post: ', this.state.post )
-console.log('post: ', this.props.post )
+// console.log('this.state.post: ', this.state.post )
+// console.log('post: ', this.props.post )
         return (
-            this.state.route ? 
-            <Redirect to='/posts' /> :
-
-            <PostCardContents 
-                post={ post }
-                image={ image }
-                textLimit={ textLimit }
-                updateButtonHandler={ this.handleClickUpdate }
-                deleteButtonHandler={ this.handleClickDelete }
-                commentHandler={ this.handleNewComment }
-            />
+            isEdited ? <Redirect to={ `/post/edit/${ post._id }` } /> :
+                        
+                        isDeleted ? <Redirect to='/posts' /> :
+            
+                                    <PostCardContents 
+                                        post={ post }
+                                        image={ image }
+                                        textLimit={ textLimit }
+                                        updateButtonHandler={ this.handleClickUpdate }
+                                        deleteButtonHandler={ this.handleClickDelete }
+                                        commentHandler={ this.handleNewComment }
+                                    />
         ) // return
     } // render
 } // PostCardExpanded

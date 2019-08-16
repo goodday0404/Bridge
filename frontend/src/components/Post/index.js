@@ -12,7 +12,8 @@ export const posterName = poster => {
 } // posterName
 
 export const getImage = post => {
-    return path( `post/photo/${ post._id }` ) 
+    const date = new Date().getTime()
+    return path( `post/photo/${ post._id }?${ date }` ) 
 } // getImage
 
 export const PostButton = props => {
@@ -33,7 +34,7 @@ export const PostButtons = props => {
     return (
         <Grid container spacing={2} justify='center' >
             <PostButton 
-                label='Update'
+                label='Edit Post'
                 variant='outlined'
                 color='primary' 
                 handler={ updateButtonHandler( post ) } 

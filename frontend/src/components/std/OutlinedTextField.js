@@ -13,13 +13,14 @@ const useStyles = makeStyles(theme => ({
 
 const OutlinedTextField = props => {
   const classes = useStyles();
-  const { label, placeholder, helperText, onChange, style } = props
+  const { label, value, placeholder, helperText, onChange, style } = props
 
   return (
     <form style={ style } noValidate autoComplete="off">
       <TextField
         id="outlined-full-width"
         label={ label }
+        value={ value }
         placeholder={ placeholder }
         helperText={ helperText }
         fullWidth

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
-import { postRequest } from '../../API/postAPI';
+import { getPostRequest, updatePostRequest } from '../../API/postAPI';
 import { InputField, FormButton } from '../std/Form';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
@@ -11,14 +11,15 @@ import OutlinedTextArea from '../std/OutlinedTextArea';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
 
-class UpdatePost extends Component {
+class EditPost extends Component {
     state = {
-        user: {},
+        _id: '',
         title: '',
         body: '',
         photo: '', 
         error: '',
-        route: '',
+        route: false,
+        isFailed: false,
         isLoading: false,
         fileSize: 0
     } // state
@@ -35,9 +36,9 @@ class UpdatePost extends Component {
         this.isLoading = false
     } // endLoading
 
-    // getUserId() {
-    //     return this.props.match.params.userId
-    // } // getUserId
+    getPostId() {
+        return this.props.match.params.postId
+    } // getUserId
 
     // getImage() {
     //     const { _id } = this.state
@@ -70,18 +71,23 @@ class UpdatePost extends Component {
         if ( this.isLoading ) this.setState( { error: '', isLoading: true } )
         this.postData = new FormData()
         this.maxFileSize = 1000000
-        this.setState( { user: isAuth().user } )
+        this.handlePostInfo( this.getPostId() )
     } // componentDidMount
       
     componentWillUnmount() {
         if ( !this.isLoading ) this.setState( { isLoading: false } )
     } // componentWillUnmount
 
-    // componentWillReceiveProps( props ) {
-    //     this.handleUserInfo( props.match.params.userId )
-    // } // componentWillReceiveProps
-
     //////////////////////////// Event handlers /////////////////////////////////
+
+    handlePostInfo( postId ) {
+        getPostRequest( postId )
+        .then( data => {
+          const { _id, title, body, error } = data
+          if ( data.error ) this.setState( { isFailed: true } )
+          else this.setState( { _id, title, body, error } )
+        }) // then
+      } // handleUserInfo
 
     handleInputEntered = key => event => {
         this.setState( { error: '' } ) // clear alert msg when entering new input
@@ -100,7 +106,7 @@ class UpdatePost extends Component {
         if ( !this.isValidInput() ) return
         this.startLoading()
         const auth = isAuth()
-        postRequest( auth.user._id, auth.token, this.postData )
+        updatePostRequest( this.state._id, auth.token, this.postData )
         .then( data => {
                 if ( data.error ) {
                     this.setState( { error: data.error.error } ) 
@@ -137,6 +143,7 @@ class UpdatePost extends Component {
             <div> 
                 <OutlinedTextField
                     label='Title'
+                    value={ title }
                     onChange={ this.handleInputEntered( 'title' ) }
                     style={ { ...formStyle, paddingTop: '100px' } }
                 />
@@ -144,34 +151,34 @@ class UpdatePost extends Component {
                 <OutlinedTextArea 
                     rows='20'
                     label='Body Context'
+                    value={ body }
                     onChange={ this.handleInputEntered( 'body' ) }
                     style={ formStyle }
                 />
-                <FormButton label='Create post' onClick={ this.handleSubmit } /> 
+                <FormButton label='Update post' onClick={ this.handleSubmit } /> 
             </div>
         ) // return
     } // postForm
 
     render() {
-        const { title, body, photo, user, route, isLoading, error } = this.state
+        const { title, body, route, isFailed, isLoading, error } = this.state
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
-            route ? <Redirect to='posts' /> :
+            route ? <Redirect to='/posts' /> :
 
             <main>
-                <Blurb body='Create you post' />
+                <Blurb body='Edit your post' />
                 <div className='container'>
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                    {/* <Image url={ this.getImage() } alt={ name } /> */}
                     { this.postForm( title, body, formStyle ) }
                 </div>
                 <Footer title='Post footer' contents={ 'add something here' } />
             </main>
         ) // return
     } // render
-} // UpdatePost
+} // EditPost
 
-export default UpdatePost;
+export default EditPost;
 

@@ -3,7 +3,8 @@
 */
 const express = require('express');
 const { getPost, getPosts, createPost, postByUser, postById, isPoster, 
-		deletePost, updatePost, postPhoto } = require('../middlewares/post');
+		deletePost, updatePost, postPhoto, updateComment, updateUncomment
+	  } = require('../middlewares/post');
 const { createPostValidator } = require( '../validator');
 const { requireLogIn } = require( '../middlewares/auth');
 const { userById } = require( '../middlewares/user' );
@@ -14,6 +15,8 @@ router.get( '/posts', getPosts );
 // validate data first, then create post if validate.
 // **** IMPORTANT: 2nd argument to post must be AN ARRAY of check function calls 
 //					for validation ****
+router.put( '/post/comment', requireLogIn, updateComment );
+router.put( '/post/uncomment', requireLogIn, updateUncomment );
 router.post( '/post/new/:userId', requireLogIn, createPost, createPostValidator );
 router.get( '/posts/by/:userId', requireLogIn, postByUser );
 router.get( '/post/:postId', getPost )
