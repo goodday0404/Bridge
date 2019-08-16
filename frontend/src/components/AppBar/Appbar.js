@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -55,9 +56,11 @@ const ButtonAppBar = props => {
                                 aria-label="Menu">
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        Bridge
-                    </Typography>
+                    <Link className={classes.title} to='/' >
+                        <Typography variant="h6" >
+                            Bridge
+                        </Typography>
+                    </Link>
                     {/* { 
                         isLogin && 
                         <SearchBox 

@@ -21,3 +21,9 @@ export const getMyPostsRequest = async ( postId, token ) => (
                    { method: 'GET', ...dataAccess( 'GET', token ) }, 
                    'Retrieving a post success!' )
 ) // signUpProcess
+
+export const deletePostRequest = async ( postId, token ) => (
+    requestServer( `post/${ postId }`, 
+                    dataAccess( 'DELETE', token ), 
+                    'Deleting a post success!' )
+) // signUpProcess
