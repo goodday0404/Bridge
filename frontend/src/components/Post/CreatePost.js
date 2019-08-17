@@ -88,7 +88,7 @@ class CreatePost extends Component {
         this.setState( { error: '' } ) // clear alert msg when entering new input
         let value = event.target.value;
         let size = 0
-        if ( key === 'photo' ) {
+        if ( key === 'photo' && key !== undefined ) {
             value = event.target.files[0]
             size = value.size
         } // if

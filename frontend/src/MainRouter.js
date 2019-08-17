@@ -14,6 +14,7 @@ import ApplyTutor from './components/Tutor/ApplyTutor';
 import Posts from './components/Post/Posts';
 import CreatePost from './components/Post/CreatePost';
 import EditPost from './components/Post/EditPost';
+import PostCardExpanded from './components/Post/PostCardExpanded';
 
 /*
     All components that assigned to component attribute will receive the value of
@@ -27,6 +28,7 @@ const MainRouter = () => {
                 <Route exact path='/signUp' component={ SignUp } />
                 <Route exact path='/login' component={ LogIn } />
                 <Route exact path='/posts/:postId' component={ Post } />
+                <Route exact path='/posts/open/:postId' component={ PostCardExpanded } />
                 <Route exact path='/posts' component={ Posts } />
                 <Route exact path='/create' component={ CreatePost } />
                 <Route exact path='/post/edit/:postId' component={ EditPost } />

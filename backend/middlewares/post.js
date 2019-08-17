@@ -29,8 +29,9 @@ exports.postById = ( request, response, next, id ) => {
 //console.log('postById is called')
 	Post.findById( id )
 		.populate( 'postedBy', '_id name')
-		.populate( 'comments', 'text created')
-		.populate( 'comments.postedBy', '_id name')
+		.populate( 'comments.postedBy', '_id name photo')
+		.populate( 'postedBy', '_id name')
+		.select('_id title body created comments photo')
 		.exec( ( err, post ) => {
 			if ( err || !post ) return createErrorObj( response, err, 400 );
 			request.post = post;
@@ -42,6 +43,7 @@ exports.postById = ( request, response, next, id ) => {
 // just return request.post since post is stored in there by executing postById
 exports.getPost = ( request, response ) => {
 console.log('getPost is called')
+console.log('post: ', request.post)
 	return response.json( request.post )
 } 
 
@@ -200,6 +202,7 @@ exports.deletePost = ( request, response ) => {
 }; // deletePost
 
 const findCommentAndUpdate = ( response, postId, comments ) => {
+console.log('findCommentAndUpdate is called')
 	Post.findByIdAndUpdate( postId, comments, { new: true } )
 	.populate( 'comments.postedBy', '_id name')
 	.populate( 'postedBy', '_id name')
@@ -211,7 +214,7 @@ const findCommentAndUpdate = ( response, postId, comments ) => {
 
 exports.updateComment = ( request, response ) => {
 	const body = request.body
-	const push = { $push: { comments: body.userId } }
+	const push = { $push: { comments: body.comment } }
 	request.body.comment.postedBy = body.userId
 	findCommentAndUpdate( response, body.postId, push )
 	// Post.findByIdAndUpdate( body.postId, push, { new: true } )

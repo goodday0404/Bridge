@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import Photo from './Photo';
 
 //import CommentPropTypes from './PropTypes';
@@ -21,18 +21,26 @@ export const getFormattedTimestamp = (time) => {
 };
 
 const Comment = ({
-  photo, userName, content, createdAt,
+  photo, userName, userId, content, createdAt,
 }) => (
   <Wrapper>
     <div>
-      <Photo src={photo} alt={userName} size="small" />
+      <Photo 
+          src={photo} 
+          alt={userName} 
+          size="small"  
+          onError={ error => { error.target.src = 'https://source.unsplash.com/random' } }
+      />
     </div>
     <div>
-      <strong>{userName}</strong>
+      <strong>
+          <Link to={ `/user/${ userId }` } > {userName} </Link>
+      </strong>
       <br />
       {content}
     </div>
-    <DateView>{getFormattedTimestamp(createdAt)}</DateView>
+    {/* <DateView>{getFormattedTimestamp(createdAt)}</DateView> */}
+        <DateView>{ new Date(createdAt).toDateString() }</DateView>
   </Wrapper>
 );
 

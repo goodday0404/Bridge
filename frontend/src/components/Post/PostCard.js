@@ -13,7 +13,7 @@ import useStyles from '../../styles/PostAlbumStyle';
 const PostCard = props => {
     const classes = useStyles()
     const { post, image, textLimit } = props
-    const postPath = `/posts/${ post._id }`
+    const postPath = `/posts/open/${ post._id }`
 
     return (
         // <CardActionArea component='a' href={ postPath } >

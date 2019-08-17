@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '@material-ui/core/Container';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import { path } from '../../Auth';
+import { isAuth, path } from '../../Auth';
 import { getPostRequest } from '../../API/postAPI';
 import { getImage } from './index';
 import Footer from '../std/Footer';
@@ -20,13 +20,18 @@ const useStyles = makeStyles(theme => ({
 })) // useStyles
 
 const PostContents = props => {
-    const { post } = props
+    const { post, comments, commentHandler } = props
     const classes = useStyles();
     return (
         <main>
             {/* <Blurb body='something blar blar' /> */}
-            <Container className={ classes.container } maxWidth="lg" >
-                <PostCardExpanded post={ post } image={ getImage( post ) } />
+            <Container style={ { paddingTop: '100px', paddingBottom: '100px' } } maxWidth="lg" >
+                <PostCardExpanded 
+                    post={ post } 
+                    image={ getImage( post ) }
+                    comments={ comments }
+                    commentHandler={ commentHandler } 
+                />
             </Container>
             <Footer title='Post footer' contents={ 'Add contents here' } />
         </main>
@@ -36,20 +41,61 @@ const PostContents = props => {
 
 class Post extends Component {
     state ={
-        post: ''
+        post: '',
+        comments: []
     } // state
+
+    getUserImage( user ) {
+        const date = new Date().getTime()
+        return user ? path( `user/photo/${ user._id }?${ date }` ) : undefined
+    } // getImage
 
     componentDidMount() {
         getPostRequest( this.props.match.params.postId ).then( data => {
             if ( data.error ) console.log( data.error )
-            else this.setState( { post: data } )
+            else this.setState( { post: data, comments: data.comments } )
         }) // then
     } // componentDidMount
 
+    // comments: [
+	// 	{
+	// 		text: String,
+
+	// 		created: {
+	// 			type: Date,
+	// 			default: Date.now
+	// 		}, // created
+			
+	// 		postedBy: {
+	// 			type: ObjectId,
+	// 			ref: 'User'
+	// 		} // postedBy
+	// 	}
+	// ] // comments
+
+    // handleSubmitComment = ( event, value ) => {
+    //     event.preventDefault();
+    //     const commenter = isAuth().user
+    //     const comment = {
+    //     id: Math.floor(Math.random() * 100000).toString(),
+    //     photo: this.getUserImage( commenter ),
+    //         // 'https://api-cdn.spott.tv/rest/v004/image/images/e91f9cad-a70c-4f75-9db4-6508c37cd3c0?width=587&height=599',
+    //     userName: commenter.name,
+    //     content: value,
+    //     createdAt: Date.now(),
+    //     };
+    //     this.setState(prevState => ({ comments: [...prevState.comments, comment] }));
+    // } // handleSubmitComment
+
     render() {
-        const { post } = this.state
+        const { post, comments } = this.state
+console.log('comments: ', comments)
         return (
-            <PostContents post={ post } />
+            <PostContents 
+                post={ post }
+                comments={ comments } 
+                commentHandler={ this.handleSubmitComment } 
+            />
           ) // return
     } // render
 } // Post
