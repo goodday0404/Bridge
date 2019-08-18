@@ -66,7 +66,7 @@ const imageStyle={
 
 const isLogInUser = ( logInUser, poster ) => {
     return logInUser && ( poster != undefined ) && logInUser._id === poster._id
-  } // isLogInUser
+} // isLogInUser
 
 export const PostCardContents = props => {
     const classes = useStyles()
@@ -116,7 +116,14 @@ console.log('comments.length: ', comments.length)
                 </div>
                 <div style={ { paddingBottom: '30px' } } >
                     <NewComment post={ post } onNewComment={ commentHandler } />
-                    { comments.length > 0 && <Comments comments={ comments } /> }
+                    { 
+                        comments.length > 0 && 
+                        <Comments 
+                            post={ post }
+                            comments={ comments } 
+                            onDeleteComment={ commentHandler } 
+                        /> 
+                    }
                 </div>
             </Card>
         // </CardActionArea>

@@ -51,6 +51,7 @@ export const PostButtons = props => {
                 body='This action will permanently delete this post, and it can not be retored.'
                 handler={ rightButtonHandler( post ) } 
                 style={ { marginTop: '18px' } }
+                cancelButton={ true }
             />
         </Grid>
     ) // return

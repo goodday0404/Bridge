@@ -7,6 +7,7 @@ import Input from './Input';
 import Wrapper from './Wrapper';
 import { isAuth } from '../../../Auth';
 import { addCommentRequest } from '../../../API/postAPI';
+import { AlertDialog } from '../../std/Alert';
 
 class NewComment extends PureComponent {
   //static propTypes = { onNewComment: PropTypes.func.isRequired };
@@ -19,12 +20,18 @@ class NewComment extends PureComponent {
     } // state
   } // constructor
 
+  isValidComment = () => {
+    if ( this.state.comment.length > 0 ) return true
+    return false
+  } // validateComment
+
   handleInputChange = event => {
     this.setState( { comment: event.target.value } )
   } // handleInputChange
 
   handleSubmit = event => {
     event.preventDefault() // prevent webbrowser from reloading
+    if ( !this.isValidComment() ) return
     const { comment } = this.state
     const { onNewComment } = this.props;
     //const { value } = this.input.current;
@@ -39,8 +46,7 @@ class NewComment extends PureComponent {
       this.setState( { comment: '' } )
       onNewComment( data.comments )
     }) // then
-    
-
+  
     // if (value) {
     //   onNewComment(e, value);
 
@@ -77,11 +83,26 @@ class NewComment extends PureComponent {
             }}
             onChange={ this.handleInputChange }
           />
-          <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
+          {/* <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
               Comment
-          </Button>
+          </Button> */}
+          {
+              this.isValidComment() ? 
+              <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
+                  Comment
+              </Button> :
+
+              <AlertDialog 
+                  label='Comment' 
+                  title='Comment is empty'
+                  body='It requires at least one character'
+                  handler={ () => {} } 
+                  //style={ { marginTop: '18px' } }
+              />
+          }
+          
       </form>
-    );
-  }
-}
+    ) // return
+  } // render
+} // NewComment
 export default NewComment;

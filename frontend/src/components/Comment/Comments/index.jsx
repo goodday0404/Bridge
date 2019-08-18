@@ -22,7 +22,7 @@ class Comments extends PureComponent {
   };
 
   render() {
-    const { comments } = this.props;
+    const { post, comments, onDeleteComment } = this.props;
     const { visible } = this.state;
 
     return (
@@ -48,11 +48,14 @@ class Comments extends PureComponent {
                 const { created, _id, text, postedBy } = comment
                 return <Comment 
                           key={ i } 
-                          photo={ this.getUserImage( postedBy._id ) } 
-                          userName={ postedBy.name }
-                          userId={ postedBy._id }
-                          content={ text }
-                          createdAt={ created }
+                          photo={ this.getUserImage( comment.postedBy._id ) } 
+                          // userName={ postedBy.name }
+                          // userId={ postedBy._id }
+                          // content={ text }
+                          // createdAt={ created }
+                          post={ post }
+                          comment={ comment }
+                          onDeleteComment={ onDeleteComment }
                        />
                })}
           </List>
