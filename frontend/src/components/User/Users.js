@@ -9,7 +9,7 @@ import Footer from '../std/Footer';
 import UserAlbumLayout from './UserAlbumLayout';
  
 const Users = () => (
-    <UserAlbumLayout isTutor={ false } />
+    <UserAlbumLayout isTutor={ false } blurbText='Search for users looking for tutors!' />
 ) // Tutor
 
 // class Users extends Component {

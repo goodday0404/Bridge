@@ -105,22 +105,22 @@ console.log('follow?: ', follow)
                 <Container style={ styleContainer } maxWidth="md">
                     <Image url={ this.getImage() } name={ user.name } />
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        Name:   { user.name }
+                        Name: {"  "}  { user.name }
                     </Typography>
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        Email:    { user.email }
+                        Email:  {"  "}  { user.email }
                     </Typography>
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        Program:    { user.program }
+                        Program: {"  "}  { user.program }
                     </Typography>
                     { 
                       this.isTutor() && 
                       <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                          Tutor for:    { user.courses }
+                          Tutor for: {"  "}  { user.courses }
                       </Typography>
                     }
                     <Typography style={ styleText } gutterBottom variant="h5" component="h2" align='center' color="textPrimary">
-                        { user.description }
+                        About me: <br/><br/> { user.description }
                     </Typography>
                     {
                       this.isLogInUser( logInUser ) ?

@@ -11,7 +11,7 @@ const Tutor = () => (
     //     </p>
     //     <Footer title='Tutor footer' content='Add contents here' />
     // </div>
-    <UserAlbumLayout isTutor={ true } />
+    <UserAlbumLayout isTutor={ true } blurbText='Find your next tutor here!' />
 ) // Tutor
 
 export default Tutor;

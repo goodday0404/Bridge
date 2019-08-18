@@ -24,11 +24,12 @@ const Body = props => {
 
 const Blurb = props => {
     const classes = useStyles()
-    const { title, body } = props
+    const { title, body, both } = props
     return (
         <div className={classes.heroContent}>
             <Container maxWidth="md">
                 { title ? <Title title={ title } /> : <Body body={ body } /> }
+                { both && <Body body={ body } /> }
                 {/* <Title title={ title } />
                 <Body body={ body } /> */}
             </Container>

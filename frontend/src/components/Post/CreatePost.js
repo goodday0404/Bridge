@@ -18,6 +18,7 @@ class CreatePost extends Component {
         title: '',
         body: '',
         photo: '', 
+        currentPhoto: undefined,
         error: '',
         route: '',
         isLoading: false,
@@ -88,9 +89,9 @@ class CreatePost extends Component {
         this.setState( { error: '' } ) // clear alert msg when entering new input
         let value = event.target.value;
         let size = 0
-        if ( key === 'photo' && key !== undefined ) {
+        if ( key === 'photo' ) {
             value = event.target.files[0]
-            size = value.size
+            if ( value ) size = value.size
         } // if
         this.postData.set( key, value )
         this.setState( { [ key ]: value, fileSize: size } )
@@ -146,6 +147,8 @@ class CreatePost extends Component {
     } // inputField
 
     postForm = ( title, body, formStyle ) => {
+        const { photo, currentPhoto } = this.state
+        const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
             <div> 
                 <OutlinedTextField
@@ -153,6 +156,7 @@ class CreatePost extends Component {
                     onChange={ this.handleInputEntered( 'title' ) }
                     style={ { ...formStyle, paddingTop: '100px' } }
                 />
+                { newPhoto && <Image url={ newPhoto } alt='newPhoto' /> }
                 { this.inputField( '', 'photo', 'file', '', 'image/*' ) }
                 <OutlinedTextArea 
                     rows='20'
@@ -173,7 +177,7 @@ class CreatePost extends Component {
             route ? <Redirect to='/posts' /> :
 
             <main>
-                <Blurb body='Create you post' />
+                <Blurb body='Got a question? Ask our tutors here!' />
                 <div className='container'>
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }

@@ -23,6 +23,8 @@ class EditUserProfile extends Component {
         courses: '',
         program: '',
         description: '',
+        photo: undefined,
+        currentPhoto: undefined,
         fileSize: 0
     } // state
 
@@ -42,8 +44,8 @@ class EditUserProfile extends Component {
         return this.props.match.params.userId
     } // getUserId
 
-    getImage() {
-        const { _id } = this.state
+    getImage( _id ) {
+        //const { _id } = this.state
         const date = new Date().getTime()
         return _id ? path( `user/photo/${ _id }?${ date }` ) : undefined
     } // getImage
@@ -112,8 +114,9 @@ class EditUserProfile extends Component {
         let value = event.target.value;
         let size = 0
         if ( key === 'photo' ) {
+console.log('image file: ', event.target.files[0])
             value = event.target.files[0]
-            size = value.size
+            if ( value ) size = value.size
         } // if
         this.userData.set( key, value )
         this.setState( { [ key ]: value, fileSize: size } )
@@ -138,8 +141,11 @@ class EditUserProfile extends Component {
         getUserInfo( userId, isAuth().token )
         .then( data => {
           const { _id, name, email, tutor, courses, program, description } = data
+          const currentPhoto = this.getImage( _id )
           if ( data.error ) this.setState( { route: true } )
-          else this.setState( { _id, name, email, tutor, courses, program, description } )
+          else this.setState( { 
+                    _id, name, email, tutor, courses, program, description, currentPhoto 
+                } ) // setState
         }) // then
       } // handleUserInfo
 
@@ -179,7 +185,8 @@ class EditUserProfile extends Component {
 
     render() {
         const { _id, name, email, password , route, isLoading, error, 
-                tutor, courses, program, description } = this.state
+                tutor, courses, program, description, photo, currentPhoto } = this.state
+        const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
             route ? <Redirect to={ `/user/${ _id }` } /> :
 
@@ -188,7 +195,8 @@ class EditUserProfile extends Component {
                 <div className='container' style={ { paddingTop: '100px' } } >
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                    <Image url={ this.getImage() } alt={ name } />
+                    {/* <Image url={ this.getImage() } alt={ name } /> */}
+                    <Image url={ newPhoto } alt={ name } /> 
                     { this.EditForm( name, email, password, program, description, tutor, courses ) }
                 </div>
                 <Footer title='Profile footer' contents={ 'add something here' } />

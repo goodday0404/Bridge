@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
 import { getPostRequest, updatePostRequest } from '../../API/postAPI';
-import { InputField, FormButton } from '../std/Form';
+import { getImage } from './index';
+import { InputField, FormButton, FormButtons } from '../std/Form';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
@@ -17,8 +18,10 @@ class EditPost extends Component {
         title: '',
         body: '',
         photo: '', 
+        currentPhoto: undefined,
         error: '',
         route: false,
+        isCancel: false,
         isFailed: false,
         isLoading: false,
         fileSize: 0
@@ -84,8 +87,9 @@ class EditPost extends Component {
         getPostRequest( postId )
         .then( data => {
           const { _id, title, body, error } = data
+          const currentPhoto = data.photo ? getImage( data ) : undefined
           if ( data.error ) this.setState( { isFailed: true } )
-          else this.setState( { _id, title, body, error } )
+          else this.setState( { _id, title, body, error, currentPhoto } )
         }) // then
       } // handleUserInfo
 
@@ -93,9 +97,9 @@ class EditPost extends Component {
         this.setState( { error: '' } ) // clear alert msg when entering new input
         let value = event.target.value;
         let size = 0
-        if ( key === 'photo' && key !== undefined ) {
+        if ( key === 'photo' ) {
             value = event.target.files[0]
-            size = value.size
+            if ( value ) size = value.size
         } // if
         this.postData.set( key, value )
         this.setState( { [ key ]: value, fileSize: size } )
@@ -118,6 +122,10 @@ class EditPost extends Component {
         }) // then
     } // handleSubmit
 
+    cancelButtonHandler = () => {
+        this.setState( { isCancel: true } )
+    } // cancelButtonHandler
+
     //////////////////////////////// rendering /////////////////////////////////////
 
     alertSection( msg, bgColor, color ) {
@@ -139,6 +147,8 @@ class EditPost extends Component {
     } // inputField
 
     postForm = ( title, body, formStyle ) => {
+        const { post, photo, currentPhoto } = this.state
+        const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
             <div> 
                 <OutlinedTextField
@@ -147,6 +157,7 @@ class EditPost extends Component {
                     onChange={ this.handleInputEntered( 'title' ) }
                     style={ { ...formStyle, paddingTop: '100px' } }
                 />
+                { newPhoto && <Image url={ newPhoto } alt='newPhoto' /> }
                 { this.inputField( '', 'photo', 'file', '', 'image/*' ) }
                 <OutlinedTextArea 
                     rows='20'
@@ -155,17 +166,25 @@ class EditPost extends Component {
                     onChange={ this.handleInputEntered( 'body' ) }
                     style={ formStyle }
                 />
-                <FormButton label='Update post' onClick={ this.handleSubmit } /> 
+                <FormButtons 
+                    leftLabel='Update'
+                    rightLabel='Cancel'
+                    leftButtonHandler={ this.handleSubmit }
+                    rightButtonHandler={ this.cancelButtonHandler }
+                /> 
+                {/* <FormButton label='Update post' onClick={ this.handleSubmit } />  */}
             </div>
         ) // return
     } // postForm
 
     render() {
-        const { title, body, route, isFailed, isLoading, error } = this.state
+        const { _id, title, body, route, isCancel, isFailed, isLoading, error } = this.state
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
             route ? <Redirect to='/posts' /> :
+
+            isCancel ? <Redirect to={ `/posts/open/${ _id }` } /> :
 
             <main>
                 <Blurb body='Edit your post' />

@@ -16,7 +16,7 @@ class UserAlbumLayout extends Component {
         searched: [],
         //searchString: '',
         criteria: '',
-        isTutor: this.props.isTutor
+        isTutor: this.props.isTutor,
     } // state
 
     getSearchedItems = searchString => {
@@ -47,8 +47,12 @@ console.log('filtered user: ', user)
                 console.log( data.error )
                 return
             } // if
-            const items = !this.state.isTutor ? data : data.filter( user => {
-                return user.tutor.match( 'yes' )
+            // const items = !this.state.isTutor ? data : data.filter( user => {
+            //     return user.tutor.match( 'yes' )
+            // } ) // filter
+            // this.setState( { users: items, searched: items } )
+            const items = data.filter( user => {
+                return user.tutor.match( this.state.isTutor ? 'yes' : 'no' )
             } ) // filter
             this.setState( { users: items, searched: items } )
         }) // then
@@ -67,7 +71,7 @@ console.log('filtered user: ', user)
                 <main>
                     <Blurb  call={ call }
                             searched= { searched } 
-                            body='Post what help you need here. Tutors will contact you.' 
+                            body={ this.props.blurbText } 
                     />
                     <Container style={ styleContainer } maxWidth="md">
                         <Grid container spacing={1} style={ { paddingBottom: '60px' } } >

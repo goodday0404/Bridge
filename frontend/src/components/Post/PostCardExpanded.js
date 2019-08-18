@@ -12,7 +12,7 @@ import { posterName } from './index'
 import { SimpleCardButton } from '../std/Card';
 //import useStyles from '../../styles/PostAlbumStyle';
 import { makeStyles } from '@material-ui/core/styles';
-import { PostButtons } from './index';
+import { PostButtons, getImage } from './index';
 import NewComment from '../Comment/NewComment';
 import Comments from '../Comment/Comments';
 import { isAuth, path } from '../../Auth';
@@ -94,8 +94,10 @@ console.log('comments.length: ', comments.length)
                         {   // Edit & Delete Post buttons
                             isAuthor && <PostButtons 
                                             post={ post } 
-                                            updateButtonHandler={ updateButtonHandler }
-                                            deleteButtonHandler={ deleteButtonHandler }
+                                            leftLabel='Edit Post'
+                                            rightLabel='Delete Post'
+                                            leftButtonHandler={ updateButtonHandler }
+                                            rightButtonHandler={ deleteButtonHandler }
                                         /> 
                         } 
                         <hr/>
@@ -185,7 +187,7 @@ console.log('comments: ',comments )
                     <PostCardContents 
                         post={ post }
                         comments={ comments }
-                        image={ this.getUserImage( isAuth().user ) }
+                        image={ getImage( post ) }
                         //textLimit={ textLimit }
                         updateButtonHandler={ this.handleClickUpdate }
                         deleteButtonHandler={ this.handleClickDelete }

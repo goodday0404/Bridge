@@ -1,4 +1,6 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import { GridButton } from '../Button';
 
 const ImageInput = props => {
     const { type, accept, onChange } = props
@@ -57,4 +59,27 @@ export const FormButton = props => {
         </button>
     ) // return 
 } // FormButton
+
+export const FormButtons = props => {
+    const { post, leftLabel, rightLabel, leftButtonHandler, rightButtonHandler } = props
+    const buttonStyle = { paddingLeft: '50px', paddingRight: '50px' } 
+    return (
+        <Grid container spacing={2} justify='center' style={ { paddingBottom: '80px' } } >
+            <GridButton 
+                label={ leftLabel }
+                submitHandler={ leftButtonHandler } 
+                color='primary'
+                variant='outlined'
+                style={ buttonStyle }
+            />
+            <GridButton 
+                label={ rightLabel }
+                variant='outlined'
+                color='secondary' 
+                handler={ rightButtonHandler } 
+                style={ buttonStyle }
+            />
+        </Grid>
+    ) // return
+} // PostButtons
 

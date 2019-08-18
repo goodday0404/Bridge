@@ -30,26 +30,26 @@ export const PostButton = props => {
 } // PostButton
 
 export const PostButtons = props => {
-    const { post, updateButtonHandler, deleteButtonHandler } = props
+    const { post, leftLabel, rightLabel, leftButtonHandler, rightButtonHandler } = props
     return (
         <Grid container spacing={2} justify='center' >
             <PostButton 
-                label='Edit Post'
+                label={ leftLabel }
                 variant='outlined'
                 color='primary' 
-                handler={ updateButtonHandler( post ) } 
+                handler={ leftButtonHandler( post ) } 
             />
             {/* <PostButton 
                 label='Delete'
                 variant='outlined'
                 color='secondary' 
-                handler={ deleteButtonHandler( post ) } 
+                handler={ rightButtonHandler( post ) } 
             /> */}
             <AlertDialog 
-                label='Delete Post' 
+                label={ rightLabel } 
                 title='Do you want to delet this post?'
                 body='This action will permanently delete this post, and it can not be retored.'
-                handler={ deleteButtonHandler( post ) } 
+                handler={ rightButtonHandler( post ) } 
                 style={ { marginTop: '18px' } }
             />
         </Grid>

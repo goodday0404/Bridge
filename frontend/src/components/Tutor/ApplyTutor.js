@@ -78,7 +78,7 @@ class ApplyTutor extends Component {
     //////////////////////////////// rendering /////////////////////////////////////
 
     render() {
-        const { tutor } = this.state
+        const { tutor, route, user } = this.state
         const containerStyle = { paddingTop: '100px', paddingBottom: '100px' } 
         const textFieldStyle = {
             display: 'flex',
@@ -88,9 +88,9 @@ class ApplyTutor extends Component {
         } // textFieldStyle
         //const { _id, name, email, password , route, isLoading, error } = this.state
         return (
-            //route ? <Redirect to={ `/user/${ _id }` } /> :
+            route ? <Redirect to={ `/user/${ user._id }` } /> :
             <main>
-                <Blurb body='Apply to be a tutor and help other members' />
+                <Blurb body='Interested in becoming a tutor? Apply here!' />
                 <Container style={ containerStyle } maxWidth="md">
                     <h4> Do you want to be a tutor? </h4>
                     <RadioButton value={ tutor } onChange={ this.handleSelectButton } />

@@ -19,9 +19,15 @@ const style = {
 
 const defaultImage = 'https://source.unsplash.com/random'
 
+const wecomleTitle = 'Built for students'
+
+const aboutBridge = 'Bridge is for students who want to give help or to get help\
+                     for their studies. Volunteer to be a tutor and help other students or\
+                     ask our tutors a question!'
+
 const Home = () => (
       <main>
-          <Blurb body='welcome to Bridge' />
+          <Blurb title={ wecomleTitle } body={ aboutBridge } both={ true } />
           <img className="card-img-top" 
               src={ Bridge } 
               alt='home'

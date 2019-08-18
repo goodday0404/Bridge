@@ -97,7 +97,7 @@ console.log('posts are mounted')
             <React.Fragment>
                 <CssBaseline />
                 <main>
-                    <Blurb body='Post what help you need here. Tutors will contact you.' />
+                    <Blurb body='See what others have been asking!' />
                     <Container style={ styleContainer } maxWidth="lg">
                         <Grid container spacing={1} style={ { paddingBottom: '60px' } } >
                             <SelectPost   handleSelect={ this.handleSelect } />
