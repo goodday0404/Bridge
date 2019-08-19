@@ -47,7 +47,9 @@ const schema = {
 			postedBy: {
 				type: ObjectId,
 				ref: 'User'
-			} // postedBy
+			}, // postedBy
+
+			//updated: Date, // date when comment is updated
 		}
 	] // comments
 }; // schema

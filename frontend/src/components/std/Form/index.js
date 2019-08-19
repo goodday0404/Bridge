@@ -67,7 +67,7 @@ export const FormButtons = props => {
         <Grid container spacing={2} justify='center' style={ { paddingBottom: '80px' } } >
             <GridButton 
                 label={ leftLabel }
-                submitHandler={ leftButtonHandler } 
+                handler={ leftButtonHandler }
                 color='primary'
                 variant='outlined'
                 style={ buttonStyle }

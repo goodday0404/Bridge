@@ -52,6 +52,7 @@ export const PostButtons = props => {
                 handler={ rightButtonHandler( post ) } 
                 style={ { marginTop: '18px' } }
                 cancelButton={ true }
+                addButton={ true }
             />
         </Grid>
     ) // return

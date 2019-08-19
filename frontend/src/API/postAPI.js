@@ -58,3 +58,15 @@ export const addCommentRequest = async ( userId, postId, token, comment ) => (
 export const deleteCommentRequest = async ( userId, postId, token, comment ) => (
     commentRequest( userId, postId, token, comment, 'uncomment' )
 ) // addCommentRequest
+
+// export const modifyCommentRequest = async ( userId, postId, token, comments ) => (
+//     commentRequest( userId, postId, token, comments, 'modifyComment' )
+// ) // modifyCommentRequest
+
+export const modifyCommentRequest = async ( userId, postId, token, comments ) => {
+    const body = JSON.stringify( { userId, postId, comments } )
+//console.log('comment: ', body)
+    return requestServer( 'post/modifyComment', 
+                          { ...dataAccess( 'PUT', token ), body:JSON.stringify( { userId, postId, comments } ) },
+                          'Modifying a comment success!' )
+} // modifyCommentRequest

@@ -2,8 +2,8 @@
 	This module works like a 'middleware'.
 */
 const express = require('express');
-const { getPost, getPosts, createPost, postByUser, postById, isPoster, 
-		deletePost, updatePost, postPhoto, updateComment, updateUncomment
+const { getPost, getPosts, createPost, postByUser, postById, isPoster, deletePost, 
+		updatePost, postPhoto, updateComment, updateUncomment, modifyComment
 	  } = require('../middlewares/post');
 const { createPostValidator } = require( '../validator');
 const { requireLogIn } = require( '../middlewares/auth');
@@ -16,7 +16,8 @@ router.get( '/posts', getPosts );
 // **** IMPORTANT: 2nd argument to post must be AN ARRAY of check function calls 
 //					for validation ****
 router.put( '/post/comment', requireLogIn, updateComment );
-router.put( '/post/uncomment', requireLogIn, updateUncomment );
+router.put( '/post/uncomment', requireLogIn, updateUncomment );  
+router.put( '/post/modifyComment', requireLogIn, modifyComment );  
 router.post( '/post/new/:userId', requireLogIn, createPost, createPostValidator );
 router.get( '/posts/by/:userId', requireLogIn, postByUser );
 router.get( '/post/:postId', getPost )

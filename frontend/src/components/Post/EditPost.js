@@ -182,9 +182,9 @@ class EditPost extends Component {
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
-            route ? <Redirect to='/posts' /> :
+            // route ? <Redirect to='/posts' /> :
 
-            isCancel ? <Redirect to={ `/posts/open/${ _id }` } /> :
+            route || isCancel ? <Redirect to={ `/posts/open/${ _id }` } /> :
 
             <main>
                 <Blurb body='Edit your post' />

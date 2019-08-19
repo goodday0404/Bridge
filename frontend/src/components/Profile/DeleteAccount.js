@@ -32,7 +32,7 @@ class DeleteAccount extends Component {
             //         onClick={ this.handleDeleteAccount } >
             //     Delete  Account
             // </button>
-            <Button variant="outlined" color="primary" onClick={ this.handleDeleteAccount }>
+            <Button variant="outlined" color="secondary" onClick={ this.handleDeleteAccount }>
                 Delete  Account
             </Button>
         )
