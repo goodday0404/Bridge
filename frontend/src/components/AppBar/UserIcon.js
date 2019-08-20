@@ -10,7 +10,7 @@ const userInitial = userName => {
 } // userInitial
 
 const UserIcon = props => {
-    const { handleMenu, anchorEl, open, handleClose, userName } = props
+    const { handleMenu, anchorEl, open, handleClose, userName, buttonRef } = props
     return (
         <div>
             <IconButton
@@ -19,6 +19,7 @@ const UserIcon = props => {
                 aria-haspopup="true"
                 onClick={handleMenu}
                 color="inherit"
+                ref={ buttonRef }
             >
                 { userName ? <LetterAvatars initial={ userInitial( userName ) } /> : 
                              <AccountCircle /> }

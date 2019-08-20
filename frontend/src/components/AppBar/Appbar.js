@@ -15,18 +15,12 @@ import UserIcon from './UserIcon';
 import NavBar from './NavBar';
 import { withRouter } from 'react-router-dom';
 import { isAuth } from '../../Auth';
-
-// export const isAuth = () => {
-//     if ( typeof window === 'undefined' ) return false
-//     const item = localStorage.getItem( 'jwt' )
-//     if ( item !== null ) return JSON.parse( item )
-//     return false
-// } // isAuth
  
 const ButtonAppBar = props => {
     const classes = useStyles()
     const isLogin = isAuth()
-    const [auth, setAuth] = React.useState( isLogin ? true : false )
+    const buttonRef = React.useRef();
+    const [auth, setAuth] = React.useState( isLogin )
     const [anchorEl, setAnchorEl] = React.useState( null )
     const open = Boolean(anchorEl)
     const { history } = props
@@ -36,7 +30,8 @@ const ButtonAppBar = props => {
     } // handleChange
 
     function handleMenu(event) {
-        setAnchorEl(event.currentTarget)
+        //setAnchorEl(event.currentTarget)
+        setAnchorEl(true);
     } // handleChange
 
     function handleClose() {
@@ -76,11 +71,12 @@ const ButtonAppBar = props => {
                         isLogin && 
                         <UserIcon
                             handleMenu={handleMenu}
-                            anchorEl={anchorEl}
+                            //anchorEl={anchorEl}
+                            anchorEl={() => buttonRef.current}
                             open={open}
                             handleClose={handleClose}
                             userName={ isAuth().user.name }
-                            
+                            buttonRef={ buttonRef }
                         /> 
                     }
                 </Toolbar>

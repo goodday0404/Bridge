@@ -19,9 +19,9 @@ const HoverText = styled.p`
 		cursor: pointer;
 	}
 `
-
 export const AlertDialog = props => {
-    const { label, title, body, variant, size, handler, style, trash, addButton } = props
+    const { label, title, body, variant, size, handler, style, trash, addButton,
+            login } = props
     const [open, setOpen] = React.useState(false)
     const dudUrl = 'javascript:;';
 
@@ -64,7 +64,7 @@ export const AlertDialog = props => {
                         </Button>
                     }
                     {   // add buttons only when addButton attribute is true
-                        addButton &&
+                        addButton && 
                         <Button onClick={handleClose} color="primary" onClick={ handler } autoFocus>
                             Ok
                         </Button>

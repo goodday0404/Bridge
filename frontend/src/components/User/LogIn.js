@@ -14,6 +14,7 @@ import AlertDiv from './alert';
 import SubmitButton from '../std/SubmitButton';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import { logInProcess, validateJWT } from '../../Auth';
+import LoginForm from  './LoginForm';
 
 class LogIn extends Component {
     constructor() {
@@ -51,13 +52,6 @@ class LogIn extends Component {
       this.isLoading = false
     } // endLoading
 
-    // validateJWT( JWT ) {
-    //   if ( typeof window === 'undefined' ) return
-    //   // save Jason web token in app local storage
-    //   localStorage.setItem( 'jwt', JSON.stringify( JWT ) )
-    //   this.setState( { isLogIn: true } )
-    // } // validateJWT
-
     handleInputEntered = key => event => {
       this.setState( { error: '' } ) // clear alert msg when entering new input
       this.setState( { [ key ]: event.target.value } )
@@ -76,24 +70,6 @@ class LogIn extends Component {
               //this.endLoading();
       }) // then
     } // handleSubmit
-
-    // logInProcess = async user => {
-    //   const domain = 'http://localhost:8080/login'
-    //   const data = {
-    //       method: 'POST',
-    //       headers: {
-    //           Accept: 'application/json',
-    //           'Content-Type': 'application/json'
-    //       }, // headers
-    //       body: JSON.stringify( user )
-    //   } // data
-    //   try {
-    //       const response = await fetch(domain, data);
-    //       return await response.json({ message: 'data fetch success!' });
-    //   } catch ( error ) {
-    //       return console.log(error);
-    //   } // catch
-    // } // doSignUp
 
     ////////////////////////////////// rendering /////////////////////////////////////
   
@@ -120,23 +96,29 @@ class LogIn extends Component {
         isLogIn ? 
         <Redirect to="/" /> : // redirect to main page if user successes login.
         // otherwise display login page
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <div className={useStyles.paper}>
-            <Avatar className={useStyles.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5"> Log in </Typography>
-            { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-            { isLoading && this.showLoadingIcon() }
-            <form className={useStyles.form} noValidate>
-              { this.createForm( 'email', 'Email Address', true ) }
-              { this.createForm( 'password', 'Password' ) }
-              <SubmitButton buttonName='Log In' onClick={ this.handleSubmit } />
-              <LogInOptions />
-            </form>
-          </div>
-        </Container>
+        <LoginForm 
+            error={ error }
+            isLoading={ isLoading }
+            formHandler={ this.handleInputEntered } 
+            submitHandler={ this.handleSubmit }
+        />
+        // <Container component="main" maxWidth="xs">
+        //   <CssBaseline />
+        //   <div className={useStyles.paper}>
+        //     <Avatar className={useStyles.avatar}>
+        //       <LockOutlinedIcon />
+        //     </Avatar>
+        //     <Typography component="h1" variant="h5"> Log in </Typography>
+        //     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
+        //     { isLoading && this.showLoadingIcon() }
+        //     <form className={useStyles.form} noValidate>
+        //       { this.createForm( 'email', 'Email Address', true ) }
+        //       { this.createForm( 'password', 'Password' ) }
+        //       <SubmitButton buttonName='Log In' onClick={ this.handleSubmit } />
+        //       <LogInOptions />
+        //     </form>
+        //   </div>
+        // </Container>
       ) // return
     } // render 
 } // LogIn

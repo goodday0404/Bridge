@@ -13,6 +13,8 @@ import SubmitButton from '../std/SubmitButton';
 import AlertDiv from './alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import { signUpProcess } from '../../Auth';
+import Blurb from '../std/Blurb';
+import Footer from '../std/Footer';
 
 class SignUp extends Component {
   constructor() {
@@ -104,28 +106,32 @@ class SignUp extends Component {
     const { error, isSignUp, isLoading } = this.state
     const loginMsg = 'Please login'
     return (
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={useStyles.paper}>
-          <LockOnIcon />
-          <FormTitle title='Sign up' />
-          { isLoading && this.showLoadingIcon() }
-          { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-          { isSignUp && this.alertSection( loginMsg, 'palegreen', 'darkgreen' ) }
-          <form className={useStyles.form} noValidate>
-            <Grid container spacing={2}>
-              { this.createForm( 'name', 'Name', true ) }
-              { this.createForm( 'email', 'Email Address' ) }
-              { this.createForm( 'password', 'Password' ) }
-              <Grid item xs={12}></Grid>
-            </Grid>
-            <SubmitButton buttonName='Sign Up' onClick={ this.handleSubmit } />
-            <Grid container justify="flex-end">
-              <Option msg="Already have an account? Sign in" />
-            </Grid>
-          </form>
-        </div>
-      </Container>
+      <main>
+        <Blurb body='Sign Up here!' />
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={useStyles.paper}>
+            <LockOnIcon />
+            <FormTitle title='Sign up' />
+            { isLoading && this.showLoadingIcon() }
+            { error && this.alertSection( error, '#F8BBD0', 'red' ) }
+            { isSignUp && this.alertSection( loginMsg, 'palegreen', 'darkgreen' ) }
+            <form className={useStyles.form} noValidate>
+              <Grid container spacing={2}>
+                { this.createForm( 'name', 'Name', true ) }
+                { this.createForm( 'email', 'Email Address' ) }
+                { this.createForm( 'password', 'Password' ) }
+                <Grid item xs={12}></Grid>
+              </Grid>
+              <SubmitButton buttonName='Sign Up' onClick={ this.handleSubmit } />
+              <Grid container justify="flex-end">
+                <Option msg="Already have an account? Sign in" />
+              </Grid>
+            </form>
+          </div>
+        </Container>
+        <Footer title='SignUp footer' contents='Add contents here' />
+      </main>
     ) // return
   } // render
 } // SignUp
