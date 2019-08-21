@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-//import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -24,30 +23,36 @@ const createForm = ( inputType, textLable, handler, focus=false ) => {
           />
 } // createForm
 
-const LoginOption = () => (
+const SignupSuccess = ( bgColor, color ) => (
+    <div className='alert' 
+            style={ { backgroundColor: bgColor, 
+                    color: color, 
+                    textAlign: 'center', 
+                    fontSize: 'large' } }>
+        Signing Up success! { "  " } Please { " " }
+        <Link to='/login' >
+            log in here
+        </Link>
+    </div>
+) // SignupSuccess
+
+const SignupOption = () => (
     <Grid container>
-        <Grid item xs>
-        {/* <Link href="#" variant="body2"> */}
-        <Link to='/#' >
-            Forgot password?
-        </Link>
-        </Grid>
         <Grid item>
-        {/* <Link href='/signUp' variant="body2"> */}
-        <Link to='/signUp' >
-            {"Don't have an account? Sign Up"}
-        </Link>
+            <Link to='/login' >
+                {"Already have an account? Log In"}
+            </Link>
         </Grid>
     </Grid>
-) // LoginOption
+) // SignupOption
 
-const LoginForm = props => {
-    const { error, isLoading, formHandler, submitHandler } = props
+const SignupForm = props => {
+    const { error, isLoading, isSignUp, formHandler, submitHandler } = props
     const classes = useStyles();
 
     return (
         <main>
-            <Blurb body='Login here!' />
+            <Blurb body='Sign Up Here!' />
             <Grid container component="main" className={ classes.root }>
                 <CssBaseline />
                 <Grid item xs={ false } sm={ 4 } md={ 7 } className={ classes.image } />
@@ -57,12 +62,14 @@ const LoginForm = props => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Login in
-                    </Typography>
+                        Sign Up
+                    </Typography> 
                     { error && <AlertDiv msg={ error } bgColor='#F8BBD0' color='red' /> }
+                    { isSignUp && SignupSuccess( 'palegreen', 'darkgreen' ) }
                     { isLoading && <CircularIndeterminate /> }
                     <form className={ classes.form } noValidate>
-                        { createForm( 'email', 'Email Address', formHandler, true ) }
+                        { createForm( 'name', 'Name', formHandler, true ) }
+                        { createForm( 'email', 'Email Address', formHandler ) }
                         { createForm( 'password', 'Password', formHandler ) }
                         <Button
                             type="submit"
@@ -72,9 +79,9 @@ const LoginForm = props => {
                             className={ classes.submit }
                             onClick={ submitHandler } 
                         >
-                            Log In
+                            Sign Up
                         </Button>
-                        <LoginOption />
+                        <SignupOption />
                     </form>
                     </div>
                 </Grid>
@@ -82,6 +89,6 @@ const LoginForm = props => {
             <Footer title='Login footer' contents='Add contents here' />
         </main>
   ) // return
-} // LoginForm
+} // SignupForm
 
-export default LoginForm;
+export default SignupForm;

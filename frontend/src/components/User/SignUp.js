@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -13,6 +14,7 @@ import SubmitButton from '../std/SubmitButton';
 import AlertDiv from './alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import { signUpProcess } from '../../Auth';
+import SignupForm from './SignupForm';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
 
@@ -37,13 +39,13 @@ class SignUp extends Component {
     this.setState( this.initialState )
   } // resetState
 
-  startLoading() {
-    this.setState( { error: '', isLoading: true } )
-  } // startLoading
+  // startLoading() {
+  //   this.setState( { error: '', isLoading: true } )
+  // } // startLoading
 
-  endLoading() {
-    this.setState( { isLoading: false } )
-  } // endLoading
+  // endLoading() {
+  //   this.setState( { isLoading: false } )
+  // } // endLoading
 
   handleInputEntered = key => event => {
     this.setState( { error: "", isSignUp: false } ) // clear alert msg when entering new input
@@ -52,16 +54,17 @@ class SignUp extends Component {
 
   handleSubmit = event => {
     event.preventDefault() // prevent webbrowser from reloading
-    this.startLoading();
+    //this.startLoading();
+    this.setState( { isLoading: true } )
     const { name, email, password, tutor, courses, program } = this.state
     signUpProcess( { name, email, password, tutor, courses, program } ).then( data => {
             if ( data.error ) {
-              this.setState( { error: data.error[0].msg } ) 
+              this.setState( { error: data.error[0].msg, isLoading: false } ) 
             } else {
               this.resetState()
               this.setState( { isSignUp: true } )
             } // if
-            this.endLoading();
+            //this.endLoading();
     }) // then
   } // handleClick
 
@@ -106,32 +109,41 @@ class SignUp extends Component {
     const { error, isSignUp, isLoading } = this.state
     const loginMsg = 'Please login'
     return (
-      <main>
-        <Blurb body='Sign Up here!' />
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <div className={useStyles.paper}>
-            <LockOnIcon />
-            <FormTitle title='Sign up' />
-            { isLoading && this.showLoadingIcon() }
-            { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-            { isSignUp && this.alertSection( loginMsg, 'palegreen', 'darkgreen' ) }
-            <form className={useStyles.form} noValidate>
-              <Grid container spacing={2}>
-                { this.createForm( 'name', 'Name', true ) }
-                { this.createForm( 'email', 'Email Address' ) }
-                { this.createForm( 'password', 'Password' ) }
-                <Grid item xs={12}></Grid>
-              </Grid>
-              <SubmitButton buttonName='Sign Up' onClick={ this.handleSubmit } />
-              <Grid container justify="flex-end">
-                <Option msg="Already have an account? Sign in" />
-              </Grid>
-            </form>
-          </div>
-        </Container>
-        <Footer title='SignUp footer' contents='Add contents here' />
-      </main>
+        isSignUp ?  <Redirect to='/welcome' /> :
+
+                    <SignupForm 
+                          error={ error }
+                          isLoading={ isLoading }
+                          isSignUp={ isSignUp }
+                          formHandler={ this.handleInputEntered } 
+                          submitHandler={ this.handleSubmit }
+                    />
+      // <main>
+      //   <Blurb body='Sign Up here!' />
+      //   <Container component="main" maxWidth="xs">
+      //     <CssBaseline />
+      //     <div className={useStyles.paper}>
+      //       <LockOnIcon />
+      //       <FormTitle title='Sign up' />
+      //       { isLoading && this.showLoadingIcon() }
+      //       { error && this.alertSection( error, '#F8BBD0', 'red' ) }
+      //       { isSignUp && this.alertSection( loginMsg, 'palegreen', 'darkgreen' ) }
+      //       <form className={useStyles.form} noValidate>
+      //         <Grid container spacing={2}>
+      //           { this.createForm( 'name', 'Name', true ) }
+      //           { this.createForm( 'email', 'Email Address' ) }
+      //           { this.createForm( 'password', 'Password' ) }
+      //           <Grid item xs={12}></Grid>
+      //         </Grid>
+      //         <SubmitButton buttonName='Sign Up' onClick={ this.handleSubmit } />
+      //         <Grid container justify="flex-end">
+      //           <Option msg="Already have an account? Sign in" />
+      //         </Grid>
+      //       </form>
+      //     </div>
+      //   </Container>
+      //   <Footer title='SignUp footer' contents='Add contents here' />
+      // </main>
     ) // return
   } // render
 } // SignUp

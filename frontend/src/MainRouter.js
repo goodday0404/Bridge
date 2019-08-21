@@ -15,6 +15,7 @@ import Posts from './components/Post/Posts';
 import CreatePost from './components/Post/CreatePost';
 import EditPost from './components/Post/EditPost';
 import PostCardExpanded from './components/Post/PostCardExpanded';
+import { Welcome } from './components/Welcome';
 
 /*
     All components that assigned to component attribute will receive the value of
@@ -39,6 +40,7 @@ const MainRouter = () => {
                 <Route exact path='/user/edit/:userId' component={ EditUserProfile } />
                 <Route exact path='/user/:userId' component={ Profile } />
                 <Route exact path='/' component={ Home } />
+                <Route exact path='/welcome' component={ Welcome } />
             </Switch>
         </div> 
     ) // return

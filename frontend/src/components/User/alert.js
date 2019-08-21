@@ -6,11 +6,16 @@ const AlertDiv = props => {
 
     return (
         <div className='alert' 
-             style={ { backgroundColor: bgColor, 
-                       color: color, 
-                       textAlign: 'center', 
-                       fontSize: 'large' } }>
-           *** { msg } ***
+            style={ { 
+                backgroundColor: bgColor, 
+                color: color, 
+                textAlign: 'center', 
+                fontSize: 'large', 
+                marginTop: '20px',
+                width: '538px'
+            } }
+        >
+            { msg } 
         </div>
     );
 } // AlertDiv
