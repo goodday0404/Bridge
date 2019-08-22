@@ -65,7 +65,25 @@ const userSchemaDetail = {
 	followers: [ {	// users who follow this user
 		type: ObjectId,
 		ref: 'User'
-	} ] // followers
+	} ], // followers
+
+	comments: [
+		{
+			text: String,
+
+			created: {
+				type: Date,
+				default: Date.now
+			}, // created
+			
+			postedBy: {
+				type: ObjectId,
+				ref: 'User'
+			}, // postedBy
+
+			//updated: Date, // date when comment is updated
+		}
+	] // comments
 }; // userSchemaDetail
 
 /*

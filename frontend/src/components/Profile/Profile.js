@@ -19,6 +19,7 @@ import ProfileLayout from './profileLayout';
 class Profile extends Component {
     state = {
         user: { follows: [], followers: [] },
+        comments: [],
         route: false,
         follow: false,
         showMyTutors: false,
@@ -53,7 +54,8 @@ console.log('myInfo: ', myInfo)
         } // if
         let follow = this.isMyFollow( data )
 console.log('follow?: ', follow)
-        this.setState( { user: data, follow } )
+console.log('comments: ', data.comments)
+        this.setState( { user: data, comments: data.comments, follow } )
       }) // then
     } // handleUserInfo
 

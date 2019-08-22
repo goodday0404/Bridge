@@ -68,15 +68,27 @@ class Comment extends Component {
     handleSubmit = event => {
         event.preventDefault() // prevent webbrowser from reloading
         if ( !this.isValidComment() ) return
-        // const comment = { ...this.state.comment, text: this.state.text }
+        let comment = this.state.comment
+        comment.text = this.state.text
         // const auth = isAuth()
         // modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, comment )
         // .then( data => {
         //   if ( data.error ) console.log( data.error )
         //   else this.props.onDeleteComment( data.comments )
         // }) // then
-        const { comment, text } = this.state
-        this.props.onModifiedComment( comment, text )
+
+        // const { comment, text } = this.state
+        // this.props.onModifiedComment( comment, text )
+        const auth = isAuth() 
+        modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, comment )
+        .then( data => {
+          if ( data.error ) {
+              console.log( data.error )
+              return
+          } // if 
+          this.props.onModifiedComment( data.comments, '' )
+          this.setState( { isEdit: false } )
+        }) // then
     } // handleSubmit
 
     cancelButtonHandler = () => {

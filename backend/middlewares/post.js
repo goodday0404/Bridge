@@ -245,33 +245,33 @@ exports.updateUncomment = ( request, response ) => {
 	// }) // exec
 } // updateComment
 
-exports.modifyComment = ( request, response, next ) => {
-	let form = new formidable.IncomingForm()
-	form.keepExtensions = true
-	const handleRequest = ( err, newData, imageFile ) => {
-		if ( err ) {
-			return createErrorObj( response, { error: 'Uploading image file failed' }, 400 );
-		} // if
-		let postInfo = request.post
-		postInfo = _.extend( postInfo, newData ) // update user data	
-		postInfo.updated = Date.now() //  updated time
-		if ( imageFile.photo ) {
-			const photo = postInfo.photo
-			photo.data = fs.readFileSync( imageFile.photo.path )
-			photo.contentType = imageFile.photo.type
-		} // if
-		postInfo.save( ( err, result ) => {
-			if ( err ) return response.status( 400 ).json( { error: err } )
-			response.json( postInfo )
-		}) // save
-	} // handleRequest
-	form.parse( request, handleRequest )
-} // modifyComment
+// exports.modifyComment = ( request, response, next ) => {
+// 	let form = new formidable.IncomingForm()
+// 	form.keepExtensions = true
+// 	const handleRequest = ( err, newData, imageFile ) => {
+// 		if ( err ) {
+// 			return createErrorObj( response, { error: 'Uploading image file failed' }, 400 );
+// 		} // if
+// 		let postInfo = request.post
+// 		postInfo = _.extend( postInfo, newData ) // update user data	
+// 		postInfo.updated = Date.now() //  updated time
+// 		if ( imageFile.photo ) {
+// 			const photo = postInfo.photo
+// 			photo.data = fs.readFileSync( imageFile.photo.path )
+// 			photo.contentType = imageFile.photo.type
+// 		} // if
+// 		postInfo.save( ( err, result ) => {
+// 			if ( err ) return response.status( 400 ).json( { error: err } )
+// 			response.json( postInfo )
+// 		}) // save
+// 	} // handleRequest
+// 	form.parse( request, handleRequest )
+// } // modifyComment
 
 
 exports.modifyComment = ( request, response ) => {
 console.log('modifyComment is called')
-	const comments = request.body.comments
+	const comment = request.body.comment
 	// const set = {
 	// 	$set: {
 	// 		comments: {
@@ -279,14 +279,20 @@ console.log('modifyComment is called')
 	// 		} // comments
 	// 	} // $set
 	// } // set
-	const set = { $set: { comments } }
+
 	//request.body.comment.updated = Date.now() 
-	//findCommentAndUpdate( response, body.postId, set )
-	Post.findByIdAndUpdate( comments.postId, set, { new: true } )
+	//Post.findByIdAndUpdate( comments.postId, set, { new: true } )
+console.log('new text: ', comment.text)
+	Post.findOneAndUpdate( 	{'comments._id': comment._id }, 
+							{
+								'$set': {
+									'comments.$.text': comment.text,
+								} // $set
+							} )
 	.populate( 'comments.postedBy', '_id name')
 	.populate( 'postedBy', '_id name')
 	.exec( ( error, result ) => {
-		result.markModified('comments')
+console.log('updated result: ', result)
 		if ( error ) return createErrorObj( response, error, 400 )
 		else response.json( result )
 	}) // exec

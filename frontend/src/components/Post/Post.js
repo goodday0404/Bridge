@@ -49,31 +49,33 @@ class Post extends Component {
         this.setState( { comments: newComments } )
     } // addNewComment
 
-    modifyComment = ( comment, modifiedText ) => {
-        //const modifiedComment = { ...comment, text: modifiedText }
-        const i = this.state.comments.findIndex( e => e._id === comment._id )
-        let post = this.state.post
-        //let comments = this.state.comments
-        //comments[ i ] = modifiedComment
-        //comments[ i ].text = modifiedText
-        post.comments[ i ] = modifiedText
-        //this.commentData.set( 'comments', comments )
-        const auth = isAuth()
-        modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, post.comments )
-        .then( data => {
-          if ( data.error ) console.log( data.error )
-          else this.setState( { comments: data.comments } )
-        }) // then
-        // updatePostRequest( this.state.post._id, auth.token, this.commentData )
+    modifyComment = ( comments, modifiedText ) => {
+        this.setState( { comments } )
+        // //const modifiedComment = { ...comment, text: modifiedText }
+        // const i = this.state.comments.findIndex( e => e._id === comment._id )
+        // let post = this.state.post
+        // //let comments = this.state.comments
+        // //comments[ i ] = modifiedComment
+        // //comments[ i ].text = modifiedText
+        // post.comments[ i ] = modifiedText
+        // //this.commentData.set( 'comments', comments )
+        // const auth = isAuth()
+        // modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, post.comments )
         // .then( data => {
-        //         if ( data.error ) {
-        //             this.setState( { error: data.error.error } ) 
-        //             return
-        //         } // if
-        //         console.log('New post: ', data)
-        //         this.endLoading()
-        //         this.setState( { post: data, comments: data.comments } )
+        //   if ( data.error ) console.log( data.error )
+        //   else this.setState( { comments: data.comments } )
         // }) // then
+        
+        // // updatePostRequest( this.state.post._id, auth.token, this.commentData )
+        // // .then( data => {
+        // //         if ( data.error ) {
+        // //             this.setState( { error: data.error.error } ) 
+        // //             return
+        // //         } // if
+        // //         console.log('New post: ', data)
+        // //         this.endLoading()
+        // //         this.setState( { post: data, comments: data.comments } )
+        // // }) // then
     } // modifyComment
 
     render() {

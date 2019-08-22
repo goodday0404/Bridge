@@ -17,7 +17,7 @@ router.get( '/posts', getPosts );
 //					for validation ****
 router.put( '/post/comment', requireLogIn, updateComment );
 router.put( '/post/uncomment', requireLogIn, updateUncomment );  
-router.put( '/post/modifyComment', requireLogIn, modifyComment );  
+router.put( '/post/modifycomment', requireLogIn, modifyComment );  
 router.post( '/post/new/:userId', requireLogIn, createPost, createPostValidator );
 router.get( '/posts/by/:userId', requireLogIn, postByUser );
 router.get( '/post/:postId', getPost )
