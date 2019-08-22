@@ -10,6 +10,8 @@ import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
+import { CheckBox } from '../std/CheckBox';
+import TextInputField from '../User/TextInputField';
 
 class EditUserProfile extends Component {
     state = {
@@ -28,7 +30,8 @@ class EditUserProfile extends Component {
         photo: undefined,
         currentPhoto: undefined,
         fileSize: 0,
-        isCancel: false
+        isCancel: false,
+        checked: false,
     } // state
 
     resetState() {
@@ -152,9 +155,13 @@ class EditUserProfile extends Component {
         }) // then
       } // handleUserInfo
 
-      cancelButtonHandler = () => {
+    cancelButtonHandler = () => {
         this.setState( { isCancel: true } )
     } // cancelButtonHandler
+
+    handleCheck = key => event => {
+        this.setState( { [ key ]: event.target.checked } )
+    } // handleCheck
 
     //////////////////////////////// rendering /////////////////////////////////////
 
@@ -185,7 +192,17 @@ class EditUserProfile extends Component {
                 />
     } // textField
 
-    EditForm = ( name, email, password, program, description, tutor, courses ) => (
+     createForm = ( inputType, textLable, handler, focus=false, value=undefined ) => {
+        return <TextInputField 
+                  inputType={ inputType } 
+                  textLabel={ textLable }
+                  onChange={ handler } 
+                  focus={ focus }
+                  value={ value }
+              />
+    } // createForm
+
+    EditForm = ( name, email, password, program, description, tutor, courses, checked ) => (
         // <form> 
         //     { this.inputField( 'Photo', 'photo', 'file', '', 'image/*' ) }
         //     { this.inputField( 'Name', 'name', 'text', name ) }
@@ -218,13 +235,33 @@ class EditUserProfile extends Component {
                 this.textField( 'Courses', courses, 'courses' ) 
             }
             {/* { this.textField( 'Password', password, 'password' ) } */}
-            <OutlinedTextField
+            {/* <OutlinedTextField
                 label='Password'
                 value={ password }
                 onChange={ this.handleInputEntered( 'password' ) }
                 style={ { display: 'flex', flexWrap: 'wrap' } }
                 type='password'
                 autoComplete='current-password'
+            /> */}
+            { 
+                checked ?
+                this.createForm( 
+                    'password', 'Password', this.handleInputEntered, false, password 
+                ) :
+
+                <OutlinedTextField
+                    label='Password'
+                    value={ password }
+                    onChange={ this.handleInputEntered( 'password' ) }
+                    style={ { display: 'flex', flexWrap: 'wrap' } }
+                    type='password'
+                    autoComplete='current-password'
+                />
+            }
+            <CheckBox 
+                label='Show password' 
+                checked={ checked } 
+                handler={ this.handleCheck } 
             />
             <FormButtons 
                 leftLabel='Update'
@@ -236,7 +273,7 @@ class EditUserProfile extends Component {
       );
 
     render() {
-        const { _id, name, email, password , route, isLoading, error, isCancel,
+        const { _id, name, email, password , route, isLoading, error, isCancel, checked, 
                 tutor, courses, program, description, photo, currentPhoto } = this.state
         const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
@@ -249,7 +286,9 @@ class EditUserProfile extends Component {
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
                     {/* <Image url={ this.getImage() } alt={ name } /> */}
                     <Image url={ newPhoto } alt={ name } /> 
-                    { this.EditForm( name, email, password, program, description, tutor, courses ) }
+                    { this.EditForm( 
+                        name, email, password, program, description, tutor, courses, checked 
+                    ) }
                 </div>
                 <Footer title='Profile footer' contents={ 'add something here' } />
             </main>
