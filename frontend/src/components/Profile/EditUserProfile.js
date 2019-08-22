@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Header from  '../std/Header';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
-import { InputField, FormButton } from '../std/Form';
+import { InputField, FormButton, FormButtons } from '../std/Form';
+import OutlinedTextField from '../std/OutlinedTextField';
+import OutlinedTextArea from '../std/OutlinedTextArea';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
@@ -25,7 +27,8 @@ class EditUserProfile extends Component {
         description: '',
         photo: undefined,
         currentPhoto: undefined,
-        fileSize: 0
+        fileSize: 0,
+        isCancel: false
     } // state
 
     resetState() {
@@ -114,7 +117,7 @@ class EditUserProfile extends Component {
         let value = event.target.value;
         let size = 0
         if ( key === 'photo' ) {
-console.log('image file: ', event.target.files[0])
+//console.log('image file: ', event.target.files[0])
             value = event.target.files[0]
             if ( value ) size = value.size
         } // if
@@ -149,6 +152,10 @@ console.log('image file: ', event.target.files[0])
         }) // then
       } // handleUserInfo
 
+      cancelButtonHandler = () => {
+        this.setState( { isCancel: true } )
+    } // cancelButtonHandler
+
     //////////////////////////////// rendering /////////////////////////////////////
 
     alertSection( msg, bgColor, color ) {
@@ -169,26 +176,71 @@ console.log('image file: ', event.target.files[0])
                />
     } // inputField
 
+    textField( label, value, key ) {
+        return <OutlinedTextField
+                    label={ label }
+                    value={ value }
+                    onChange={ this.handleInputEntered( key ) }
+                    style={ { display: 'flex', flexWrap: 'wrap' } }
+                />
+    } // textField
+
     EditForm = ( name, email, password, program, description, tutor, courses ) => (
-        <form> 
+        // <form> 
+        //     { this.inputField( 'Photo', 'photo', 'file', '', 'image/*' ) }
+        //     { this.inputField( 'Name', 'name', 'text', name ) }
+        //     { this.inputField( 'Email', 'email', 'text', email ) }
+        //     { this.inputField( 'Program', 'program', 'text', program, undefined, 'textarea' ) }
+        //     { this.inputField( 'About me', 'description', 'text', description, undefined, 'textarea' ) }
+        //     { this.inputField( 'Tutor', 'tutor', 'text', tutor ) }
+        //     { this.inputField( 'Courses', 'courses', 'text', courses ) }
+        //     { this.inputField( 'Password', 'password', 'text', password ) }
+        //     <FormButton label='Update' onClick={ this.handleSubmit } /> 
+        // </form>
+        <div>
             { this.inputField( 'Photo', 'photo', 'file', '', 'image/*' ) }
-            { this.inputField( 'Name', 'name', 'text', name ) }
-            { this.inputField( 'Email', 'email', 'text', email ) }
-            { this.inputField( 'Program', 'program', 'text', program, undefined, 'textarea' ) }
-            { this.inputField( 'About me', 'description', 'text', description, undefined, 'textarea' ) }
-            { this.inputField( 'Tutor', 'tutor', 'text', tutor ) }
-            { this.inputField( 'Courses', 'courses', 'text', courses ) }
-            { this.inputField( 'Password', 'password', 'text', password ) }
-            <FormButton label='Update' onClick={ this.handleSubmit } /> 
-        </form>
+            { this.textField( 'Name', name, 'name' ) }
+            { this.textField( 'Email', email, 'email' ) }
+            { this.textField( 'Program', program, 'program' ) }
+            <OutlinedTextArea 
+                    rows='10'
+                    label='About me'
+                    value={ description }
+                    onChange={ this.handleInputEntered( 'description' ) }
+                    style={ { display: 'flex', flexWrap: 'wrap' } }
+            />
+            {
+                tutor === 'yes' &&
+                this.textField( 'Tutor', tutor, 'tutor' ) 
+            }
+            {
+                tutor === 'yes' &&
+                this.textField( 'Courses', courses, 'courses' ) 
+            }
+            {/* { this.textField( 'Password', password, 'password' ) } */}
+            <OutlinedTextField
+                label='Password'
+                value={ password }
+                onChange={ this.handleInputEntered( 'password' ) }
+                style={ { display: 'flex', flexWrap: 'wrap' } }
+                type='password'
+                autoComplete='current-password'
+            />
+            <FormButtons 
+                leftLabel='Update'
+                rightLabel='Cancel'
+                leftButtonHandler={ this.handleSubmit }
+                rightButtonHandler={ this.cancelButtonHandler }
+            /> 
+        </div>
       );
 
     render() {
-        const { _id, name, email, password , route, isLoading, error, 
+        const { _id, name, email, password , route, isLoading, error, isCancel,
                 tutor, courses, program, description, photo, currentPhoto } = this.state
         const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
-            route ? <Redirect to={ `/user/${ _id }` } /> :
+            route || isCancel ? <Redirect to={ `/user/${ _id }` } /> :
 
             <main>
                 <Blurb body='Edit User Profile' />

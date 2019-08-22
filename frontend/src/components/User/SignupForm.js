@@ -13,13 +13,16 @@ import Footer from '../std/Footer';
 import useStyles from '../../styles/LoginFormStyle';
 import AlertDiv from './alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
+import OutlinedTextField from '../std/OutlinedTextField';
+import { CheckBox } from '../std/CheckBox';
 
-const createForm = ( inputType, textLable, handler, focus=false ) => {
+const createForm = ( inputType, textLable, handler, focus=false, value=undefined ) => {
     return <TextInputField 
               inputType={ inputType } 
               textLabel={ textLable }
               onChange={ handler } 
               focus={ focus }
+              value={ value }
           />
 } // createForm
 
@@ -47,7 +50,8 @@ const SignupOption = () => (
 ) // SignupOption
 
 const SignupForm = props => {
-    const { error, isLoading, isSignUp, formHandler, submitHandler } = props
+    const { error, isLoading, isSignUp, checked, formHandler, submitHandler, checkHandler, 
+            password } = props
     const classes = useStyles();
 
     return (
@@ -58,31 +62,51 @@ const SignupForm = props => {
                 <Grid item xs={ false } sm={ 4 } md={ 7 } className={ classes.image } />
                 <Grid item xs={ 12 } sm={ 8 } md={ 5 } component={ Paper } elevation={ 6 } square>
                     <div className={ classes.paper }>
-                    <Avatar className={ classes.avatar }>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign Up
-                    </Typography> 
-                    { error && <AlertDiv msg={ error } bgColor='#F8BBD0' color='red' /> }
-                    { isSignUp && SignupSuccess( 'palegreen', 'darkgreen' ) }
-                    { isLoading && <CircularIndeterminate /> }
-                    <form className={ classes.form } noValidate>
-                        { createForm( 'name', 'Name', formHandler, true ) }
-                        { createForm( 'email', 'Email Address', formHandler ) }
-                        { createForm( 'password', 'Password', formHandler ) }
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={ classes.submit }
-                            onClick={ submitHandler } 
-                        >
+                        <Avatar className={ classes.avatar }>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
                             Sign Up
-                        </Button>
-                        <SignupOption />
-                    </form>
+                        </Typography> 
+                        { error && <AlertDiv msg={ error } bgColor='#F8BBD0' color='red' /> }
+                        { isSignUp && SignupSuccess( 'palegreen', 'darkgreen' ) }
+                        { isLoading && <CircularIndeterminate /> }
+                        <div className={ classes.form } >
+                            { createForm( 'name', 'Name', formHandler, true ) }
+                            { createForm( 'email', 'Email Address', formHandler ) }
+                            {/* { createForm( 'password', 'Password', formHandler ) } */}
+                            { 
+                                checked ?
+                                createForm( 
+                                    'password', 'Password', formHandler, false, password 
+                                ) :
+
+                                <OutlinedTextField
+                                    label='Password'
+                                    value={ password }
+                                    onChange={ formHandler( 'password' ) }
+                                    style={ { display: 'flex', flexWrap: 'wrap' } }
+                                    type='password'
+                                    autoComplete='current-password'
+                                />
+                            }
+                            <CheckBox 
+                                label='Show password' 
+                                checked={ checked } 
+                                handler={ checkHandler } 
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={ classes.submit }
+                                onClick={ submitHandler } 
+                            >
+                                Sign Up
+                            </Button>
+                            <SignupOption />
+                        </div> 
                     </div>
                 </Grid>
             </Grid>

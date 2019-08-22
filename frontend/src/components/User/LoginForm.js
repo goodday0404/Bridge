@@ -14,13 +14,16 @@ import Footer from '../std/Footer';
 import useStyles from '../../styles/LoginFormStyle';
 import AlertDiv from './alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
+import { CheckBox } from '../std/CheckBox';
+import OutlinedTextField from '../std/OutlinedTextField';
 
-const createForm = ( inputType, textLable, handler, focus=false ) => {
+const createForm = ( inputType, textLable, handler, focus=false, value=undefined ) => {
     return <TextInputField 
               inputType={ inputType } 
               textLabel={ textLable }
               onChange={ handler } 
               focus={ focus }
+              value={ value }
           />
 } // createForm
 
@@ -42,7 +45,8 @@ const LoginOption = () => (
 ) // LoginOption
 
 const LoginForm = props => {
-    const { error, isLoading, formHandler, submitHandler } = props
+    const { error, isLoading, checked, formHandler, submitHandler, checkHandler,
+            password } = props
     const classes = useStyles();
 
     return (
@@ -53,29 +57,48 @@ const LoginForm = props => {
                 <Grid item xs={ false } sm={ 4 } md={ 7 } className={ classes.image } />
                 <Grid item xs={ 12 } sm={ 8 } md={ 5 } component={ Paper } elevation={ 6 } square>
                     <div className={ classes.paper }>
-                    <Avatar className={ classes.avatar }>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Login in
-                    </Typography>
-                    { error && <AlertDiv msg={ error } bgColor='#F8BBD0' color='red' /> }
-                    { isLoading && <CircularIndeterminate /> }
-                    <form className={ classes.form } noValidate>
-                        { createForm( 'email', 'Email Address', formHandler, true ) }
-                        { createForm( 'password', 'Password', formHandler ) }
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={ classes.submit }
-                            onClick={ submitHandler } 
-                        >
-                            Log In
-                        </Button>
-                        <LoginOption />
-                    </form>
+                        <Avatar className={ classes.avatar }>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Login in
+                        </Typography>
+                        { error && <AlertDiv msg={ error } bgColor='#F8BBD0' color='red' /> }
+                        { isLoading && <CircularIndeterminate /> }
+                        <div className={ classes.form } >
+                            { createForm( 'email', 'Email Address', formHandler, true ) }
+                            { 
+                                checked ?
+                                createForm( 
+                                    'password', 'Password', formHandler, false, password 
+                                ) :
+
+                                <OutlinedTextField
+                                    label='Password'
+                                    value={ password }
+                                    onChange={ formHandler( 'password' ) }
+                                    style={ { display: 'flex', flexWrap: 'wrap' } }
+                                    type='password'
+                                    autoComplete='current-password'
+                                />
+                            }
+                            <CheckBox 
+                                label='Show password' 
+                                checked={ checked } 
+                                handler={ checkHandler } 
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={ classes.submit }
+                                onClick={ submitHandler } 
+                            >
+                                Log In
+                            </Button>
+                            <LoginOption />
+                        </div>
                     </div>
                 </Grid>
             </Grid>

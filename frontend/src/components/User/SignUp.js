@@ -28,6 +28,7 @@ class SignUp extends Component {
           error: '',
           isSignUp: false,
           isLoading: false,
+          checked: false,
           tutor: 'no',
           courses: '',
           program: ''
@@ -68,6 +69,10 @@ class SignUp extends Component {
     }) // then
   } // handleClick
 
+  handleCheck = key => event => {
+    this.setState( { [ key ]: event.target.checked } )
+  } // handleCheck
+
   // signUpProcess = async user => {
   //   const domain = 'http://localhost:8080/signup'
   //   const data = {
@@ -106,17 +111,20 @@ class SignUp extends Component {
   } // showLoadingIcon
 
   render() {
-    const { error, isSignUp, isLoading } = this.state
+    const { error, isSignUp, isLoading, checked, password } = this.state
     const loginMsg = 'Please login'
     return (
         isSignUp ?  <Redirect to='/welcome' /> :
 
                     <SignupForm 
                           error={ error }
+                          password={ password }
                           isLoading={ isLoading }
                           isSignUp={ isSignUp }
+                          checked={ checked }
                           formHandler={ this.handleInputEntered } 
                           submitHandler={ this.handleSubmit }
+                          checkHandler={ this.handleCheck }
                     />
       // <main>
       //   <Blurb body='Sign Up here!' />

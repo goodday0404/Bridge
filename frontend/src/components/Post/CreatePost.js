@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import Header from  '../std/Header';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
 import { postRequest } from '../../API/postAPI';
-import { InputField, FormButton } from '../std/Form';
+import { InputField, FormButton, FormButtons } from '../std/Form';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
@@ -22,6 +22,7 @@ class CreatePost extends Component {
         error: '',
         route: '',
         isLoading: false,
+        isCancel: false,
         fileSize: 0
     } // state
 
@@ -117,6 +118,10 @@ class CreatePost extends Component {
         }) // then
     } // handleSubmit
 
+    cancelButtonHandler = () => {
+        this.setState( { isCancel: true } )
+    } // cancelButtonHandler
+
     // handleUserInfo( userId ) {
     //     getUserInfo( userId, isAuth().token )
     //     .then( data => {
@@ -164,17 +169,23 @@ class CreatePost extends Component {
                     onChange={ this.handleInputEntered( 'body' ) }
                     style={ formStyle }
                 />
-                <FormButton label='Create post' onClick={ this.handleSubmit } /> 
+                {/* <FormButton label='Create post' onClick={ this.handleSubmit } /> */}
+                <FormButtons 
+                    leftLabel='Create'
+                    rightLabel='Cancel'
+                    leftButtonHandler={ this.handleSubmit }
+                    rightButtonHandler={ this.cancelButtonHandler }
+                />  
             </div>
         ) // return
     } // postForm
 
     render() {
-        const { title, body, photo, user, route, isLoading, error } = this.state
+        const { title, body, photo, user, route, isLoading, isCancel, error } = this.state
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
-            route ? <Redirect to='/posts' /> :
+            route || isCancel ? <Redirect to='/posts' /> : 
 
             <main>
                 <Blurb body='Got a question? Ask our tutors here!' />

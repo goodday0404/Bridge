@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 
 const OutlinedTextField = props => {
   const classes = useStyles();
-  const { label, value, placeholder, helperText, onChange, style } = props
+  const { label, value, placeholder, helperText, onChange, style, type, autoComplete } = props
 
   return (
     <form style={ style } noValidate autoComplete="off">
@@ -30,6 +30,9 @@ const OutlinedTextField = props => {
           shrink: true,
         }}
         onChange={ onChange }
+        style={ style }
+        type={ type }
+        autoComplete={ autoComplete }
       />
     </form>
   ) // return

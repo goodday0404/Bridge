@@ -24,7 +24,8 @@ class LogIn extends Component {
             password: '',
             error: '',
             isLogIn: false,
-            isLoading: false
+            isLoading: false,
+            checked: false,
         } // this.initialState
         this.state = this.initialState
         this.isLoading = false
@@ -71,6 +72,10 @@ class LogIn extends Component {
       }) // then
     } // handleSubmit
 
+    handleCheck = key => event => {
+      this.setState( { [ key ]: event.target.checked } )
+    } // handleCheck
+
     ////////////////////////////////// rendering /////////////////////////////////////
   
     alertSection( msg, bgColor, color ) {
@@ -91,7 +96,7 @@ class LogIn extends Component {
     } // showLoadingIcon
 
     render() {
-      const { error, isLogIn, isLoading } = this.state
+      const { error, isLogIn, isLoading, checked, password } = this.state
       return (
         isLogIn ? 
         <Redirect to="/" /> : // redirect to main page if user successes login.
@@ -99,8 +104,11 @@ class LogIn extends Component {
         <LoginForm 
             error={ error }
             isLoading={ isLoading }
+            checked={ checked }
+            password={ password }
             formHandler={ this.handleInputEntered } 
             submitHandler={ this.handleSubmit }
+            checkHandler={ this.handleCheck }
         />
         // <Container component="main" maxWidth="xs">
         //   <CssBaseline />
