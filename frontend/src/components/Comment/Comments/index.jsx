@@ -22,7 +22,7 @@ class Comments extends PureComponent {
   };
 
   render() {
-    const { post, comments, onDeleteComment ,onModifiedComment } = this.props;
+    const { isPost, _id, comments, onDeleteComment, onComment ,onModifiedComment } = this.props;
     const { visible } = this.state;
 
     return (
@@ -45,7 +45,7 @@ class Comments extends PureComponent {
               .sort((a, b) => b.createdAt - a.createdAt)
               .map( ( comment, i ) => {
                 console.log(comment)   
-                const { created, _id, text, postedBy } = comment
+                // const { created, _id, text, postedBy } = comment
                 return <Comment 
                           key={ i } 
                           photo={ this.getUserImage( comment.postedBy._id ) } 
@@ -53,10 +53,13 @@ class Comments extends PureComponent {
                           // userId={ postedBy._id }
                           // content={ text }
                           // createdAt={ created }
-                          post={ post }
+                          // post={ post }
+                          _id={ _id }
                           comment={ comment }
+                          isPost={ isPost }
                           onDeleteComment={ onDeleteComment }
-                          onModifiedComment={ onModifiedComment }
+                          // onModifiedComment={ onModifiedComment }
+                          onComment={ onComment }
                        />
                })}
           </List>

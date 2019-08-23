@@ -1,6 +1,7 @@
 const express = require( 'express' );
 const { userById, allUsers, getUser, userPhoto, updateUser, deleteUser, addFollows, 
-        addFollowers, deleteFollows, deleteFollowers } = require( '../middlewares/user' );
+        addFollowers, deleteFollows, deleteFollowers, updateComment, updateUncomment,
+        modifyComment } = require( '../middlewares/user' );
 const { requireLogIn } = require( '../middlewares/auth');
 
 const router = express.Router();
@@ -11,6 +12,10 @@ const router = express.Router();
               that doesn't contain 'userId' substring above routers that contain the 
               substring for each API call.
  */
+router.put( '/user/comment', requireLogIn, updateComment );
+router.put( '/user/uncomment', requireLogIn, updateUncomment );  
+router.put( '/user/modifycomment', requireLogIn, modifyComment );  
+
 router.put( '/user/follow', requireLogIn, addFollows, addFollowers )
 router.put( '/user/unfollow', requireLogIn, deleteFollows, deleteFollowers )
 router.get( '/users', allUsers );

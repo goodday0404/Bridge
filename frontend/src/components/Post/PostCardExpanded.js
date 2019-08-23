@@ -82,14 +82,31 @@ console.log('comments.length: ', comments.length)
                     <hr style={ { marginLeft: '15px', marginRight: '15px' } } />
                 </div>
                 <div style={ { paddingBottom: '30px' } } >
-                    <NewComment post={ post } onNewComment={ commentHandler } />
-                    { 
+                    {/* <NewComment post={ post } onNewComment={ commentHandler } /> */}
+                    <NewComment 
+                        _id={ post._id } 
+                        isPost={ true }
+                        onNewComment={ commentHandler } 
+                    />
+                    {/* { 
                         comments.length > 0 && 
                         <Comments 
                             post={ post }
                             comments={ comments } 
                             onDeleteComment={ commentHandler } 
-                            onModifiedComment={ modifiedCommentHandler }
+                            // onModifiedComment={ modifiedCommentHandler }
+                            onComment={ commentHandler }
+                        /> 
+                    } */}
+                    { 
+                        comments.length > 0 && 
+                        <Comments 
+                            _id={ post._id }
+                            comments={ comments } 
+                            isPost={ true }
+                            // onDeleteComment={ commentHandler } 
+                            // onModifiedComment={ modifiedCommentHandler }
+                            onComment={ commentHandler }
                         /> 
                     }
                 </div>

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Input from './Input';
 import Wrapper from './Wrapper';
 import { isAuth } from '../../../Auth';
-import { addCommentRequest } from '../../../API/postAPI';
+import { addCommentRequest, addTutorCommentRequest } from '../../../API/postAPI';
 import { AlertDialog } from '../../std/Alert';
 
 class NewComment extends PureComponent {
@@ -37,21 +37,32 @@ class NewComment extends PureComponent {
     //const { value } = this.input.current;
     const auth = isAuth()
 
-    addCommentRequest( auth.user._id, this.props.post._id, auth.token, { text: comment } )
-    .then( data => {
-      if ( data.error ) {
-        console.log( data.error )
-        return
-      } // if
-      this.setState( { comment: '' } )
-      onNewComment( data.comments )
-    }) // then
-  
-    // if (value) {
-    //   onNewComment(e, value);
+    // addCommentRequest( auth.user._id, this.props._id, auth.token, { text: comment } )
+    // .then( data => {
+    //   if ( data.error ) {
+    //     console.log( data.error )
+    //     return
+    //   } // if
+    //   this.setState( { comment: '' } )
+    //   onNewComment( data.comments )
+    // }) // then
 
-    //   this.input.current.value = '';
-    // }
+    const handleResponse = data => {
+        if ( data.error ) {
+          console.log( data.error )
+          return
+        } // if
+        this.setState( { comment: '' } )
+        onNewComment( data.comments )
+    } // handleResponse
+
+    if ( this.props.isPost ) {
+        addCommentRequest( auth.user._id, this.props._id, auth.token, { text: comment } )
+        .then( handleResponse )
+        return
+    } // if
+    addTutorCommentRequest( auth.user._id, this.props._id, auth.token, { text: comment } )
+    .then( handleResponse )
   }
 
   render() {

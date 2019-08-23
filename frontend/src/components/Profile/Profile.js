@@ -97,6 +97,13 @@ console.log('comments: ', data.comments)
         }
     } // handleShowMyStudents
 
+    addNewComment = newComments => {
+        /*
+             IMPORTANT: newComments.reverse() will reverse the list of comments
+        */
+        this.setState( { comments: newComments } )
+    } // addNewComment
+
     // request new user data when FIRST TIME new user component is clicked
     componentDidMount() {
         this.handleUserInfo( this.props.match.params.userId )
@@ -120,7 +127,7 @@ console.log('comments: ', data.comments)
     } // isLogInUser
 
     render() {
-        const { user, route, follow, showMyTutors, showMyStudents } = this.state
+        const { user, comments, route, follow, showMyTutors, showMyStudents } = this.state
         const logInUser = isAuth().user 
         const styleContainer = {
             paddingTop: '100px',
@@ -140,6 +147,7 @@ console.log('comments: ', data.comments)
                     
                     <ProfileLayout 
                         user={ user } 
+                        comments={ comments }
                         image={ this.getImage() } 
                         follow={ follow }
                         isLogInUser={ this.isLogInUser( logInUser ) }
@@ -149,6 +157,7 @@ console.log('comments: ', data.comments)
                         followHandler={ this.handleClickFollowUnfollow }
                         handleShowMyTutor={ this.handleShowMyTutor }
                         handleShowMyStudents={ this.handleShowMyStudents }
+                        commentHandler={ this.addNewComment }
                     />
                 </Container>
 

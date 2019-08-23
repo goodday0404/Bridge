@@ -99,7 +99,7 @@ console.log('comments: ',comments )
                         updateButtonHandler={ this.handleClickUpdate }
                         deleteButtonHandler={ this.handleClickDelete }
                         commentHandler={ this.addNewComment }
-                        modifiedCommentHandler={ this.modifyComment }
+                        // modifiedCommentHandler={ this.modifyComment }
                     />
                 </Container>
                 <Footer title='Post footer' contents={ 'Add contents here' } />

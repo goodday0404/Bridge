@@ -15,6 +15,12 @@ console.log('find id: ', id)
 	User.findById( id )
 		.populate( 'follows', '_id name email program description' )
 		.populate( 'followers', '_id name email program description' )
+		.populate( 'comments.postedBy', '_id name photo')
+		.populate( 'postedBy', '_id name')
+		//.select('_id title body created comments photo')
+		.select(
+			'_id name email description tutor courses program updated created comments photo'
+		)
 		.exec( ( err, user ) => {
 		if ( err || !user ) {
 			// const error = { error: "user is not found" };
@@ -49,7 +55,9 @@ exports.allUsers = ( request, response ) => {
 		} // if
 		response.json( users );
 	}; // findUsers
-	User.find( findUsers ).select( 'name email description tutor courses program updated created' ); 
+	User.find( findUsers ).select( 
+		'name email description tutor courses program updated created comments' 
+	); 
 	// updated field will be available once user post is updated. Using the updated field
 	// is available even though the field is not created yet.
 }; // allUsers
@@ -275,3 +283,52 @@ exports.deleteFollowers = (req, res) => {
             res.json(result);
         });
 };
+
+
+const findCommentAndUpdate = ( response, postId, comments ) => {
+console.log('findCommentAndUpdate is called')
+	User.findByIdAndUpdate( postId, comments, { new: true } )
+	.populate( 'comments.postedBy', '_id name')
+	.populate( 'postedBy', '_id name')
+	.exec( ( error, result ) => {
+		if ( error ) return createErrorObj( response, error, 400 )
+		else response.json( result )
+	}) // exec
+} // findCommentAndUpdate
+	
+exports.updateComment = ( request, response ) => {
+	const body = request.body
+	const push = { $push: { comments: body.comment } }
+	request.body.comment.postedBy = body.userId
+	findCommentAndUpdate( response, body.postId, push )
+} // updateComment
+
+exports.updateUncomment = ( request, response ) => {
+	const body = request.body
+	const pull = {
+		$pull: {
+			comments: {
+				_id: body.comment._id
+			} // comments
+		} // $pull
+	} // pull
+	findCommentAndUpdate( response, body.postId, pull )
+} // updateComment
+
+exports.modifyComment = ( request, response ) => {
+//console.log('modifyComment is called')
+	const comment = request.body.comment
+	User.findOneAndUpdate( 	{ 'comments._id': comment._id }, 
+							{
+								'$set': {
+									'comments.$.text': comment.text,
+								} // $set
+							} )
+	.populate( 'comments.postedBy', '_id name')
+	.populate( 'postedBy', '_id name')
+	.exec( ( error, result ) => {
+//console.log('updated result: ', result)
+		if ( error ) return createErrorObj( response, error, 400 )
+		else response.json( result )
+	}) // exec
+} // modifyComment

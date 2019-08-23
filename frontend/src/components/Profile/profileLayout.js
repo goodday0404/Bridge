@@ -39,7 +39,8 @@ const isLogInUser = ( logInUser, poster ) => {
 const ProfileLayout = props => {
     const classes = useStyles()
     const { user, image, follow, isLogInUser, isTutor, followHandler, handleShowMyTutor,
-            handleShowMyStudents, showMyTutors, showMyStudents } = props
+            handleShowMyStudents, showMyTutors, showMyStudents, commentHandler, comments
+             } = props
 console.log('props.user: ', user)
     // const isAuthor = isLogInUser( isAuth().user, post.postedBy )
     // const haveImage = post.photo
@@ -114,15 +115,6 @@ console.log('props.user: ', user)
                     </CardContent>
                     {   // display tutor cards only when this user is logged in
                         isLogInUser && 
-                        // <Grid container justify="center" alignItems="center">
-                        //     <GridButton 
-                        //         className={ classes.showMyTutors }
-                        //         label='Show My Tutors' 
-                        //         variant='outlined' 
-                        //         color='primary' 
-                        //         handler={ handleShowMyTutor } 
-                        //     />
-                        // </Grid>
                         <Grid container spacing={2} justify="center">
                             {
                                 isTutor && <ShowMyStudentsButton
@@ -135,36 +127,37 @@ console.log('props.user: ', user)
                                 handler={ handleShowMyTutor } 
                             />
                         </Grid>
-                        // <ShowMyTutorsButton 
-                        //     show={ showMyTutors } 
-                        //     handler={ handleShowMyTutor } 
-                        // />
                     }
-                    {
+                    {   // display a list of tutors this user follows
                         showMyTutors && <SubView follows={ user.follows } />
                     }
-                    {
+                    {   // display a list of students who follows this user
                         isTutor && showMyStudents && <SubView followers={ user.followers } />
                     }
-                    {
+                    {   // back to tutors or members page
                         isTutor ? 
                         <DefaultCardActions label='Back to Tutors' to='/tutors' /> :
                         <DefaultCardActions label='Back to Members' to='/users' />
                     }
                     <hr style={ { marginLeft: '15px', marginRight: '15px' } } />
                 </div>
-                {/* <div style={ { paddingBottom: '30px' } } >
-                    <NewComment post={ post } onNewComment={ commentHandler } />
-                    { 
-                        comments.length > 0 && 
-                        <Comments 
-                            post={ post }
-                            comments={ comments } 
-                            onDeleteComment={ commentHandler } 
-                            onModifiedComment={ modifiedCommentHandler }
-                        /> 
-                    }
-                </div> */}
+                {   // display comment section if this user is a tutor
+                    isTutor &&
+                    <div style={ { paddingBottom: '30px' } } >
+                        <NewComment _id={ user._id } onNewComment={ commentHandler } />
+                        {   // display the list of comments if there is at least 1 comment
+                            comments.length > 0 && 
+                            <Comments 
+                                _id={ user._id }
+                                comments={ comments } 
+                                isPost={ false }
+                                // onDeleteComment={ commentHandler } 
+                                //onModifiedComment={ modifiedCommentHandler }
+                                onComment={ commentHandler }
+                            /> 
+                        }
+                    </div>
+                }
             </Card>
     ) // return
 } // ProfileLayout

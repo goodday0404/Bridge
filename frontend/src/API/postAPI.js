@@ -46,29 +46,31 @@ export const deletePostRequest = async ( postId, token ) => (
 export const commentRequest = async ( userId, postId, token, comment, event ) => {
     //const body = JSON.stringify( { userId, postId, comment } )
 console.log('comment: ', comment)
-    return requestServer( `post/${ event }`, 
+    return requestServer( `${ event }`, 
                           { ...dataAccess( 'PUT', token ), body:JSON.stringify( { userId, postId, comment } ) },
                           'Adding/Deleting/Editing a comment success!' )
 } // addCommentRequest
 
 export const addCommentRequest = async ( userId, postId, token, comment ) => (
-    commentRequest( userId, postId, token, comment, 'comment' )
+    commentRequest( userId, postId, token, comment, 'post/comment' )
 ) // addCommentRequest
 
 export const deleteCommentRequest = async ( userId, postId, token, comment ) => (
-    commentRequest( userId, postId, token, comment, 'uncomment' )
+    commentRequest( userId, postId, token, comment, 'post/uncomment' )
 ) // addCommentRequest
 
 export const modifyCommentRequest = async ( userId, postId, token, comment ) => (
-    commentRequest( userId, postId, token, comment, 'modifycomment' )
+    commentRequest( userId, postId, token, comment, 'post/modifycomment' )
 ) // modifyCommentRequest
 
-// export const modifyCommentRequest = async ( userId, postId, token, comments ) => {
-//     const body = JSON.stringify( { userId, postId, comments } )
-// //console.log('comment: ', body)
-//     const headers = { Accept: 'application/json', Authorization: `Bearer ${ token }`}
-//     return requestServer( 'post/modifyComment', 
-//                           //{ ...dataAccess( 'PUT', token ), body:JSON.stringify( { userId, postId, comments } ) },
-//                           { method: 'PUT', headers, body: JSON.stringify( { userId, postId, comments } ) },
-//                           'Modifying a comment success!' )
-// } // modifyCommentRequest
+export const addTutorCommentRequest = async ( commenterId, userId, token, comment ) => (
+    commentRequest( commenterId, userId, token, comment, 'user/comment' )
+) // addTutorCommentRequest
+
+export const deleteTutorCommentRequest = async ( commenterId, userId, token, comment ) => (
+    commentRequest( commenterId, userId, token, comment, 'user/uncomment' )
+) // deleteTutorCommentRequest
+
+export const modifyTutorCommentRequest = async ( commenterId, userId, token, comment ) => (
+    commentRequest( commenterId, userId, token, comment, 'user/modifycomment' )
+) // modifyTutorCommentRequest

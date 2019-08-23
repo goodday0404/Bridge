@@ -13,7 +13,8 @@ import Wrapper from './Wrapper';
 import DateView from './Date';
 import { AlertDialog } from '../std/Alert';
 import { isAuth } from '../../Auth';
-import { deleteCommentRequest, modifyCommentRequest } from '../../API/postAPI';
+import { deleteCommentRequest, modifyCommentRequest, deleteTutorCommentRequest,
+         modifyTutorCommentRequest } from '../../API/postAPI';
 import OutlinedTextArea from '../std/OutlinedTextArea';
 
 export const getFormattedTimestamp = (time) => {
@@ -25,6 +26,7 @@ export const getFormattedTimestamp = (time) => {
 
 class Comment extends Component {
     state = {
+        _id: this.props._id,
         post: this.props.post,
         comment: this.props.comment,
         photo: this.props.photo,
@@ -58,11 +60,25 @@ class Comment extends Component {
 
     handleDelete = comment => () => {
         const auth = isAuth() 
-        deleteCommentRequest( auth.user._id, this.state.post._id, auth.token, comment )
-        .then( data => {
-          if ( data.error ) console.log( data.error )
-          else this.props.onDeleteComment( data.comments )
-        }) // then
+        // deleteCommentRequest( auth.user._id, this.props._id, auth.token, comment )
+        // .then( data => {
+        //   if ( data.error ) console.log( data.error )
+        //   // else this.props.onDeleteComment( data.comments )
+        //   else this.props.onComment( data.comments )
+        // }) // then
+
+        const handleResponse = data => {
+            if ( data.error ) console.log( data.error )
+            else this.props.onComment( data.comments )
+        } // handleResponse
+
+        if ( this.props.isPost ) {
+            deleteCommentRequest( auth.user._id, this.props._id, auth.token, comment )
+            .then( handleResponse )
+            return
+        } // if
+        deleteTutorCommentRequest( auth.user._id, this.props._id, auth.token, comment )
+            .then( handleResponse )
     } // handleDelete
 
     handleSubmit = event => {
@@ -70,25 +86,35 @@ class Comment extends Component {
         if ( !this.isValidComment() ) return
         let comment = this.state.comment
         comment.text = this.state.text
-        // const auth = isAuth()
-        // modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, comment )
+        
+        const auth = isAuth() 
+        // modifyCommentRequest( auth.user._id, this.state._id, auth.token, comment )
         // .then( data => {
-        //   if ( data.error ) console.log( data.error )
-        //   else this.props.onDeleteComment( data.comments )
+        //   if ( data.error ) {
+        //       console.log( data.error )
+        //       return
+        //   } // if 
+        //   // this.props.onModifiedComment( data.comments, '' )
+        //   this.props.onComment( data.comments )
+        //   this.setState( { isEdit: false } )
         // }) // then
 
-        // const { comment, text } = this.state
-        // this.props.onModifiedComment( comment, text )
-        const auth = isAuth() 
-        modifyCommentRequest( auth.user._id, this.state.post._id, auth.token, comment )
-        .then( data => {
-          if ( data.error ) {
-              console.log( data.error )
-              return
-          } // if 
-          this.props.onModifiedComment( data.comments, '' )
-          this.setState( { isEdit: false } )
-        }) // then
+        const handleResponse = data => {
+            if ( data.error ) {
+                console.log( data.error )
+                return
+            } // if 
+            this.props.onComment( data.comments )
+            this.setState( { isEdit: false } )
+        } // handleResponse
+
+        if ( this.props.isPost ) {
+            modifyCommentRequest( auth.user._id, this.state._id, auth.token, comment )
+            .then( handleResponse )
+            return
+        } // if
+        modifyTutorCommentRequest( auth.user._id, this.props._id, auth.token, comment )
+        .then( handleResponse )
     } // handleSubmit
 
     cancelButtonHandler = () => {
