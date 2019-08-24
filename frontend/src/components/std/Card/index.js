@@ -9,10 +9,10 @@ import useStyles from '../../../styles/PostStyle';
 import { Link } from 'react-router-dom';
 
 export const SimpleCardButton = props => {
-    const { label, to } = props
+    const { label, to, style } = props
     return (
         <Link to={ to } >
-            <Button size="small" color="primary">
+            <Button size="small" color="primary" style={ style } >
                 { label }
             </Button>
         </Link>
@@ -56,10 +56,10 @@ export const SimpleCardContents = props => {
 } // SimpleCardMedia
 
 export const DefaultCardActions = props => {
-    const { label, to } = props
+    const { label, to, style } = props
     return (
         <CardActions>
-            <SimpleCardButton label={ label } to={ to } />
+            <SimpleCardButton label={ label } to={ to } style={ style } />
             {/* <SimpleCardButton label='Edit' to={ to } /> */}
         </CardActions>
     ) // return

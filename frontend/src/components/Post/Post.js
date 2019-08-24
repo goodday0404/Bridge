@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import { getImage } from './index';
@@ -6,7 +7,7 @@ import { isAuth, path } from '../../Auth';
 import { updatePostRequest,  getPostRequest, deletePostRequest, modifyCommentRequest } from '../../API/postAPI';
 import PostCardExpanded from './PostCardExpanded';
 import Footer from '../std/Footer';
-//import Blurb from '../std/Blurb';
+import Blurb from '../std/Blurb';
 
 
 class Post extends Component {
@@ -16,6 +17,15 @@ class Post extends Component {
         isEdited: false,
         isDeleted: false
     } // state
+
+    itemRefs = []
+
+    focusOnFirst = () => {
+console.log('focusOnFirst is called, ', this.itemRefs[ 0 ])
+        this.itemRefs[ 0 ].focus()
+    }
+
+    inputRef = ref => this.itemRefs.push( ref )
 
     getUserImage( user ) {
         const date = new Date().getTime()
@@ -29,7 +39,13 @@ class Post extends Component {
             if ( data.error ) console.log( data.error )
             else this.setState( { post: data, comments: data.comments } )
         }) // then
+        this.focusOnFirst()
+        window.scrollTo(0, 0)
     } // componentDidMount
+
+    componentDidUpdate() {
+        this.focusOnFirst()
+    }
 
     handleClickDelete = post => () => {
         deletePostRequest( post._id, isAuth().token ).then( data => {
@@ -100,6 +116,7 @@ console.log('comments: ',comments )
                         deleteButtonHandler={ this.handleClickDelete }
                         commentHandler={ this.addNewComment }
                         // modifiedCommentHandler={ this.modifyComment }
+                        ref={ this.inputRef }
                     />
                 </Container>
                 <Footer title='Post footer' contents={ 'Add contents here' } />

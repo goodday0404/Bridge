@@ -34,7 +34,7 @@ const isLogInUser = ( logInUser, poster ) => {
     return logInUser && ( poster != undefined ) && logInUser._id === poster._id
 } // isLogInUser
 
-const PostCardExpanded = props => {
+const PostCardExpanded = React.forwardRef( ( props, ref ) => {
     const classes = useStyles()
     const { post, image, comments, textLimit, updateButtonHandler, deleteButtonHandler, 
             commentHandler, modifiedCommentHandler } = props
@@ -46,11 +46,13 @@ console.log('comments.length: ', comments.length)
     return (
         // <CardActionArea component='a' href={ postPath } >
             <Card className={classes.card}>
-                <div className={classes.cardDetails}>            
+                <div className={classes.cardDetails} >            
                     <CardContent>
+                        <div ref={ ref }>
                         <Typography className={ classes.title } component="h1" variant="h2">
                             { post.title }
                         </Typography>
+                        </div>
                         <Typography className={ classes.name } variant="subtitle1" color="textSecondary">
                             <p className='font-italic' >
                                 Posted by { posterName( post.postedBy ) } 
@@ -109,11 +111,19 @@ console.log('comments.length: ', comments.length)
                             onComment={ commentHandler }
                         /> 
                     }
+                    {
+                        comments.length > 4 && 
+                        <DefaultCardActions 
+                            label='Back to Posts' 
+                            to='/posts'
+                            style={ { paddingTop: '20px' } } 
+                        />
+                    }
                 </div>
             </Card>
         // </CardActionArea>
     ) // return
-} // PostCardExpanded
+}) // PostCardExpanded
 
 
 

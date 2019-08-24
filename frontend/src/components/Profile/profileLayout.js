@@ -156,6 +156,14 @@ console.log('props.user: ', user)
                                 onComment={ commentHandler }
                             /> 
                         }
+                        {
+                            comments.length > 4 && 
+                            <DefaultCardActions 
+                                label='Back to Tutors' 
+                                to='/tutors'
+                                style={ { paddingTop: '20px' } } 
+                            />
+                        }
                     </div>
                 }
             </Card>
