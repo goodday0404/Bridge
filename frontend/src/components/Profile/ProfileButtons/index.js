@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { red } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
+import Box from '@material-ui/core/Box';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteAccount from '../DeleteAccount';
 import { GridButton } from '../../std/Button'
 import { followRequest, unfollowRequest } from '../../../Auth';
@@ -101,4 +107,53 @@ export const ShowMyStudentsButton = props => {
         StudentButton( show, handler )
     ) // return
 } // ShowMyStudentsButton
+
+
+const useStyles = makeStyles(theme => ({
+    avatar: {
+      // backgroundColor: red[500],
+      color: red[500],
+    },
+    shareButton: {
+      color: pink[500],
+    },
+    shareContainer: {
+      paddingTop: '10px',
+      paddingBottom: '20px'
+    },
+}));
+  
+const HeartIcon = () => {
+    const classes = useStyles()
+    return (
+        <FavoriteIcon className={ classes.avatar } />
+    ) // return
+} // HeartIcon
+
+const ShareButton = props => {
+    const { handler } = props
+    const classes = useStyles()
+    return (
+        <Button color="secondary" className={ classes.shareButton } onClick={ handler } >
+            <Box fontStyle="italic" m={1}>
+                Share nice things about this tutor here!
+            </Box>
+            {/* Share nice things about this tutor here! */}
+        </Button>
+    ) // return
+} // ShareButton
+
+export const ShareAboutTutor = props => {
+    const { handler } = props
+    const classes = useStyles()
+    return (
+        <Container className={ classes.shareContainer } justify="center" >
+            <Grid container justify="center" alignItems="center" spacing={ 2 } >
+                <Grid item> <HeartIcon /> </Grid>
+                <Grid item> <ShareButton handler={ handler } /> </Grid>
+                <Grid item> <HeartIcon /> </Grid>
+            </Grid>
+        </Container>
+    ) // return
+} // ShareAboutTutor
 

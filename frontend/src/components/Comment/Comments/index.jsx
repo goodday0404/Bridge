@@ -22,7 +22,8 @@ class Comments extends PureComponent {
   };
 
   render() {
-    const { isPost, _id, comments, onDeleteComment, onComment ,onModifiedComment } = this.props;
+    const { isPost, _id, comments, onDeleteComment, onComment ,onModifiedComment,
+            isTutor } = this.props;
     const { visible } = this.state;
 
     return (
@@ -60,6 +61,7 @@ class Comments extends PureComponent {
                           onDeleteComment={ onDeleteComment }
                           // onModifiedComment={ onModifiedComment }
                           onComment={ onComment }
+                          isTutor={ isTutor }
                        />
                })}
           </List>

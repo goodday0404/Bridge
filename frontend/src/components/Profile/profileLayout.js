@@ -23,7 +23,7 @@ import Blurb from '../std/Blurb';
 import SubView from './SubView';
 import { ShowMyStudentsButton, ShowMyTutorsButton } from './ProfileButtons';
 import CircularIndeterminate from '../Loading/CircularIndicator';
-
+import { ShareAboutTutor } from './ProfileButtons';
 
 const imageStyle={ 
     height: '400px', 
@@ -41,8 +41,8 @@ const isLogInUser = ( logInUser, poster ) => {
 const ProfileLayout = props => {
     const classes = useStyles()
     const { user, image, follow, isLogInUser, isTutor, followHandler, handleShowMyTutor,
-            handleShowMyStudents, showMyTutors, showMyStudents, commentHandler, comments
-             } = props
+            handleShowMyStudents, showMyTutors, showMyStudents, commentHandler, comments,
+            share, shareButtonHandler } = props
 console.log('props.user: ', user)
     // const isAuthor = isLogInUser( isAuth().user, post.postedBy )
     // const haveImage = post.photo
@@ -86,7 +86,7 @@ console.log('props.user: ', user)
                         }
                         {
                             isTutor && user.followers.length > 0 &&
-                            <Typography className={ classes.tutor } variant="subtitle1" color="textSecondary">
+                            <Typography className={ classes.follower } variant="subtitle1" color="textSecondary">
                                 <p className='font-italic' >
                                     { user.followers.length } students follows { user.name }
                                 </p>
@@ -146,10 +146,16 @@ console.log('props.user: ', user)
                     }
                     <hr style={ { marginLeft: '15px', marginRight: '15px' } } />
                 </div>
+                { isTutor && <ShareAboutTutor handler={ shareButtonHandler } /> }
                 {   // display comment section if this user is a tutor
-                    isTutor &&
+                    isTutor && share &&
+
                     <div style={ { paddingBottom: '30px' } } >
-                        <NewComment _id={ user._id } onNewComment={ commentHandler } />
+                        <NewComment 
+                            _id={ user._id } 
+                            onNewComment={ commentHandler } 
+                            isTutor={ isTutor }
+                        />
                         {   // display the list of comments if there is at least 1 comment
                             comments.length > 0 && 
                             <Comments 
@@ -159,6 +165,7 @@ console.log('props.user: ', user)
                                 // onDeleteComment={ commentHandler } 
                                 //onModifiedComment={ modifiedCommentHandler }
                                 onComment={ commentHandler }
+                                isTutor={ isTutor }
                             /> 
                         }
                         {

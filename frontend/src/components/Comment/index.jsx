@@ -16,6 +16,8 @@ import { isAuth } from '../../Auth';
 import { deleteCommentRequest, modifyCommentRequest, deleteTutorCommentRequest,
          modifyTutorCommentRequest } from '../../API/postAPI';
 import OutlinedTextArea from '../std/OutlinedTextArea';
+import StarRatings from 'react-star-ratings';
+
 
 export const getFormattedTimestamp = (time) => {
     const diff = (Date.now() - time) / 1000 / 60; // Minutes
@@ -128,6 +130,7 @@ class Comment extends Component {
         //const { onDeleteComment } = this.props
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
+        
         return (
           <>
           <Wrapper>

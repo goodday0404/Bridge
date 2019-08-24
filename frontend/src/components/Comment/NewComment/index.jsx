@@ -1,13 +1,21 @@
 import React, { PureComponent, createRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import { red } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import PropTypes from 'prop-types';
 import Input from './Input';
 import Wrapper from './Wrapper';
 import { isAuth } from '../../../Auth';
 import { addCommentRequest, addTutorCommentRequest } from '../../../API/postAPI';
 import { AlertDialog } from '../../std/Alert';
+import StarRatings from 'react-star-ratings';
+import { FormatItalic } from '@material-ui/icons';
 
 class NewComment extends PureComponent {
   //static propTypes = { onNewComment: PropTypes.func.isRequired };
@@ -16,7 +24,7 @@ class NewComment extends PureComponent {
     super()
     this.input = createRef()
     this.state = {
-      comment: ''
+      comment: '',
     } // state
   } // constructor
 
@@ -37,16 +45,6 @@ class NewComment extends PureComponent {
     //const { value } = this.input.current;
     const auth = isAuth()
 
-    // addCommentRequest( auth.user._id, this.props._id, auth.token, { text: comment } )
-    // .then( data => {
-    //   if ( data.error ) {
-    //     console.log( data.error )
-    //     return
-    //   } // if
-    //   this.setState( { comment: '' } )
-    //   onNewComment( data.comments )
-    // }) // then
-
     const handleResponse = data => {
         if ( data.error ) {
           console.log( data.error )
@@ -66,53 +64,48 @@ class NewComment extends PureComponent {
   }
 
   render() {
-    const style = {
-      display: 'flex',
-      flexWrap: 'wrap',
-      paddingTop: '5px',
-      //paddingBottom: '10px',
-      marginLeft: '15px',
+    const formStyle = {
+      display: 'flex', flexWrap: 'wrap', paddingTop: '5px', marginLeft: '15px', 
       marginRight: '16px'
     }
-    return (
-      // <Wrapper as="form" onSubmit={this.onSubmit}>
-      //   <Input type="text" ref={this.input} placeholder="Add a comment" required />
-      // </Wrapper>
-      <form style={ style } noValidate autoComplete="off">
-          <TextField
-            id="outlined-full-width"
-            label='comment'
-            value={ this.state.comment }
-            placeholder='Add a comment'
-            // helperText={ helperText }
-            fullWidth
-            multiline
-            margin="normal"
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            onChange={ this.handleInputChange }
-          />
-          {/* <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
-              Comment
-          </Button> */}
-          {
-              this.isValidComment() ? 
-              <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
-                  Comment
-              </Button> :
+    const textStyle = {
+      textAlign: 'center', color: '#cc3399', fontSize: '20px', marginTop: '10px',
+    }
 
-              <AlertDialog 
-                  label='Comment' 
-                  title='Comment is empty'
-                  body='It requires at least one character'
-                  handler={ () => {} } 
-                  //style={ { marginTop: '18px' } }
+    return (
+      <main>
+          <form style={ formStyle } noValidate autoComplete="off">
+              <TextField
+                id="outlined-full-width"
+                label='comment'
+                value={ this.state.comment }
+                placeholder='Add a comment'
+                // helperText={ helperText }
+                fullWidth
+                multiline
+                margin="normal"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={ this.handleInputChange }
               />
-          }
-          
-      </form>
+              {
+                  this.isValidComment() ? 
+                  <Button variant='outlined' color='primary' onClick={ this.handleSubmit } >
+                      Comment
+                  </Button> :
+
+                  <AlertDialog 
+                      label='Comment' 
+                      title='Comment is empty'
+                      body='It requires at least one character'
+                      handler={ () => {} } 
+                      //style={ { marginTop: '18px' } }
+                  />
+              }
+          </form>
+      </main>
     ) // return
   } // render
 } // NewComment

@@ -3,6 +3,11 @@ import { Redirect, Link } from 'react-router-dom';
 import { isAuth, path, getData, getUserInfo } from '../../Auth';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import { red } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import useStyles from '../../styles/PostStyle';
@@ -15,7 +20,6 @@ import { EditDeleteButtons, FollowUnFollowButtons } from './ProfileButtons';
 import SubView from './SubView';
 import ProfileLayout from './profileLayout';
 
-
 class Profile extends Component {
     state = {
         user: { follows: [], followers: [] },
@@ -23,7 +27,8 @@ class Profile extends Component {
         route: false,
         follow: false,
         showMyTutors: false,
-        showMyStudents: false
+        showMyStudents: false,
+        share: false
     } // state
 
     isTutor = () => this.state.user.tutor === 'yes'
@@ -97,6 +102,10 @@ console.log('comments: ', data.comments)
         }
     } // handleShowMyStudents
 
+    handleShareButton = () => {
+        this.setState( { share: !this.state.share } )
+    } // handleShareButton
+
     addNewComment = newComments => {
         /*
              IMPORTANT: newComments.reverse() will reverse the list of comments
@@ -107,6 +116,7 @@ console.log('comments: ', data.comments)
     // request new user data when FIRST TIME new user component is clicked
     componentDidMount() {
         this.handleUserInfo( this.props.match.params.userId )
+        window.scrollTo(0, 0)
         // const domain = `${ p(ath( 'user' ) }/${ userId }`
         // fetch( domain, getData( isAuth().token ) )
         // .then( response => response.json() )
@@ -127,7 +137,8 @@ console.log('comments: ', data.comments)
     } // isLogInUser
 
     render() {
-        const { user, comments, route, follow, showMyTutors, showMyStudents } = this.state
+        const { user, comments, route, follow, showMyTutors, showMyStudents,
+                share } = this.state
         const logInUser = isAuth().user 
         const styleContainer = {
             paddingTop: '100px',
@@ -150,6 +161,7 @@ console.log('comments: ', data.comments)
                         comments={ comments }
                         image={ this.getImage() } 
                         follow={ follow }
+                        share={ share }
                         isLogInUser={ this.isLogInUser( logInUser ) }
                         isTutor={ this.isTutor() }
                         showMyTutors={ showMyTutors }
@@ -158,6 +170,7 @@ console.log('comments: ', data.comments)
                         handleShowMyTutor={ this.handleShowMyTutor }
                         handleShowMyStudents={ this.handleShowMyStudents }
                         commentHandler={ this.addNewComment }
+                        shareButtonHandler={ this.handleShareButton }
                     />
                 </Container>
 

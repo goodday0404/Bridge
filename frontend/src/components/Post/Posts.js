@@ -87,6 +87,7 @@ console.log('filtered post: ', post)
             //     return user.tutor.match( 'yes' )
             // } ) // filter
             this.setState( { posts: data.posts, searched: data.posts, isLoading: false } )
+            window.scrollTo(0, 0)
         }) // then
     } // componentDidMount
 

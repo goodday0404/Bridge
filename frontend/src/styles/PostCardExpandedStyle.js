@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     },
     about: {
         textAlign: 'center',
-        color: 'green',
+        color: 'navy',
         fontSize: '20px',
     },
     schoolAvatar: {
@@ -43,7 +43,11 @@ const useStyles = makeStyles(theme => ({
     },
     tutor: {
         textAlign: 'center',
-        //color: '#ff0066'
+        color: '#ff0066'
+        //color: 'green'
+    },
+    follower: {
+        textAlign: 'center',
         color: 'green'
     },
 })) // useStyles

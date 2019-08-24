@@ -57,6 +57,7 @@ console.log('filtered user: ', user)
                 return user.tutor.match( this.state.isTutor ? 'yes' : 'no' )
             } ) // filter
             this.setState( { users: items, searched: items } )
+            window.scrollTo(0, 0)
         }) // then
     } // componentDidMount
 

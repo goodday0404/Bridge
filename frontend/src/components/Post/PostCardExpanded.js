@@ -47,7 +47,8 @@ const PostCardExpanded = React.forwardRef( ( props, ref ) => {
 // console.log('comments.length: ', comments.length)
     return (
         // <CardActionArea component='a' href={ postPath } >
-            author === 'Unknown' ?
+            //author === 'Unknown' ?
+            post.created === undefined ?
             <CircularIndeterminate style={ { height: '200px' } } /> :
             
             <Card className={classes.card}>
@@ -95,6 +96,7 @@ const PostCardExpanded = React.forwardRef( ( props, ref ) => {
                         _id={ post._id } 
                         isPost={ true }
                         onNewComment={ commentHandler } 
+                        isTutor={ false }
                     />
                     {/* { 
                         comments.length > 0 && 
@@ -115,6 +117,7 @@ const PostCardExpanded = React.forwardRef( ( props, ref ) => {
                             // onDeleteComment={ commentHandler } 
                             // onModifiedComment={ modifiedCommentHandler }
                             onComment={ commentHandler }
+                            isTutor={ false }
                         /> 
                     }
                     {
