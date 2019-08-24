@@ -15,15 +15,16 @@ class Post extends Component {
         post: '',
         comments: [],
         isEdited: false,
-        isDeleted: false
+        isDeleted: false,
+        // isLoading: false
     } // state
 
     itemRefs = []
 
-    focusOnFirst = () => {
-console.log('focusOnFirst is called, ', this.itemRefs[ 0 ])
-        this.itemRefs[ 0 ].focus()
-    }
+//     focusOnFirst = () => {
+// // console.log('focusOnFirst is called, ', this.itemRefs[ 0 ])
+//         this.itemRefs[ 0 ].focus()
+//     }
 
     inputRef = ref => this.itemRefs.push( ref )
 
@@ -33,19 +34,21 @@ console.log('focusOnFirst is called, ', this.itemRefs[ 0 ])
     } // getImage
 
     componentDidMount() {
+        // this.setState( { isLoading: true } )
         //this.setState( { comments: this.props.comments } )
         this.commentData = new FormData()
         getPostRequest( this.props.match.params.postId ).then( data => {
             if ( data.error ) console.log( data.error )
             else this.setState( { post: data, comments: data.comments } )
         }) // then
-        this.focusOnFirst()
+        // this.focusOnFirst()
         window.scrollTo(0, 0)
+        // this.setState( { isLoading: false } )
     } // componentDidMount
 
-    componentDidUpdate() {
-        this.focusOnFirst()
-    }
+    // componentDidUpdate() {
+    //     this.focusOnFirst()
+    // }
 
     handleClickDelete = post => () => {
         deletePostRequest( post._id, isAuth().token ).then( data => {
@@ -95,7 +98,7 @@ console.log('focusOnFirst is called, ', this.itemRefs[ 0 ])
     } // modifyComment
 
     render() {
-        const { post, comments, isEdited, isDeleted } = this.state
+        const { post, comments, isEdited, isDeleted, isLoading } = this.state
         // const { post, comments, image, textLimit } = this.props
 console.log('this.state.post: ', this.state.post )
 console.log('comments: ',comments )
@@ -117,6 +120,7 @@ console.log('comments: ',comments )
                         commentHandler={ this.addNewComment }
                         // modifiedCommentHandler={ this.modifyComment }
                         ref={ this.inputRef }
+                        // isLoading={ isLoading }
                     />
                 </Container>
                 <Footer title='Post footer' contents={ 'Add contents here' } />

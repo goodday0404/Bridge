@@ -8,6 +8,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { SelectOutlined } from '../std/Select';
+import CircularIndeterminate from '../Loading/CircularIndicator';
+import { height } from '@material-ui/system';
 
 
 class UserAlbumLayout extends Component {
@@ -65,14 +67,20 @@ console.log('filtered user: ', user)
             paddingTop: '60px',
             paddingBottom: '100px'
         } // styleContainer
+// console.log('searched users: ', searched)
         return (
             <React.Fragment>
                 <CssBaseline />
-                <main>
-                    <Blurb  call={ call }
-                            searched= { searched } 
-                            body={ this.props.blurbText } 
-                    />
+                <Blurb  call={ call }
+                        searched= { searched } 
+                        body={ this.props.blurbText } 
+                />
+                {
+                    searched.length === 0 ? 
+                    <CircularIndeterminate 
+                        style= { { marginTop: '100px', marginBottom: '100px' } } 
+                    /> :
+
                     <Container style={ styleContainer } maxWidth="md">
                         <Grid container spacing={1} style={ { paddingBottom: '60px' } } >
                             <SelectOutlined     isTutor={ isTutor } 
@@ -82,7 +90,7 @@ console.log('filtered user: ', user)
                         </Grid>
                         <UserAlbum searched={ searched } />
                     </Container>
-                </main>
+                }
                 <Footer title='Posts footer' contents='Add someting here' />
             </React.Fragment>
           ) // return

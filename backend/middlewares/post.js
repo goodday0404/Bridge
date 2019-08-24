@@ -234,7 +234,7 @@ exports.updateUncomment = ( request, response ) => {
 exports.modifyComment = ( request, response ) => {
 console.log('modifyComment is called')
 	const comment = request.body.comment
-	Post.findOneAndUpdate( 	{'comments._id': comment._id }, 
+	Post.findOneAndUpdate( 	{ 'comments._id': comment._id }, 
 							{
 								'$set': {
 									'comments.$.text': comment.text,

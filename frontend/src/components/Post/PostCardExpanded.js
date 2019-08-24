@@ -18,6 +18,7 @@ import NewComment from '../Comment/NewComment';
 import Comments from '../Comment/Comments';
 import { isAuth, path } from '../../Auth';
 import { getPostRequest, deletePostRequest } from '../../API/postAPI';
+import CircularIndeterminate from '../Loading/CircularIndicator';
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
 
@@ -37,14 +38,18 @@ const isLogInUser = ( logInUser, poster ) => {
 const PostCardExpanded = React.forwardRef( ( props, ref ) => {
     const classes = useStyles()
     const { post, image, comments, textLimit, updateButtonHandler, deleteButtonHandler, 
-            commentHandler, modifiedCommentHandler } = props
-console.log('props.post: ', post)
+            commentHandler, modifiedCommentHandler, isLoading } = props
+// console.log('props.post: ', post)
     const isAuthor = isLogInUser( isAuth().user, post.postedBy )
     const haveImage = post.photo
-console.log('passed comments: ', comments)
-console.log('comments.length: ', comments.length)
+    const author = posterName( post.postedBy )
+// console.log('passed comments: ', comments)
+// console.log('comments.length: ', comments.length)
     return (
         // <CardActionArea component='a' href={ postPath } >
+            author === 'Unknown' ?
+            <CircularIndeterminate style={ { height: '200px' } } /> :
+            
             <Card className={classes.card}>
                 <div className={classes.cardDetails} >            
                     <CardContent>
@@ -55,7 +60,7 @@ console.log('comments.length: ', comments.length)
                         </div>
                         <Typography className={ classes.name } variant="subtitle1" color="textSecondary">
                             <p className='font-italic' >
-                                Posted by { posterName( post.postedBy ) } 
+                                Posted by { author } 
                                 {' on '}
                                 { new Date( post.created ).toDateString() } 
                             </p>
@@ -70,6 +75,7 @@ console.log('comments.length: ', comments.length)
                                         /> 
                         } 
                         <hr/>
+                        {/* { isLoading && <CircularIndeterminate /> } */}
                         {   // Display image if it exists
                             haveImage && 
                             <SimpleCardMedia   

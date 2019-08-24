@@ -13,6 +13,8 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { SelectPost } from '../std/Select';
 import { PostButton } from './index';
+import CircularIndeterminate from '../Loading/CircularIndicator';
+
 
 class Posts extends Component {
     state = {
@@ -22,7 +24,8 @@ class Posts extends Component {
         searched: [],
         //searchString: '',
         criteria: '',
-        isTutor: this.props.isTutor
+        isTutor: this.props.isTutor,
+        isLoading: false,
     } // state
 
     setMyPosts = ( _id, token ) => {
@@ -71,7 +74,8 @@ console.log('filtered post: ', post)
     } // ClickPostButton
 
     componentDidMount() {
-console.log('posts are mounted')
+        this.setState( { isLoading: true } )
+// console.log('posts are mounted')
         // this.handleUserInfo( this.props.match.params.userId )
         this.handleUserInfo( isAuth() )
         getAllPostsRequest().then( data => {
@@ -82,12 +86,12 @@ console.log('posts are mounted')
             // const items = !this.state.isTutor ? data : data.filter( user => {
             //     return user.tutor.match( 'yes' )
             // } ) // filter
-            this.setState( { posts: data.posts, searched: data.posts } )
+            this.setState( { posts: data.posts, searched: data.posts, isLoading: false } )
         }) // then
     } // componentDidMount
 
     render() {
-        const { posts, myPosts, searched } = this.state
+        const { posts, myPosts, searched, isLoading } = this.state
         const styleContainer = {
             paddingTop: '60px',
             paddingBottom: '100px'
@@ -96,8 +100,13 @@ console.log('posts are mounted')
         return (
             <React.Fragment>
                 <CssBaseline />
-                <main>
-                    <Blurb body='See what others have been asking!' />
+                <Blurb body='See what others have been asking!' />
+                {
+                    isLoading ? 
+                    <CircularIndeterminate
+                        style= { { marginTop: '100px', marginBottom: '100px' } } 
+                     /> :
+
                     <Container style={ styleContainer } maxWidth="lg">
                         <Grid container spacing={1} style={ { paddingBottom: '60px' } } >
                             <SelectPost   handleSelect={ this.handleSelect } />
@@ -127,8 +136,8 @@ console.log('posts are mounted')
                             </Grid>
                         <PostAlbum searched={ searched } />
                     </Container>
-                    <Footer title='Posts footer' contents={ 'add something here' } />
-                </main>
+                }
+                <Footer title='Posts footer' contents={ 'add something here' } />
             </React.Fragment>   
           ) // return
     } // render

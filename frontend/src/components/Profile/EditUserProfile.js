@@ -13,6 +13,7 @@ import Footer from '../std/Footer';
 import { CheckBox } from '../std/CheckBox';
 import TextInputField from '../User/TextInputField';
 
+
 class EditUserProfile extends Component {
     state = {
         _id: '',
@@ -234,15 +235,6 @@ class EditUserProfile extends Component {
                 tutor === 'yes' &&
                 this.textField( 'Courses', courses, 'courses' ) 
             }
-            {/* { this.textField( 'Password', password, 'password' ) } */}
-            {/* <OutlinedTextField
-                label='Password'
-                value={ password }
-                onChange={ this.handleInputEntered( 'password' ) }
-                style={ { display: 'flex', flexWrap: 'wrap' } }
-                type='password'
-                autoComplete='current-password'
-            /> */}
             { 
                 checked ?
                 this.createForm( 
@@ -275,21 +267,31 @@ class EditUserProfile extends Component {
     render() {
         const { _id, name, email, password , route, isLoading, error, isCancel, checked, 
                 tutor, courses, program, description, photo, currentPhoto } = this.state
+
         const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
+
         return (
             route || isCancel ? <Redirect to={ `/user/${ _id }` } /> :
 
             <main>
                 <Blurb body='Edit User Profile' />
-                <div className='container' style={ { paddingTop: '100px' } } >
-                    { isLoading && this.showLoadingIcon() }
-                    { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                    {/* <Image url={ this.getImage() } alt={ name } /> */}
-                    <Image url={ newPhoto } alt={ name } /> 
-                    { this.EditForm( 
-                        name, email, password, program, description, tutor, courses, checked 
-                    ) }
-                </div>
+                {
+                     name === '' ?  
+                     <CircularIndeterminate 
+                        style={ { height: '200px', marginTop: '100px' } } 
+                     /> :
+
+                     <div className='container' style={ { paddingTop: '100px' } } >
+                        { isLoading && this.showLoadingIcon() }
+                        { error && this.alertSection( error, '#F8BBD0', 'red' ) }
+                        {/* <Image url={ this.getImage() } alt={ name } /> */}
+                        <Image url={ newPhoto } alt={ name } /> 
+                        { this.EditForm( 
+                            name, email, password, program, description, 
+                            tutor, courses, checked 
+                        ) }
+                    </div>
+                } 
                 <Footer title='Profile footer' contents={ 'add something here' } />
             </main>
             

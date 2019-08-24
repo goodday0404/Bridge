@@ -22,6 +22,8 @@ import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
 import SubView from './SubView';
 import { ShowMyStudentsButton, ShowMyTutorsButton } from './ProfileButtons';
+import CircularIndeterminate from '../Loading/CircularIndicator';
+
 
 const imageStyle={ 
     height: '400px', 
@@ -47,6 +49,9 @@ console.log('props.user: ', user)
 // console.log('passed comments: ', comments)
 // console.log('comments.length: ', comments.length)
     return (
+            user.name === undefined ? 
+            <CircularIndeterminate /> :
+
             <Card className={classes.card}>
                 <div className={classes.cardDetails}>            
                     <CardContent >
