@@ -159,7 +159,7 @@ class CreatePost extends Component {
                 <OutlinedTextField
                     label='Title'
                     onChange={ this.handleInputEntered( 'title' ) }
-                    style={ { ...formStyle, paddingTop: '100px' } }
+                    style={ { ...formStyle, marginTop: '30px' } }
                 />
                 { newPhoto && <Image url={ newPhoto } alt='newPhoto' /> }
                 { this.inputField( '', 'photo', 'file', '', 'image/*' ) }

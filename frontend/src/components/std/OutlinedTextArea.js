@@ -18,7 +18,7 @@ const OutlinedTextArea = props => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <TextField
-        id="outlined-multiline-static"
+        //id="outlined-multiline-static"
         label={ label }
         value={ value }
         multiline

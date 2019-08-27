@@ -17,6 +17,8 @@ import { deleteCommentRequest, modifyCommentRequest, deleteTutorCommentRequest,
          modifyTutorCommentRequest } from '../../API/postAPI';
 import OutlinedTextArea from '../std/OutlinedTextArea';
 import StarRatings from 'react-star-ratings';
+import MarkDown from '../std/MarkDown';
+import useStyles from '../../styles/PostCardExpandedStyle';
 
 
 export const getFormattedTimestamp = (time) => {
@@ -25,6 +27,12 @@ export const getFormattedTimestamp = (time) => {
     if (diff >= 60 && diff < 24 * 60) return `${Math.round(diff / 60)}h`
     return `${Math.round(diff / (24 * 60))}d`
 } // getFormattedTimestamp
+
+const UseMarkdown = text => {
+    const classes = useStyles()
+console.log('text: ', text)
+    return <MarkDown className={ classes.markdown } > { text.text } </MarkDown>
+} // UseMarkdown
 
 class Comment extends Component {
     state = {
@@ -149,7 +157,7 @@ class Comment extends Component {
                   <Link to={ `/user/${ postedBy._id }` } > { postedBy.name } </Link>
               </strong>
               <br />
-              { isEdit ? <></> : <>{ text }</> }
+              { isEdit ? <></> : <> { text } </> }
             </div>
             {
              !isEdit &&

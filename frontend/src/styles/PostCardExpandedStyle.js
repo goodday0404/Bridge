@@ -50,6 +50,10 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         color: 'green'
     },
+    markdown: {
+        ...theme.typography.body2,
+        padding: theme.spacing(3, 0),
+    },
 })) // useStyles
 
 export default useStyles;

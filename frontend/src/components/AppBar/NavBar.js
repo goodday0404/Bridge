@@ -28,7 +28,7 @@ const ItemBeforeLogin = props => {
     return (
         <List component="nav">
             <ListItem component="div">
-                <NavBarItem item='SignIn' to='/signUp' history={ history } />
+                <NavBarItem item='SignUp' to='/signUp' history={ history } />
                 <NavBarItem item='LogIn' to='/login' history={ history } />
             </ListItem>
         </List>

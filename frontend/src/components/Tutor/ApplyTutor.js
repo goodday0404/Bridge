@@ -10,8 +10,24 @@ import RadioButton from '../std/RadioButton';
 import FormGroup from '@material-ui/core/FormGroup';
 import OutlinedTextField from '../std/OutlinedTextField';
 import SubmitButton from '../std/SubmitButton';
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import { School } from '@material-ui/icons'
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
+import useStyles from '../../styles/PostCardExpandedStyle';
+
+const Description = () => {
+    const classes = useStyles()
+    return (
+        <Grid container justify="center" alignItems="center">
+            <Avatar className={classes.schoolAvatar}>
+                <School />
+            </Avatar>
+            <h4>Enter courses your are Interested in being tutor</h4>
+        </Grid>
+    ) // return
+} // Description
 
 class ApplyTutor extends Component {
     state = {
@@ -27,6 +43,7 @@ class ApplyTutor extends Component {
 
     componentDidMount() {
         this.userData = new FormData()
+        this.userData.set( 'tutor', 'yes' )
         this.handleUserInfo( this.props.match.params.userId )
     } // componentDidMount
 
@@ -79,22 +96,26 @@ class ApplyTutor extends Component {
 
     render() {
         const { tutor, route, user } = this.state
-        const containerStyle = { paddingTop: '100px', paddingBottom: '100px' } 
+        const containerStyle = { 
+            paddingTop: '50px', paddingBottom: '50px', textAligned: 'center',
+            marginTop: '50px', marginBottom: '50px', backgroundColor: 'white',
+        } // containerStyle
         const textFieldStyle = {
-            display: 'flex',
-            flexWrap: 'wrap',
-            paddingTop: '40px',
-            paddingBottom: '50px'
+            display: 'flex', flexWrap: 'wrap', marginTop: '20px', marginBottom: '40px',
         } // textFieldStyle
         //const { _id, name, email, password , route, isLoading, error } = this.state
         return (
             route ? <Redirect to={ `/user/${ user._id }` } /> :
             <main>
                 <Blurb body='Interested in becoming a tutor? Apply here!' />
-                <Container style={ containerStyle } maxWidth="md">
-                    <h4> Do you want to be a tutor? </h4>
-                    <RadioButton value={ tutor } onChange={ this.handleSelectButton } />
-                    { console.log(this.state) }
+                <Container style={ containerStyle } maxWidth="lg" >
+                    {/* <h4> Do you want to be a tutor? </h4>
+                    <RadioButton value={ tutor } onChange={ this.handleSelectButton } /> */}
+                    {/* <div style={ descriptionStyle } >
+                        Enter courses your are Interested in being tutor
+                    </div> */}
+                    <Description />
+                    
                     <OutlinedTextField  
                         onChange={ this.handleTextInput( 'courses' ) }
                         label="Courses"

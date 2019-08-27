@@ -18,7 +18,7 @@ const OutlinedTextField = props => {
   return (
     <form style={ style } noValidate autoComplete="off">
       <TextField
-        id="outlined-full-width"
+        //id="outlined-full-width"
         label={ label }
         value={ value }
         placeholder={ placeholder }

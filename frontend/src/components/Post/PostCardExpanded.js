@@ -21,6 +21,7 @@ import { getPostRequest, deletePostRequest } from '../../API/postAPI';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Footer from '../std/Footer';
 import Blurb from '../std/Blurb';
+import MarkDown from '../std/MarkDown';
 
 const imageStyle={ 
     height: '400px', 
@@ -83,9 +84,12 @@ const PostCardExpanded = React.forwardRef( ( props, ref ) => {
                                 image={ image } title={ post.title } style={ imageStyle } 
                             />
                         }
-                        <Typography className={ classes.body } variant="subtitle1" paragraph>
+                        {/* <Typography className={ classes.body } variant="subtitle1" paragraph>
                             { textLimit ? post.body.substring( 0, 200 ) : post.body }
-                        </Typography>
+                        </Typography> */}
+                        <MarkDown className={ classes.markdown } >
+                            { textLimit ? post.body.substring( 0, 200 ) : post.body }
+                        </MarkDown>
                     </CardContent>
                     <DefaultCardActions label='Back to Posts' to='/posts' />
                     <hr style={ { marginLeft: '15px', marginRight: '15px' } } />

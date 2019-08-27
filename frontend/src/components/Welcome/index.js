@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -40,16 +40,38 @@ const Blurb = () => {
     ) // return
 } // Blurb
 
-export const Welcome = () => (
-      <main>
-          <Blurb />
-          <img className="card-img-top" 
-              src={ WelcomeImage } 
-              alt='Welcome'
-              style={ style }
-              onError={ image => { image.target.src = `${ defaultImage }` } } 
-          />
-          <Footer title='Welcome footer' contents={ 'add something here' } />
-      </main>
-) // Welcome
+// export const Welcome = () => (
+//       <main>
+//           <Blurb />
+//           <img className="card-img-top" 
+//               src={ WelcomeImage } 
+//               alt='Welcome'
+//               style={ style }
+//               onError={ image => { image.target.src = `${ defaultImage }` } } 
+//           />
+//           <Footer title='Welcome footer' contents={ 'add something here' } />
+//       </main>
+// ) // Welcome
+
+export class Welcome extends Component {
+
+    componentDidMount() {
+        window.scroll( 0, 0 )
+    } // componentDidMount
+
+    render() {
+        return (
+            <main>
+                <Blurb />
+                <img className="card-img-top" 
+                    src={ WelcomeImage } 
+                    alt='Welcome'
+                    style={ style }
+                    onError={ image => { image.target.src = `${ defaultImage }` } } 
+                />
+                <Footer title='Welcome footer' contents={ 'add something here' } />
+            </main>
+        ) // return
+    } // render
+} // Welcome
 
