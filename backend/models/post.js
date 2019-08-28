@@ -51,7 +51,11 @@ const schema = {
 
 			//updated: Date, // date when comment is updated
 		}
-	] // comments
+	], // comments
+
+	place: String, // preferred place to have tutor
+
+	hours: String // preferred hours for tutor session
 }; // schema
 
 const postSchema = new mongoose.Schema( schema );

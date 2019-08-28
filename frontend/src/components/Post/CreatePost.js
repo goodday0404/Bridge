@@ -23,7 +23,9 @@ class CreatePost extends Component {
         route: '',
         isLoading: false,
         isCancel: false,
-        fileSize: 0
+        fileSize: 0,
+        place: '',
+        hours: ''
     } // state
 
     resetState() {
@@ -49,7 +51,7 @@ class CreatePost extends Component {
     // } // getImage
 
     isValidInput = () => {
-        const { title, body, fileSize } = this.state
+        const { title, place, hours, body, fileSize } = this.state
         if ( fileSize > this.maxFileSize ) {
           this.setState({ error: 'File size should be less than 100kb', isLoading: false })
           return false;
@@ -58,6 +60,16 @@ class CreatePost extends Component {
         if ( title.length === 0 ) {
           this.setState({ error: 'Title is required', isLoading: false });
           return false;
+        } // if
+
+        if ( place.length === 0 ) {
+            this.setState({ error: 'Place is required', isLoading: false });
+            return false;
+        } // if
+
+        if ( hours.length === 0 ) {
+        this.setState({ error: 'Hours is required', isLoading: false });
+        return false;
         } // if
         
         if ( body.length === 0 ) {
@@ -151,18 +163,36 @@ class CreatePost extends Component {
                />
     } // inputField
 
+    outLinedInputField( label, key, style, placeholder ) {
+        return <OutlinedTextField
+                    label={ label }
+                    onChange={ this.handleInputEntered( key ) }
+                    style={ style }
+                    placeholder={ placeholder }
+                />
+    } // outLinedInputField
+
     postForm = ( title, body, formStyle ) => {
         const { photo, currentPhoto } = this.state
         const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
             <div> 
-                <OutlinedTextField
+                {/* <OutlinedTextField
                     label='Title'
                     onChange={ this.handleInputEntered( 'title' ) }
                     style={ { ...formStyle, marginTop: '30px' } }
-                />
+                /> */}
+                { this.outLinedInputField( 
+                    'Title', 'title', { ...formStyle, marginTop: '30px' } 
+                ) }
                 { newPhoto && <Image url={ newPhoto } alt='newPhoto' /> }
                 { this.inputField( '', 'photo', 'file', '', 'image/*' ) }
+                { this.outLinedInputField( 
+                    'Preferred place', 'place', formStyle, 'Preferred place for tutoring session' 
+                ) }
+                { this.outLinedInputField( 
+                    'Preferred hours', 'hours', formStyle, 'Duration of tutor session' 
+                ) }
                 <OutlinedTextArea 
                     rows='20'
                     label='Body Context'

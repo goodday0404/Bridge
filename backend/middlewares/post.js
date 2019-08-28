@@ -31,7 +31,7 @@ exports.postById = ( request, response, next, id ) => {
 		.populate( 'postedBy', '_id name')
 		.populate( 'comments.postedBy', '_id name photo')
 		.populate( 'postedBy', '_id name')
-		.select('_id title body created comments photo')
+		.select('_id title body created comments photo place hours')
 		.exec( ( err, post ) => {
 			if ( err || !post ) return createErrorObj( response, err, 400 );
 			request.post = post;

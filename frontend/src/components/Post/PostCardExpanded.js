@@ -3,6 +3,10 @@ import { Redirect } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import { NotificationImportant } from '@material-ui/icons';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import { Divider } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import Hidden from '@material-ui/core/Hidden';
@@ -35,6 +39,30 @@ const imageStyle={
 const isLogInUser = ( logInUser, poster ) => {
     return logInUser && ( poster != undefined ) && logInUser._id === poster._id
 } // isLogInUser
+
+const PlaceAndHours = props => {
+    const { post, author } = props
+    const classes = useStyles()
+
+    return (
+        <CardContent>
+            <Grid container justify='center' alignItems='center' > 
+                <Avatar className={ classes.schoolAvatar } >
+                    <NotificationImportant />
+                </Avatar>
+                <Typography className={ classes.name } variant="subtitle1" color="textSecondary">
+                    { author } prefer to have tutoring in
+                </Typography>
+            </Grid>
+            <Typography className={ classes.name } variant="subtitle1" color="primary">
+                { post.place }
+            </Typography>
+            <Typography className={ classes.name } variant="subtitle1" color="secondary">
+                for {" "} { post.hours }
+            </Typography>
+        </CardContent>
+    ) // return
+} // PlaceAndHours
 
 const PostCardExpanded = React.forwardRef( ( props, ref ) => {
     const classes = useStyles()
@@ -90,6 +118,7 @@ const PostCardExpanded = React.forwardRef( ( props, ref ) => {
                         <MarkDown className={ classes.markdown } >
                             { textLimit ? post.body.substring( 0, 200 ) : post.body }
                         </MarkDown>
+                        <PlaceAndHours post={ post } author={ author } />
                     </CardContent>
                     <DefaultCardActions label='Back to Posts' to='/posts' />
                     <hr style={ { marginLeft: '15px', marginRight: '15px' } } />

@@ -17,6 +17,8 @@ class EditPost extends Component {
         _id: '',
         title: '',
         body: '',
+        place: '',
+        hours: '',
         photo: '', 
         currentPhoto: undefined,
         error: '',
@@ -50,7 +52,7 @@ class EditPost extends Component {
     // } // getImage
 
     isValidInput = () => {
-        const { title, body, fileSize } = this.state
+        const { title, place, hours, body, fileSize } = this.state
         if ( fileSize > this.maxFileSize ) {
           this.setState({ error: 'File size should be less than 100kb', isLoading: false })
           return false;
@@ -59,6 +61,16 @@ class EditPost extends Component {
         if ( title.length === 0 ) {
           this.setState({ error: 'Title is required', isLoading: false });
           return false;
+        } // if
+
+        if ( place.length === 0 ) {
+            this.setState({ error: 'Place is required', isLoading: false });
+            return false;
+        } // if
+
+        if ( hours.length === 0 ) {
+        this.setState({ error: 'Hours is required', isLoading: false });
+        return false;
         } // if
         
         if ( body.length === 0 ) {
@@ -86,10 +98,10 @@ class EditPost extends Component {
     handlePostInfo( postId ) {
         getPostRequest( postId )
         .then( data => {
-          const { _id, title, body, error } = data
+          const { _id, title, place, hours, body, error } = data
           const currentPhoto = data.photo ? getImage( data ) : undefined
           if ( data.error ) this.setState( { isFailed: true } )
-          else this.setState( { _id, title, body, error, currentPhoto } )
+          else this.setState( { _id, title, place, hours, body, error, currentPhoto } )
         }) // then
       } // handleUserInfo
 
@@ -146,19 +158,33 @@ class EditPost extends Component {
                />
     } // inputField
 
-    postForm = ( title, body, formStyle ) => {
+    outLinedInputField( label, key, value, style ) {
+        return <OutlinedTextField
+                    label={ label }
+                    value={ value }
+                    onChange={ this.handleInputEntered( key ) }
+                    style={ style }
+                />
+    } // outLinedInputField
+
+    postForm = ( title, place, hours, body, formStyle ) => {
         const { post, photo, currentPhoto } = this.state
         const newPhoto = photo ? URL.createObjectURL( photo ) : currentPhoto
         return (
             <div> 
-                <OutlinedTextField
+                {/* <OutlinedTextField
                     label='Title'
                     value={ title }
                     onChange={ this.handleInputEntered( 'title' ) }
-                    style={ { ...formStyle, paddingTop: '100px' } }
-                />
+                    style={ { ...formStyle, marginTop: '30px' } }
+                /> */}
+                { this.outLinedInputField( 
+                    'Title', 'title', title, { ...formStyle, marginTop: '30px' } 
+                ) }
                 { newPhoto && <Image url={ newPhoto } alt='newPhoto' /> }
                 { this.inputField( '', 'photo', 'file', '', 'image/*' ) }
+                { this.outLinedInputField( 'Preferred place', 'place', place, formStyle ) }
+                { this.outLinedInputField( 'Preferred hours', 'hours', hours, formStyle ) }
                 <OutlinedTextArea 
                     rows='20'
                     label='Body Context'
@@ -178,7 +204,8 @@ class EditPost extends Component {
     } // postForm
 
     render() {
-        const { _id, title, body, route, isCancel, isFailed, isLoading, error } = this.state
+        const { _id, title, place, hours, body, route, isCancel, isFailed, isLoading, 
+                error } = this.state
         const formStyle = { display: 'flex', flexWrap: 'wrap' }
 
         return (
@@ -191,7 +218,7 @@ class EditPost extends Component {
                 <div className='container'>
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
-                    { this.postForm( title, body, formStyle ) }
+                    { this.postForm( title, place, hours, body, formStyle ) }
                 </div>
                 <Footer title='Post footer' contents={ 'add something here' } />
             </main>
