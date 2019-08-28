@@ -20,8 +20,7 @@ const HoverText = styled.p`
 	}
 `
 export const AlertDialog = props => {
-    const { label, title, body, variant, size, handler, style, trash, addButton,
-            login } = props
+    const { label, title, body, variant, size, handler, style, trash, addButton } = props
     const [open, setOpen] = React.useState(false)
     const dudUrl = 'javascript:;';
 
@@ -29,7 +28,7 @@ export const AlertDialog = props => {
     function handleClose() { setOpen(false) }
 
     return (
-        <div>
+        <div style={ style } >
             
             {   // display trash can icon if trash attribute is true
                 trash ? <IconButton aria-label="delete" onClick={handleClickOpen} >

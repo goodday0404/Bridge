@@ -51,7 +51,7 @@ const SignupOption = () => (
 
 const SignupForm = props => {
     const { error, isLoading, isSignUp, checked, formHandler, submitHandler, checkHandler, 
-            password } = props
+            password, enterKeyHandler } = props
     const classes = useStyles();
 
     return (
@@ -85,6 +85,7 @@ const SignupForm = props => {
                                     label='Password'
                                     value={ password }
                                     onChange={ formHandler( 'password' ) }
+                                    onKeyPress={ enterKeyHandler }
                                     style={ { display: 'flex', flexWrap: 'wrap' } }
                                     type='password'
                                     autoComplete='current-password'

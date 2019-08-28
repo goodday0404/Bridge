@@ -157,7 +157,8 @@ class Comment extends Component {
                   <Link to={ `/user/${ postedBy._id }` } > { postedBy.name } </Link>
               </strong>
               <br />
-              { isEdit ? <></> : <> { text } </> }
+              {/* { isEdit ? <></> : <> { text } </> } */}
+              { isEdit ? <></> : <div style={{width:'800px'}}>{ text }</div>  }
             </div>
             {
              !isEdit &&
@@ -165,9 +166,10 @@ class Comment extends Component {
               <>
                   <DateView>{ new Date( created ).toDateString() }</DateView>
                   { // display edit icon only on comment of this user.
-                    isAuthor && <IconButton aria-label="edit" onClick={ this.handleEdit } >
-                                    <Edit />
-                                </IconButton> 
+                    isAuthor && 
+                    <IconButton aria-label="edit" onClick={ this.handleEdit } style={{height: '50px', marginTop: '5px'}} >
+                        <Edit />
+                    </IconButton> 
                   }
                   { // display trash icon only on comment of this user.
                     isAuthor && <AlertDialog 
@@ -177,6 +179,7 @@ class Comment extends Component {
                                     handler={ this.handleDelete( comment ) } 
                                     trash={ true }
                                     addButton={ true }
+                                    style={ { marginTop: '5px' } }
                                 />
                   }
               </>

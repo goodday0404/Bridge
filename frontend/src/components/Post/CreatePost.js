@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import Header from  '../std/Header';
+import Container from '@material-ui/core/Container';
+import { containerStyle } from './index';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
 import { postRequest } from '../../API/postAPI';
 import { InputField, FormButton, FormButtons } from '../std/Form';
@@ -11,6 +12,7 @@ import OutlinedTextField from '../std/OutlinedTextField';
 import OutlinedTextArea from '../std/OutlinedTextArea';
 import Blurb from '../std/Blurb';
 import Footer from '../std/Footer';
+
 
 class CreatePost extends Component {
     state = {
@@ -219,12 +221,12 @@ class CreatePost extends Component {
 
             <main>
                 <Blurb body='Got a question? Ask our tutors here!' />
-                <div className='container'>
+                <Container style={ containerStyle } maxWidth="lg" >
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
                     {/* <Image url={ this.getImage() } alt={ name } /> */}
                     { this.postForm( title, body, formStyle ) }
-                </div>
+                </Container>
                 <Footer title='Post footer' contents={ 'add something here' } />
             </main>
         ) // return

@@ -48,14 +48,7 @@ class SignUp extends Component {
   //   this.setState( { isLoading: false } )
   // } // endLoading
 
-  handleInputEntered = key => event => {
-    this.setState( { error: "", isSignUp: false } ) // clear alert msg when entering new input
-    this.setState( { [ key ]: event.target.value } )
-  } // handleChange
-
-  handleSubmit = event => {
-    event.preventDefault() // prevent webbrowser from reloading
-    //this.startLoading();
+  signup = () => {
     this.setState( { isLoading: true } )
     const { name, email, password, tutor, courses, program } = this.state
     signUpProcess( { name, email, password, tutor, courses, program } ).then( data => {
@@ -67,7 +60,35 @@ class SignUp extends Component {
             } // if
             //this.endLoading();
     }) // then
+  } // signup
+
+  handleInputEntered = key => event => {
+    this.setState( { error: "", isSignUp: false } ) // clear alert msg when entering new input
+    this.setState( { [ key ]: event.target.value } )
+  } // handleChange
+
+  handleSubmit = event => {
+    event.preventDefault() // prevent webbrowser from reloading
+    //this.startLoading();
+    // this.setState( { isLoading: true } )
+    // const { name, email, password, tutor, courses, program } = this.state
+    // signUpProcess( { name, email, password, tutor, courses, program } ).then( data => {
+    //         if ( data.error ) {
+    //           this.setState( { error: data.error[0].msg, isLoading: false } ) 
+    //         } else {
+    //           this.resetState()
+    //           this.setState( { isSignUp: true } )
+    //         } // if
+    //         //this.endLoading();
+    // }) // then
+    this.signup()
   } // handleClick
+
+  handleEnterKey = event => {
+    if (event.key !== 'Enter') return 
+    this.signup()
+    event.preventDefault();
+  } // handleEnterKey
 
   handleCheck = key => event => {
     this.setState( { [ key ]: event.target.checked } )
@@ -125,6 +146,7 @@ class SignUp extends Component {
                           formHandler={ this.handleInputEntered } 
                           submitHandler={ this.handleSubmit }
                           checkHandler={ this.handleCheck }
+                          enterKeyHandler={ this.handleEnterKey }
                     />
       // <main>
       //   <Blurb body='Sign Up here!' />

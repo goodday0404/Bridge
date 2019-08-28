@@ -7,6 +7,7 @@ export default styled.li`
   padding: 2rem 0 1rem 0;
   font-size: 0.88rem;
   color: #444444;
+  width: auto;
 
   &:first-child {
     padding-top: 1rem;

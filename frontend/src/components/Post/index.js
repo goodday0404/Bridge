@@ -5,6 +5,12 @@ import { path } from '../../Auth';
 import { GridButton } from '../std/Button';
 import { AlertDialog } from '../std/Alert';
 
+export const containerStyle = { 
+    paddingTop: '100px', paddingBottom: '100px', textAligned: 'center', 
+    paddingLeft: '100px', marginTop: '75px', marginBottom: '75px', 
+    backgroundColor: 'white', paddingRight: '100px'
+} // containerStyle
+
 export const posterId = poster => poster ? `/user/${ poster._id }`  : '/posts'
 
 export const posterName = poster => {
@@ -47,10 +53,10 @@ export const PostButtons = props => {
             /> */}
             <AlertDialog 
                 label={ rightLabel } 
-                title='Do you want to delet this post?'
+                title='Do you want to delete this post?'
                 body='This action will permanently delete this post, and it can not be retored.'
                 handler={ rightButtonHandler( post ) } 
-                style={ { marginTop: '18px' } }
+                style={ { marginTop: '9px' } }
                 cancelButton={ true }
                 addButton={ true }
             />

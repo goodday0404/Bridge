@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import Container from '@material-ui/core/Container';
 import { isAuth, path, getUserInfo, updateProcess, updateLocalJWT } from '../../Auth';
 import { getPostRequest, updatePostRequest } from '../../API/postAPI';
 import { getImage } from './index';
 import { InputField, FormButton, FormButtons } from '../std/Form';
+import { containerStyle } from './index';
 import AlertDiv from '../User/alert';
 import CircularIndeterminate from '../Loading/CircularIndicator';
 import Image from '../std/Image';
@@ -215,11 +217,11 @@ class EditPost extends Component {
 
             <main>
                 <Blurb body='Edit your post' />
-                <div className='container'>
+                <Container style={ containerStyle } maxWidth="lg" >
                     { isLoading && this.showLoadingIcon() }
                     { error && this.alertSection( error, '#F8BBD0', 'red' ) }
                     { this.postForm( title, place, hours, body, formStyle ) }
-                </div>
+                </Container>
                 <Footer title='Post footer' contents={ 'add something here' } />
             </main>
         ) // return

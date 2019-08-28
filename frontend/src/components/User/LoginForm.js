@@ -46,7 +46,7 @@ const LoginOption = () => (
 
 const LoginForm = props => {
     const { error, isLoading, checked, formHandler, submitHandler, checkHandler,
-            password } = props
+            password, enterKeyHandler } = props
     const classes = useStyles();
 
     return (
@@ -77,6 +77,7 @@ const LoginForm = props => {
                                     label='Password'
                                     value={ password }
                                     onChange={ formHandler( 'password' ) }
+                                    onKeyPress={ enterKeyHandler }
                                     style={ { display: 'flex', flexWrap: 'wrap' } }
                                     type='password'
                                     autoComplete='current-password'

@@ -53,13 +53,7 @@ class LogIn extends Component {
       this.isLoading = false
     } // endLoading
 
-    handleInputEntered = key => event => {
-      this.setState( { error: '' } ) // clear alert msg when entering new input
-      this.setState( { [ key ]: event.target.value } )
-    } // handleChange
-
-    handleSubmit = event => {
-      event.preventDefault() // prevent webbrowser from reloading
+    login = () => {
       this.setState( { isLoading: true } )
       //this.startLoading();
       const { email, password } = this.state
@@ -70,7 +64,33 @@ class LogIn extends Component {
               else validateJWT( data, () => this.setState( { isLogIn: true } ) )
               //this.endLoading();
       }) // then
+    } // login
+
+    handleInputEntered = key => event => {
+      this.setState( { error: '' } ) // clear alert msg when entering new input
+      this.setState( { [ key ]: event.target.value } )
+    } // handleChange
+
+    handleSubmit = event => {
+      event.preventDefault() // prevent webbrowser from reloading
+//       this.setState( { isLoading: true } )
+//       //this.startLoading();
+//       const { email, password } = this.state
+// //console.log({email, password})
+//       logInProcess( { email, password } ).then( data => {
+// //console.log(data.error)
+//               if ( data.error ) this.setState( { error: data.error[0].msg, isLoading: false } ) 
+//               else validateJWT( data, () => this.setState( { isLogIn: true } ) )
+//               //this.endLoading();
+//       }) // then
+      this.login()
     } // handleSubmit
+
+    handleEnterKey = event => {
+      if (event.key !== 'Enter') return 
+      this.login()
+      event.preventDefault();
+    } // handleEnterKey
 
     handleCheck = key => event => {
       this.setState( { [ key ]: event.target.checked } )
@@ -109,6 +129,7 @@ class LogIn extends Component {
             formHandler={ this.handleInputEntered } 
             submitHandler={ this.handleSubmit }
             checkHandler={ this.handleCheck }
+            enterKeyHandler={ this.handleEnterKey }
         />
         // <Container component="main" maxWidth="xs">
         //   <CssBaseline />
